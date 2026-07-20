@@ -47,4 +47,36 @@ leadsRouter.post("/leads", async (req, res) => {
     }
 });
 
+leadsRouter.get("/leads", async (req, res) => {
+    try {
+        const { salesAgent, status, tags, source } = req.query;
+        const query = {};
+        if (salesAgent) {
+            query.salesAgent = salesAgent
+        }
+
+        if (status) {
+            query.status = status
+        }
+
+        if (tags) {
+            query.tags = { $in: tags }
+        }
+
+        if (source) {
+            query.source = source
+        }
+
+        const leads = await Leads.find(query);
+
+        if (!Array.isArray(leads) || !leads)
+            return res.status(409).json({ error: "cannot find leads" });
+
+        res.json(leads);
+
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+})
+
 export default leadsRouter;
