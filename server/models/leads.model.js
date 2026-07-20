@@ -11,7 +11,7 @@ const LeadSchema = new Schema({
         enum: ['Website', 'Referral', 'Cold Call', 'Advertisement', 'Email', 'Other'],
     },
     salesAgent: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'SalesAgent',
         required: [true, 'Sales Agent is required'],
     },
@@ -38,6 +38,6 @@ const LeadSchema = new Schema({
     closedAt: {
         type: Date,
     },
-}, { timestamp: true });
+}, { timestamps: true });
 
 export const Leads = model('Lead', LeadSchema);

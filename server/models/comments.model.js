@@ -2,12 +2,12 @@ import { model, Schema } from "mongoose";
 
 const CommentSchema = new Schema({
     lead: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'Lead',
         required: [true, 'Lead reference is required'],
     },
     author: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'SalesAgent',
         required: [true, 'Author is required'],
     },

@@ -2,6 +2,7 @@ import cors from "cors"
 import express from "express"
 import { connectDB } from "./db/db.connect.js";
 import agentRouter from "./routes/agents.route.js";
+import leadsRouter from "./routes/leads.route.js";
 
 const app = express();
 app.use(express.json());
@@ -27,7 +28,9 @@ app.get("/", async (req, res) => {
 })
 
 app.use("/api", agentRouter);
+app.use("/api", leadsRouter);
 
 app.listen(3000, () => {
     console.log(`Server running on port 3000`);
 })
+
