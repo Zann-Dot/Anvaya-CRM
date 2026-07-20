@@ -13,7 +13,7 @@ agentRouter.post("/agents", async (req, res) => {
             return res
                 .status(409)
                 .json({
-                    error: "Sales agent with email 'john@example.com' already exists.",
+                    error: `Sales agent with email '${email}' already exists.`,
                 });
 
         await SalesAgent.create({ name, email });
