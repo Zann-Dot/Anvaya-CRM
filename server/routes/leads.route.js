@@ -79,4 +79,66 @@ leadsRouter.get("/leads", async (req, res) => {
     }
 })
 
+leadsRouter.put("/leads/:id", async (req, res) => {
+    try {
+        const { name, source, salesAgent, status, tags, timeToClose, priority } =
+            req.body;
+
+        if (
+            !name ||
+            !source ||
+            !salesAgent ||
+            !status ||
+            !tags ||
+            !timeToClose ||
+            !priority
+        )
+            return res
+                .status(400)
+                .json({ error: "Invalid input: all fields are required." });
+
+        const updatedLead = await Leads.findByIdAndUpdate(
+            req.params.id,
+            {
+                name,
+                source,
+                salesAgent,
+                status,
+                tags,
+                timeToClose,
+                priority
+            },
+            { new: true }
+        );
+
+        if (!updatedLead)
+            return res.status(404).json({
+                error: `Lead with ID '${req.params.id}' not found.`
+            });
+
+        res.json({
+            success: true,
+            message: "Lead updated successfully",
+            updatedLead
+        })
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+})
+
+leadsRouter.delete("/leads/:id", async (req, res) => {
+    try {
+        const deletedLead = await Leads.findByIdAndDelete(req.params.id);
+
+        if (!deletedLead)
+            return res.status(404), json({ error: `Lead with ID '${req.params.id}' not found.` });
+
+        res.json({
+            success: true,
+            message: "Lead deleted successfully."
+        })
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+})
 export default leadsRouter;
