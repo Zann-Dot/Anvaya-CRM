@@ -1,7 +1,7 @@
 import { model, Schema } from "mongoose";
 
 const CommentSchema = new Schema({
-    lead: {
+    leadId: {
         type: Schema.Types.ObjectId,
         ref: 'Lead',
         required: [true, 'Lead reference is required'],
