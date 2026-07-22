@@ -40,7 +40,7 @@ leadsRouter.post("/leads", async (req, res) => {
         res.json({
             success: true,
             message: "Lead added successfully",
-            lead
+            lead,
         });
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -52,19 +52,19 @@ leadsRouter.get("/leads", async (req, res) => {
         const { salesAgent, status, tags, source } = req.query;
         const query = {};
         if (salesAgent) {
-            query.salesAgent = salesAgent
+            query.salesAgent = salesAgent;
         }
 
         if (status) {
-            query.status = status
+            query.status = status;
         }
 
         if (tags) {
-            query.tags = { $in: tags }
+            query.tags = { $in: tags };
         }
 
         if (source) {
-            query.source = source
+            query.source = source;
         }
 
         const leads = await Leads.find(query);
@@ -73,15 +73,14 @@ leadsRouter.get("/leads", async (req, res) => {
             return res.status(409).json({ error: "cannot find leads" });
 
         res.json(leads);
-
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-})
+});
 
 leadsRouter.put("/leads/:id", async (req, res) => {
     try {
-        const { name, source, salesAgent, status, tags, timeToClose, priority } =
+        const { name, source, salesAgent, status, tags, timeToClose, priority, closedAt = null } =
             req.body;
 
         if (
@@ -106,39 +105,43 @@ leadsRouter.put("/leads/:id", async (req, res) => {
                 status,
                 tags,
                 timeToClose,
-                priority
+                priority,
+                closedAt
             },
-            { new: true }
+            { new: true },
         );
 
         if (!updatedLead)
             return res.status(404).json({
-                error: `Lead with ID '${req.params.id}' not found.`
+                error: `Lead with ID '${req.params.id}' not found.`,
             });
 
         res.json({
             success: true,
             message: "Lead updated successfully",
-            updatedLead
-        })
+            updatedLead,
+        });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-})
+});
 
 leadsRouter.delete("/leads/:id", async (req, res) => {
     try {
         const deletedLead = await Leads.findByIdAndDelete(req.params.id);
 
         if (!deletedLead)
-            return res.status(404), json({ error: `Lead with ID '${req.params.id}' not found.` });
+            return (
+                res.status(404),
+                json({ error: `Lead with ID '${req.params.id}' not found.` })
+            );
 
         res.json({
             success: true,
-            message: "Lead deleted successfully."
-        })
+            message: "Lead deleted successfully.",
+        });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-})
+});
 export default leadsRouter;

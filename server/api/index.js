@@ -4,6 +4,7 @@ import { connectDB } from "../db/db.connect.js";
 import agentRouter from "../routes/agents.route.js";
 import leadsRouter from "../routes/leads.route.js";
 import commentRouter from "../routes/comments.route.js";
+import reportRouter from "../routes/reports.route.js";
 
 const app = express();
 app.use(express.json());
@@ -31,6 +32,7 @@ app.get("/", async (req, res) => {
 app.use("/api", agentRouter);
 app.use("/api", leadsRouter);
 app.use("/api", commentRouter);
+app.use("/api", reportRouter);
 
 app.listen(3000, () => {
     console.log(`Server running on port 3000`);
