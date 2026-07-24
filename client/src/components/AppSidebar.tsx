@@ -22,7 +22,6 @@ export default function AppSidebar() {
 
    return (
       <aside className="fixed top-0 left-0 z-40 flex h-screen w-64 flex-col border-r border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900">
-         {/* Logo */}
          <div className="flex h-16 items-center gap-3 border-b border-gray-200 px-6 dark:border-gray-700">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-linear-to-br from-violet-600 to-indigo-600 shadow-lg">
                <svg
@@ -48,7 +47,7 @@ export default function AppSidebar() {
             </div>
          </div>
 
-         {/* Navigation */}
+
          <nav className="flex flex-1 flex-col gap-1 overflow-y-auto px-3 py-4">
             <p className="mb-2 px-3 text-[10px] font-semibold tracking-widest text-gray-400 uppercase dark:text-gray-500">
                Main Menu
@@ -80,7 +79,7 @@ export default function AppSidebar() {
             })}
          </nav>
 
-         {/* User Profile */}
+
          <div className="border-t border-gray-200 p-4 dark:border-gray-700">
             <div className="flex cursor-pointer items-center gap-3 rounded-xl p-2 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800">
                <div className="relative">
@@ -93,7 +92,7 @@ export default function AppSidebar() {
                </div>
                <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-semibold text-gray-900 dark:text-white">
-                     Rohan Sharma
+                     Username
                   </p>
                   <p className="truncate text-xs text-gray-500 dark:text-gray-400">
                      Admin

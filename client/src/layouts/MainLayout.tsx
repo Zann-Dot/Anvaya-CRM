@@ -13,15 +13,12 @@ const pageTitles: Record<string, { title: string; subtitle: string }> = {
 
 export default function MainLayout() {
   const location = useLocation();
-  const { title, subtitle } =
-    pageTitles[location.pathname] ?? pageTitles["/"];
+  const { title, subtitle } = pageTitles[location.pathname] ?? pageTitles["/"];
 
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-gray-950">
-      {/* Sidebar */}
       <AppSidebar />
 
-      {/* Main area */}
       <div className="ml-64 flex min-h-screen flex-1 flex-col">
         <TopNavbar title={title} subtitle={subtitle} />
         <main className="flex-1 overflow-auto">
