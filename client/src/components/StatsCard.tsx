@@ -33,11 +33,11 @@ export default function StatsCard({
                <div className="mt-2 flex items-center gap-1">
                   <span
                      className={`flex items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[11px] font-semibold ${positive
-                           ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-                           : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+                        ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+                        : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
                         }`}
                   >
-                     {positive ? "↑" : "↓"} {change}
+                     {positive ? "↑" : "↓"} {change}%
                   </span>
                   <span className="text-[11px] text-gray-400">vs last month</span>
                </div>
