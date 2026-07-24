@@ -12,7 +12,7 @@ import {
 } from "react-icons/hi";
 import StatsCard from "../components/StatsCard";
 import LeadCard, { type Lead } from "../components/LeadCard";
-
+import LEADS from "../utilis/Leads";
 
 const STATUS_FILTERS = [
   "All",
@@ -47,8 +47,42 @@ const activeFilterStyle: Record<FilterType, string> = {
   Closed: "bg-green-600 text-white",
 };
 
-export default function Dashboard() {
+const stats = [
+  {
+    label: "Total Leads",
+    value: LEADS.length,
+    change: "12%",
+    positive: true,
+    icon: <HiOutlineCollection className="h-6 w-6" />,
+    color: "bg-violet-500",
+  },
+  {
+    label: "Active Agents",
+    value: 4,
+    change: "5%",
+    positive: true,
+    icon: <HiOutlineUserGroup className="h-6 w-6" />,
+    color: "bg-blue-500",
+  },
+  {
+    label: "Conversion Rate",
+    value: "23.5%",
+    change: "3.2%",
+    positive: true,
+    icon: <HiOutlineTrendingUp className="h-6 w-6" />,
+    color: "bg-emerald-500",
+  },
+  {
+    label: "Deals Closed",
+    value: "6",
+    change: "8%",
+    positive: false,
+    icon: <HiOutlineCheckCircle className="h-6 w-6" />,
+    color: "bg-amber-500",
+  },
+];
 
+export default function Dashboard() {
   return (
     <div className="space-y-6 p-6">
       <div className="relative overflow-hidden rounded-2xl bg-linear-to-r from-violet-600 via-indigo-600 to-blue-600 p-6 text-white shadow-xl">
@@ -64,13 +98,17 @@ export default function Dashboard() {
             <h2 className="mt-1 text-2xl font-bold">Good morning, Rohan! 👋</h2>
             <p className="mt-1 text-sm text-violet-200">
               You have{" "}
-              <span className="font-semibold text-white">
-                8 new leads
-              </span>{" "}
+              <span className="font-semibold text-white">8 new leads</span>{" "}
               waiting for review.
             </p>
           </div>
         </div>
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {stats.map((s) => (
+          <StatsCard key={s.label} {...s} />
+        ))}
       </div>
     </div>
   );
