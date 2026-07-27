@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
+
 interface MainContextType {
     dashboardReport: any;
     loading: boolean;
@@ -12,7 +13,7 @@ const useMain = () => {
     if (!context) {
         throw new Error("useMain must be used within a MainProvider");
     }
-    return context
+    return context;
 };
 export default useMain;
 
@@ -21,7 +22,7 @@ export function MainProvider({ children }: React.PropsWithChildren) {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
-    const fetchDashboardReport = async () => {
+    async function fetchDashboardReport() {
         try {
             setLoading(true);
             const response = await fetch("/api/report/last-month-comparison", {
@@ -35,7 +36,7 @@ export function MainProvider({ children }: React.PropsWithChildren) {
         } finally {
             setLoading(false);
         }
-    };
+    }
 
     useEffect(() => {
         fetchDashboardReport();
@@ -43,7 +44,12 @@ export function MainProvider({ children }: React.PropsWithChildren) {
 
     return (
         <MainContext.Provider
-            value={{ dashboardReport, loading, error, fetchDashboardReport }}
+            value={{
+                dashboardReport,
+                loading,
+                error,
+                fetchDashboardReport,
+            }}
         >
             {children}
         </MainContext.Provider>

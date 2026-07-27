@@ -1,11 +1,24 @@
-import { HiOutlineCollection, HiOutlineFilter, HiOutlinePlus, HiOutlineViewGrid, HiOutlineViewList } from "react-icons/hi";
-import LEADS from "../utilis/Leads";
+import {
+    HiOutlineCollection,
+    HiOutlineFilter,
+    HiOutlinePlus,
+    HiOutlineViewGrid,
+    HiOutlineViewList,
+} from "react-icons/hi";
 import { useState } from "react";
-import { Button } from "flowbite-react";
-import LeadCard from "./LeadCard";
+import { Button, Spinner } from "flowbite-react";
+import LeadCard, { Lead } from "./LeadCard";
+import { useLeads } from "../hooks/useLeads";
 
 interface LeadsSectionProp {
-    STATUS_FILTERS: readonly ["All", "New", "Contacted", "Qualified", "Proposal", "Closed"]
+    STATUS_FILTERS: readonly [
+        "All",
+        "New",
+        "Contacted",
+        "Qualified",
+        "Proposal",
+        "Closed",
+    ];
 }
 
 export default function LeadsSection({ STATUS_FILTERS }: LeadsSectionProp) {
@@ -13,13 +26,19 @@ export default function LeadsSection({ STATUS_FILTERS }: LeadsSectionProp) {
     const [viewMode, setViewMode] = useState<"grid" | "list">("list");
     const [activeFilter, setActiveFilter] = useState();
 
+    const { data: leads, isLoading, isError } = useLeads();
+
     const filterBadgeColor: Record<FilterType, string> = {
         All: "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300",
         New: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
-        Contacted: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
-        Qualified: "bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400",
-        Proposal: "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400",
-        Closed: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
+        Contacted:
+            "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
+        Qualified:
+            "bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400",
+        Proposal:
+            "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400",
+        Closed:
+            "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
     };
 
     const activeFilterStyle: Record<FilterType, string> = {
@@ -40,7 +59,7 @@ export default function LeadsSection({ STATUS_FILTERS }: LeadsSectionProp) {
                         Lead Management
                     </h3>
                     <span className="ml-1 rounded-full bg-violet-100 px-2.5 py-0.5 text-xs font-semibold text-violet-700 dark:bg-violet-900/30 dark:text-violet-400">
-                        {LEADS.length}
+                        {leads?.length}
                     </span>
                 </div>
 
@@ -70,14 +89,13 @@ export default function LeadsSection({ STATUS_FILTERS }: LeadsSectionProp) {
                     {/* Add Lead Button */}
                     <Button
                         size="sm"
-                        className="bg-linear-to-r from-violet-600 to-indigo-600 text-white border-0 shadow-md hover:from-violet-700 hover:to-indigo-700 focus:ring-violet-300"
+                        className="border-0 bg-linear-to-r from-violet-600 to-indigo-600 text-white shadow-md hover:from-violet-700 hover:to-indigo-700 focus:ring-violet-300"
                     >
                         <HiOutlinePlus className="mr-1.5 h-4 w-4" />
                         Add Lead
                     </Button>
                 </div>
             </div>
-
 
             <div className="flex flex-wrap items-center gap-2 border-b border-gray-100 px-5 py-3 dark:border-gray-700">
                 <HiOutlineFilter className="h-4 w-4 shrink-0 text-gray-400" />
@@ -90,7 +108,6 @@ export default function LeadsSection({ STATUS_FILTERS }: LeadsSectionProp) {
                                 }`}
                         >
                             {filter}
-
                         </button>
                     );
                 })}
@@ -99,7 +116,13 @@ export default function LeadsSection({ STATUS_FILTERS }: LeadsSectionProp) {
             <div
                 className={`p-4 ${viewMode === "grid" ? "grid grid-cols-1 gap-3 sm:grid-cols-2" : "flex flex-col gap-3"}`}
             >
-                {LEADS.length === 0 ? (
+                {isLoading ? (
+                    <div className="group flex items-center justify-center gap-4 rounded-2xl border border-gray-100 bg-white p-4 transition-all duration-200 hover:border-violet-200 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:border-violet-700">
+                        <div className="text-center">
+                            <Spinner aria-label="Center-aligned spinner example" />
+                        </div>
+                    </div>
+                ) : (leads?.length === 0 || isError) ? (
                     <div className="flex flex-col items-center justify-center py-16 text-center">
                         <div className="mb-3 rounded-2xl bg-gray-100 p-4 dark:bg-gray-700">
                             <HiOutlineCollection className="h-8 w-8 text-gray-400" />
@@ -112,38 +135,29 @@ export default function LeadsSection({ STATUS_FILTERS }: LeadsSectionProp) {
                         </p>
                     </div>
                 ) : (
-                    LEADS.map((lead) => <LeadCard key={lead._id} lead={lead} />)
+                    leads?.map((lead: Lead) => <LeadCard key={lead._id} lead={lead} />)
                 )}
             </div>
 
             <div className="flex items-center justify-between border-t border-gray-100 px-5 py-3 dark:border-gray-700">
                 <p className="text-xs text-gray-400">
-                    Showing {LEADS.length} of {LEADS.length} leads
+                    Showing {leads?.length} of {leads?.length} leads
                 </p>
                 <button className="text-xs font-medium text-violet-600 hover:text-violet-700 hover:underline dark:text-violet-400 dark:hover:text-violet-300">
                     View all leads →
                 </button>
             </div>
         </div>
-    )
+    );
 }
 
-
-
-
-
-
-
-
-
-
-
-
-{/* <span
-                                className={`rounded-full px-1.5 py-0.5 text-[10px] font-bold ${isActive
-                                    ? "bg-white/25 text-white"
-                                    : "bg-black/10 text-inherit dark:bg-white/10"
-                                    }`}
-                            >
-                                {count}
-                            </span> */}
+{
+    /* <span
+                                    className={`rounded-full px-1.5 py-0.5 text-[10px] font-bold ${isActive
+                                        ? "bg-white/25 text-white"
+                                        : "bg-black/10 text-inherit dark:bg-white/10"
+                                        }`}
+                                >
+                                    {count}
+                                </span> */
+}

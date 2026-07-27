@@ -1,3 +1,5 @@
+import { format } from "date-fns"
+
 export interface Lead {
    readonly _id: string;
    name: string;
@@ -94,11 +96,11 @@ export default function LeadCard({ lead }: LeadCardProps) {
 
          <div className="hidden flex-col items-end gap-1 text-right sm:flex">
 
-            <p className="text-[11px] text-gray-400 dark:text-gray-500">
+            <p className="text-[11px] text-gray-500 dark:text-gray-400">
                {lead.salesAgent?.name}
             </p>
-            <p className="text-[11px] text-gray-300 dark:text-gray-600">
-               {lead.createdAt}
+            <p className="text-[11px] text-gray-400 dark:text-gray-500">
+               {format(lead.createdAt, "dd MMM yyyy")}
             </p>
          </div>
 
