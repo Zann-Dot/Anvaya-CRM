@@ -14,7 +14,7 @@ import StatsCard from "../components/StatsCard";
 import LeadCard, { type Lead } from "../components/LeadCard";
 import LEADS from "../utilis/Leads";
 import useMain from "../context/MainProvider";
-
+import LeadsSection from "../components/LeadsSection";
 
 const STATUS_FILTERS = [
    "All",
@@ -49,7 +49,6 @@ const activeFilterStyle: Record<FilterType, string> = {
    Closed: "bg-green-600 text-white",
 };
 
-
 export default function Dashboard() {
    const { dashboardReport } = useMain();
 
@@ -59,7 +58,7 @@ export default function Dashboard() {
          label: "Total Leads",
          value: dashboardReport?.totalLeadsOfTheMonth,
          change: dashboardReport?.changeInLeads,
-         positive: true,
+         positive: dashboardReport?.changeInLeads >= 0,
          icon: <HiOutlineCollection className="h-6 w-6" />,
          color: "bg-violet-500",
       },
@@ -75,7 +74,7 @@ export default function Dashboard() {
          label: "Conversion Rate",
          value: `${dashboardReport?.conversionRateThisMonth}%`,
          change: dashboardReport?.changeInConversionRate,
-         positive: true,
+         positive: dashboardReport?.changeInConversionRate >= 0,
          icon: <HiOutlineTrendingUp className="h-6 w-6" />,
          color: "bg-emerald-500",
       },
@@ -83,7 +82,7 @@ export default function Dashboard() {
          label: "Deals Closed",
          value: dashboardReport?.totalLeadsClosedThisMonth,
          change: dashboardReport?.changeInClosedLeads,
-         positive: false,
+         positive: dashboardReport?.changeInClosedLeads >= 0,
          icon: <HiOutlineCheckCircle className="h-6 w-6" />,
          color: "bg-amber-500",
       },
@@ -104,7 +103,9 @@ export default function Dashboard() {
                   <h2 className="mt-1 text-2xl font-bold">Good morning, Rohan! 👋</h2>
                   <p className="mt-1 text-sm text-violet-200">
                      You have{" "}
-                     <span className="font-semibold text-white">{dashboardReport?.totalLeadsOfTheMonth} new leads</span>{" "}
+                     <span className="font-semibold text-white">
+                        {dashboardReport?.totalLeadsOfTheMonth} new leads
+                     </span>{" "}
                      waiting for review.
                   </p>
                </div>
@@ -116,6 +117,10 @@ export default function Dashboard() {
                <StatsCard key={s.label} {...s} />
             ))}
          </div>
+
+         <LeadsSection
+            STATUS_FILTERS={STATUS_FILTERS}
+         />
       </div>
    );
 }

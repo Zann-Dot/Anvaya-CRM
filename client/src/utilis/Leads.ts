@@ -1,102 +1,159 @@
-import { Lead } from "./components/LeadCard";
+import { Lead } from "../components/LeadCard";
+
 
 const LEADS: Lead[] = [
   {
-    id: "1",
+    _id: "1",
     name: "Priya Mehta",
     company: "TechNova Pvt Ltd",
     email: "priya.mehta@technova.in",
-    phone: "+91 98765 43210",
     status: "New",
-    value: "₹4,20,000",
-    agent: "Arjun Singh",
-    date: "Jul 22, 2026",
+    tags: [
+      'Inbound',
+      'High Value'
+    ],
+    timeToClose: 15,
+    salesAgent: {
+      name: "Arjun Singh",
+      email: "arunsingh@gmail.com"
+    },
+    createdAt: '2026-07-22T10:15:00.000Z',
+    updatedAt: '2026-07-22T12:00:00.000Z',
     avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Priya",
   },
   {
-    id: "2",
+    _id: "2",
     name: "Rahul Verma",
     company: "BlueSky Solutions",
     email: "rahul.v@bluesky.io",
-    phone: "+91 87654 32109",
     status: "Contacted",
-    value: "₹7,80,000",
-    agent: "Neha Kapoor",
-    date: "Jul 21, 2026",
+    tags: [
+      'Follow-up',
+      'Mid-Market'
+    ],
+    timeToClose: 25,
+    salesAgent: {
+      name: "Neha Kapoor",
+      email: "nehakapoor@gmail.com"
+    },
+    createdAt: '2026-07-21T09:30:00.000Z',
+    updatedAt: '2026-07-21T14:20:00.000Z',
     avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Rahul",
   },
   {
-    id: "3",
+    _id: "3",
     name: "Sneha Iyer",
     company: "Horizon Fintech",
     email: "sneha.iyer@horizonfin.com",
-    phone: "+91 76543 21098",
     status: "Qualified",
-    value: "₹12,50,000",
-    agent: "Arjun Singh",
-    date: "Jul 20, 2026",
+    tags: [
+      'Enterprise',
+      'Hot'
+    ],
+    timeToClose: 40,
+    salesAgent: {
+      name: "Arjun Singh",
+      email: "arunsingh@gmail.com"
+    },
+    createdAt: '2026-07-20T11:45:00.000Z',
+    updatedAt: '2026-07-21T16:10:00.000Z',
     avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Sneha",
   },
   {
-    id: "4",
+    _id: "4",
     name: "Amit Desai",
     company: "GreenLeaf Exports",
     email: "amit.desai@greenleaf.co",
-    phone: "+91 65432 10987",
     status: "Proposal",
-    value: "₹9,30,000",
-    agent: "Meera Joshi",
-    date: "Jul 19, 2026",
+    tags: [
+      'High Value',
+      'Negotiation'
+    ],
+    timeToClose: 20,
+    salesAgent: {
+      name: "Meera Joshi",
+      email: "meerajoshi@gmail.com"
+    },
+    createdAt: '2026-07-19T08:00:00.000Z',
+    updatedAt: '2026-07-20T10:30:00.000Z',
     avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Amit",
   },
   {
-    id: "5",
+    _id: "5",
     name: "Kavya Nair",
     company: "Sparkle Retail",
     email: "kavya.n@sparkleretail.com",
-    phone: "+91 54321 09876",
     status: "Closed",
-    value: "₹3,60,000",
-    agent: "Rohan Sharma",
-    date: "Jul 18, 2026",
+    tags: [
+      'Retail',
+      'Completed'
+    ],
+    timeToClose: 10,
+    salesAgent: {
+      name: "Rohan Sharma",
+      email: "rohansharma@gmail.com"
+    },
+    createdAt: '2026-07-18T14:10:00.000Z',
+    updatedAt: '2026-07-19T17:50:00.000Z',
     avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Kavya",
   },
   {
-    id: "6",
+    _id: "6",
     name: "Vikram Patel",
     company: "Nexgen Logistics",
     email: "vikram.p@nexgenlog.in",
-    phone: "+91 43210 98765",
     status: "New",
-    value: "₹5,10,000",
-    agent: "Neha Kapoor",
-    date: "Jul 17, 2026",
+    tags: [
+      'Logistics',
+      'Cold Lead'
+    ],
+    timeToClose: 35,
+    salesAgent: {
+      name: "Neha Kapoor",
+      email: "nehakapoor@gmail.com"
+    },
+    createdAt: '2026-07-17T13:25:00.000Z',
+    updatedAt: '2026-07-17T15:40:00.000Z',
     avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Vikram",
   },
   {
-    id: "7",
+    _id: "7",
     name: "Ananya Bose",
     company: "CloudPeak Technologies",
     email: "ananya.bose@cloudpeak.tech",
-    phone: "+91 32109 87654",
     status: "Contacted",
-    value: "₹6,70,000",
-    agent: "Meera Joshi",
-    date: "Jul 16, 2026",
+    tags: [
+      'SaaS',
+      'Follow-up'
+    ],
+    timeToClose: 18,
+    salesAgent: {
+      name: "Meera Joshi",
+      email: "meerajoshi@gmail.com"
+    },
+    createdAt: '2026-07-16T15:00:00.000Z',
+    updatedAt: '2026-07-17T11:15:00.000Z',
     avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Ananya",
   },
   {
-    id: "8",
+    _id: "8",
     name: "Siddharth Rao",
     company: "Meridian Healthcare",
     email: "siddharth.rao@meridian.co",
-    phone: "+91 21098 76543",
     status: "Qualified",
-    value: "₹15,00,000",
-    agent: "Arjun Singh",
-    date: "Jul 15, 2026",
+    tags: [
+      'High Value',
+      'Follow-up'
+    ],
+    timeToClose: 30,
+    salesAgent: { 
+      name: "Arjun Singh",
+      email: "arunsingh@gmail.com"
+    },
+    createdAt: '2026-07-20T16:13:34.202Z',
+    updatedAt: '2026-07-21T18:48:48.549Z',
     avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Siddharth",
   },
 ];
 
-export default LEADS
+export default LEADS;
