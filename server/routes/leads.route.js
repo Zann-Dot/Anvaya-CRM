@@ -5,11 +5,23 @@ const leadsRouter = express.Router();
 
 leadsRouter.post("/leads", async (req, res) => {
     try {
-        const { name, source, salesAgent, status, tags, timeToClose, priority } =
-            req.body;
+        const {
+            name,
+            company,
+            email,
+            avatar,
+            source,
+            salesAgent,
+            status,
+            tags,
+            timeToClose,
+            priority,
+        } = req.body;
 
         if (
             !name ||
+            !company ||
+            !email ||
             !source ||
             !salesAgent ||
             !status ||
@@ -29,8 +41,11 @@ leadsRouter.post("/leads", async (req, res) => {
 
         const lead = await Leads.create({
             name,
+            email,
+            company,
+            avatar,
             source,
-            salesAgent: agent,
+            salesAgent,
             status,
             tags,
             timeToClose,
@@ -67,7 +82,7 @@ leadsRouter.get("/leads", async (req, res) => {
             query.source = source;
         }
 
-        const leads = await Leads.find(query);
+        const leads = await Leads.find(query).populate("salesAgent");
 
         if (!Array.isArray(leads) || !leads)
             return res.status(409).json({ error: "cannot find leads" });
@@ -80,11 +95,24 @@ leadsRouter.get("/leads", async (req, res) => {
 
 leadsRouter.put("/leads/:id", async (req, res) => {
     try {
-        const { name, source, salesAgent, status, tags, timeToClose, priority, closedAt = null } =
-            req.body;
+        const {
+            name,
+            company,
+            email,
+            avatar,
+            source,
+            salesAgent,
+            status,
+            tags,
+            timeToClose,
+            priority,
+            closedAt = null,
+        } = req.body;
 
         if (
             !name ||
+            !company ||
+            !email ||
             !source ||
             !salesAgent ||
             !status ||
@@ -100,13 +128,16 @@ leadsRouter.put("/leads/:id", async (req, res) => {
             req.params.id,
             {
                 name,
+                company,
+                email,
+                avatar,
                 source,
                 salesAgent,
                 status,
                 tags,
                 timeToClose,
                 priority,
-                closedAt
+                closedAt,
             },
             { new: true },
         );

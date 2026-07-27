@@ -1,9 +1,32 @@
 import { model, Schema } from "mongoose"
 
+function capitalizeString(str) {
+    if (!str) return;
+    return str
+        .split(/\s+/)
+        .map(string => string.slice(0, 1).toUpperCase() + string.slice(1))
+        .join(" ")
+}
+
 const LeadSchema = new Schema({
     name: {
         type: String,
-        required: [true, 'Lead name is required'],
+        required: [true, 'Lead contact name is required'],
+        set: capitalizeString
+    },
+    company: {
+        type: String,
+        required: [true, 'Company name is required'],
+        set: capitalizeString
+    },
+    email: {
+        type: String,
+        required: [true, 'email is required'],
+        match: [/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Please provide a valid email address"]
+    },
+    avatar: {
+        type: String,
+        default: "https://upload.wikimedia.org/wikipedia/commons/0/03/Twitter_default_profile_400x400.png"
     },
     source: {
         type: String,
@@ -18,7 +41,7 @@ const LeadSchema = new Schema({
     status: {
         type: String,
         required: true,
-        enum: ['New', 'Contacted', 'Qualified', 'Proposal Sent', 'Closed'],
+        enum: ['New', 'Contacted', 'Qualified', 'Proposal', 'Closed'],
         default: 'New',
     },
     tags: {
