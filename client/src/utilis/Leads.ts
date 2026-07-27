@@ -8,6 +8,8 @@ const LEADS: Lead[] = [
     company: "TechNova Pvt Ltd",
     email: "priya.mehta@technova.in",
     status: "New",
+    priority: "High",
+    source: "Website",
     tags: [
       'Inbound',
       'High Value'
@@ -27,6 +29,8 @@ const LEADS: Lead[] = [
     company: "BlueSky Solutions",
     email: "rahul.v@bluesky.io",
     status: "Contacted",
+    priority: "Medium",
+    source: "Referral",
     tags: [
       'Follow-up',
       'Mid-Market'
@@ -46,6 +50,8 @@ const LEADS: Lead[] = [
     company: "Horizon Fintech",
     email: "sneha.iyer@horizonfin.com",
     status: "Qualified",
+    priority: "High",
+    source: "Cold Call",
     tags: [
       'Enterprise',
       'Hot'
@@ -65,6 +71,8 @@ const LEADS: Lead[] = [
     company: "GreenLeaf Exports",
     email: "amit.desai@greenleaf.co",
     status: "Proposal",
+    priority: "Low",
+    source: "Advertisement",
     tags: [
       'High Value',
       'Negotiation'
@@ -84,6 +92,8 @@ const LEADS: Lead[] = [
     company: "Sparkle Retail",
     email: "kavya.n@sparkleretail.com",
     status: "Closed",
+    priority: "Medium",
+    source: "Email",
     tags: [
       'Retail',
       'Completed'
@@ -103,6 +113,8 @@ const LEADS: Lead[] = [
     company: "Nexgen Logistics",
     email: "vikram.p@nexgenlog.in",
     status: "New",
+    priority: "Low",
+    source: "Other",
     tags: [
       'Logistics',
       'Cold Lead'
@@ -122,6 +134,8 @@ const LEADS: Lead[] = [
     company: "CloudPeak Technologies",
     email: "ananya.bose@cloudpeak.tech",
     status: "Contacted",
+    priority: "Medium",
+    source: "Website",
     tags: [
       'SaaS',
       'Follow-up'
@@ -141,6 +155,8 @@ const LEADS: Lead[] = [
     company: "Meridian Healthcare",
     email: "siddharth.rao@meridian.co",
     status: "Qualified",
+    priority: "High",
+    source: "Referral",
     tags: [
       'High Value',
       'Follow-up'

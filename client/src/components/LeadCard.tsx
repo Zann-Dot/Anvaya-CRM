@@ -1,5 +1,3 @@
-// import { Badge } from "flowbite-react";
-
 export interface Lead {
    readonly _id: string;
    name: string;
@@ -7,6 +5,8 @@ export interface Lead {
    email: string;
    tags: string[];
    status: "New" | "Contacted" | "Qualified" | "Proposal" | "Closed";
+   priority: "High" | "Medium" | "Low";
+   source: "Website" | "Referral" | "Cold Call" | "Advertisement" | "Email" | "Other";
    timeToClose: number;
    salesAgent: {
       name: string;
