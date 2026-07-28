@@ -56,10 +56,12 @@ reportRouter.post("/report/last-month-comparison", async (req, res) => {
         const startOfPrevMonth = startOfMonth(subMonths(presentDate, 1));
 
         const [
-            totalLeadsInPreviousMonth,
-            totalLeadsCLosedInPreviousMonth,
+            totalLeadsInPrevMonth,
+            totalLeadsCLosedInPrevMonth,
+            activeLeadsInPrevMonth,
             totalLeadsOfTheMonth,
             totalLeadsClosedThisMonth,
+            activeLeads
         ] = await Promise.all([
             Leads.countDocuments({
                 createdAt: { $gte: startOfPrevMonth, $lte: sameDayPrevMonth },
@@ -69,27 +71,40 @@ reportRouter.post("/report/last-month-comparison", async (req, res) => {
                 createdAt: { $gte: startOfPrevMonth, $lte: sameDayPrevMonth },
             }),
             Leads.countDocuments({
+                status: { $ne: "Closed" },
+                createdAt: { $gte: startOfPrevMonth, $lte: sameDayPrevMonth },
+            }),
+            Leads.countDocuments({
                 createdAt: { $gte: startOfTheMonth, $lte: presentDate },
             }),
             Leads.countDocuments({
                 status: { $eq: "Closed" },
                 createdAt: { $gte: startOfTheMonth, $lte: presentDate },
             }),
+            Leads.countDocuments({
+                status: { $ne: "Closed" },
+                createdAt: { $gte: startOfTheMonth, $lte: presentDate },
+            }),
         ]);
 
         const changeInLeads = safePercentageChange(
             totalLeadsOfTheMonth,
-            totalLeadsInPreviousMonth,
+            totalLeadsInPrevMonth,
         );
 
         const changeInClosedLeads = safePercentageChange(
             totalLeadsClosedThisMonth,
-            totalLeadsCLosedInPreviousMonth,
+            totalLeadsCLosedInPrevMonth,
         );
 
+        const changeInActiveLeads = safePercentageChange(
+            activeLeads,
+            activeLeadsInPrevMonth
+        )
+
         const conversionRateInPrevMon = safeRate(
-            totalLeadsCLosedInPreviousMonth,
-            totalLeadsInPreviousMonth,
+            totalLeadsCLosedInPrevMonth,
+            totalLeadsInPrevMonth,
         );
 
         const conversionRateThisMonth = safeRate(
@@ -104,8 +119,10 @@ reportRouter.post("/report/last-month-comparison", async (req, res) => {
         res.json({
             totalLeadsClosedThisMonth,
             totalLeadsOfTheMonth,
+            activeLeads,
             changeInLeads,
             changeInClosedLeads,
+            changeInActiveLeads,
             conversionRateThisMonth,
             changeInConversionRate,
         });
