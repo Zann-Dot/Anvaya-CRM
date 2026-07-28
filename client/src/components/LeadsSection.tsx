@@ -7,7 +7,7 @@ import {
 } from "react-icons/hi";
 import { useState } from "react";
 import { Button, Spinner } from "flowbite-react";
-import LeadCard, { Lead } from "./LeadCard";
+import LeadCard from "./LeadCard";
 import { useLeads } from "../hooks/useLeads";
 // import LEADS from "../utilis/Leads";
 
@@ -31,7 +31,7 @@ export default function LeadsSection({ STATUS_FILTERS }: LeadsSectionProp) {
 
     const filteredLeads =
         activeFilter && activeFilter !== "All"
-            ? leads.filter((lead: Lead) => lead.status === activeFilter)
+            ? leads?.filter((lead) => lead.status === activeFilter)
             : leads;
 
     const filterBadgeColor: Record<FilterType, string> = {
@@ -143,7 +143,7 @@ export default function LeadsSection({ STATUS_FILTERS }: LeadsSectionProp) {
                         </p>
                     </div>
                 ) : (
-                    filteredLeads?.map((lead: Lead) => <LeadCard key={lead._id} lead={lead} />)
+                    filteredLeads?.map((lead) => <LeadCard key={lead._id} lead={lead} />)
                 )}
             </div>
 

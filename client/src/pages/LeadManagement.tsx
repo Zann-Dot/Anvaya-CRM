@@ -11,10 +11,12 @@ import {
 } from "react-icons/hi";
 import { useParams } from "react-router-dom";
 import { useLead } from "../hooks/useLeads";
+import { format } from "date-fns";
 
 export default function LeadManagement() {
-   const { leadId } = useParams();
-   const { data: lead } = useLead(leadId);
+   const { id } = useParams();
+   const { data: lead } = useLead(id);
+
    return (
       <div className="mx-auto max-w-7xl space-y-6 p-6">
          <div className="flex flex-col gap-4 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between dark:border-gray-700 dark:bg-gray-800">
@@ -33,17 +35,27 @@ export default function LeadManagement() {
                      </Badge>
                   </div>
                   <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                     Sarah Jenkins
+                     {lead?.name}
                   </h1>
                </div>
             </div>
 
             <div className="flex items-center gap-2">
-               <Badge color="blue" size="sm" icon={HiOutlineCheckCircle}>
-                  Status: New
+               <Badge
+                  color="blue"
+                  className="bg-blue-50 px-3 hover:bg-blue-50 dark:bg-blue-900 dark:text-blue-300 dark:hover:bg-blue-900"
+                  size="sm"
+                  icon={HiOutlineCheckCircle}
+               >
+                  Status: {lead?.status}
                </Badge>
-               <Badge color="failure" size="sm" icon={HiOutlineFire}>
-                  Priority: High
+               <Badge
+                  color="failure"
+                  className="px-3 hover:bg-red-100 dark:bg-red-900/20 dark:text-red-600 dark:hover:bg-red-900/20"
+                  size="sm"
+                  icon={HiOutlineFire}
+               >
+                  Priority: {lead?.priority}
                </Badge>
             </div>
          </div>
@@ -58,13 +70,13 @@ export default function LeadManagement() {
                      <div className="rounded-xl bg-gray-50 p-3 dark:bg-gray-700/50">
                         <p className="text-[11px] text-gray-400">Company</p>
                         <p className="text-sm font-semibold text-gray-900 dark:text-white">
-                           Acme Tech Solutions
+                           {lead?.company}
                         </p>
                      </div>
                      <div className="rounded-xl bg-gray-50 p-3 dark:bg-gray-700/50">
                         <p className="text-[11px] text-gray-400">Created Date</p>
                         <p className="text-sm font-semibold text-gray-900 dark:text-white">
-                           July 28, 2026
+                           {lead && format(lead.createdAt, "MMMM, dd yyyy")}
                         </p>
                      </div>
                   </div>
@@ -77,7 +89,7 @@ export default function LeadManagement() {
                      <h2 className="text-lg font-bold text-gray-900 dark:text-white">
                         Lead Details
                      </h2>
-                     <Badge color="gray">ID: #LD-70291</Badge>
+                     <Badge color="gray">ID: {lead?._id}</Badge>
                   </div>
 
                   <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -87,7 +99,7 @@ export default function LeadManagement() {
                            <span>Lead Name</span>
                         </div>
                         <p className="mt-1 text-base font-semibold text-gray-900 dark:text-white">
-                           Sarah Jenkins
+                           {lead?.name}
                         </p>
                      </div>
 
@@ -97,7 +109,7 @@ export default function LeadManagement() {
                            <span>Sales Agent</span>
                         </div>
                         <p className="mt-1 text-base font-semibold text-gray-900 dark:text-white">
-                           John Doe
+                           {lead?.salesAgent.name}
                         </p>
                      </div>
 
@@ -107,7 +119,7 @@ export default function LeadManagement() {
                            <span>Lead Source</span>
                         </div>
                         <p className="mt-1 text-base font-semibold text-gray-900 dark:text-white">
-                           Referral
+                           {lead?.source}
                         </p>
                      </div>
 
@@ -117,8 +129,11 @@ export default function LeadManagement() {
                            <span>Lead Status</span>
                         </div>
                         <div className="mt-1.5">
-                           <Badge color="blue" className="w-fit" size="sm">
-                              New
+                           <Badge
+                              className="w-fit bg-blue-50 hover:bg-blue-50 dark:bg-blue-900 dark:text-blue-300 dark:hover:bg-blue-900"
+                              size="sm"
+                           >
+                              {lead?.status}
                            </Badge>
                         </div>
                      </div>
@@ -129,8 +144,12 @@ export default function LeadManagement() {
                            <span>Priority</span>
                         </div>
                         <div className="mt-1.5">
-                           <Badge color="failure" className="w-fit" size="sm">
-                              High
+                           <Badge
+                              color="failure"
+                              className="w-fit hover:bg-red-100 dark:bg-red-900/30 dark:text-red-700 dark:hover:bg-red-900/30"
+                              size="sm"
+                           >
+                              {lead?.priority}
                            </Badge>
                         </div>
                      </div>
@@ -141,19 +160,18 @@ export default function LeadManagement() {
                            <span>Time to Close</span>
                         </div>
                         <p className="mt-1 text-base font-semibold text-gray-900 dark:text-white">
-                           30 Days
+                           {lead?.timeToClose} Days
                         </p>
                      </div>
                   </div>
 
                   <div className="mt-6 flex justify-end border-t border-gray-100 pt-4 dark:border-gray-700">
-                     <Button color="purple" disabled>
+                     <Button color="purple" className="cursor-pointer">
                         <HiOutlinePencil className="mr-2 h-4 w-4" />
                         Edit Lead Details
                      </Button>
                   </div>
                </div>
-
             </div>
          </div>
       </div>
