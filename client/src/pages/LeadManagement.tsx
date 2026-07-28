@@ -1,4 +1,4 @@
-import { Badge, Button, Label, Textarea } from "flowbite-react";
+import { Badge, Button } from "flowbite-react";
 import {
    HiOutlineUser,
    HiOutlineUserCircle,
@@ -6,12 +6,15 @@ import {
    HiOutlineTag,
    HiOutlineClock,
    HiOutlinePencil,
-   HiOutlineChatAlt2,
    HiOutlineFire,
    HiOutlineCheckCircle,
 } from "react-icons/hi";
+import { useParams } from "react-router-dom";
+import { useLead } from "../hooks/useLeads";
 
 export default function LeadManagement() {
+   const { leadId } = useParams();
+   const { data: lead } = useLead(leadId);
    return (
       <div className="mx-auto max-w-7xl space-y-6 p-6">
          <div className="flex flex-col gap-4 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between dark:border-gray-700 dark:bg-gray-800">
@@ -151,72 +154,6 @@ export default function LeadManagement() {
                   </div>
                </div>
 
-               <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-                  <div className="mb-4 flex items-center justify-between border-b border-gray-100 pb-3 dark:border-gray-700">
-                     <div className="flex items-center gap-2">
-                        <HiOutlineChatAlt2 className="h-5 w-5 text-violet-600 dark:text-violet-400" />
-                        <h3 className="text-base font-bold text-gray-900 dark:text-white">
-                           Comments Section
-                        </h3>
-                     </div>
-                     <Badge color="purple" size="xs">
-                        2 Comments
-                     </Badge>
-                  </div>
-
-                  <div className="space-y-4">
-                     <div className="rounded-xl border border-gray-100 bg-gray-50/70 p-4 dark:border-gray-700/60 dark:bg-gray-900/40">
-                        <div className="flex items-center justify-between">
-                           <span className="text-xs font-bold text-gray-900 dark:text-white">
-                              John Doe
-                           </span>
-                           <span className="text-[11px] text-gray-500 dark:text-gray-400">
-                              July 28, 2026 at 02:30 PM
-                           </span>
-                        </div>
-                        <p className="mt-2 text-sm text-gray-700 dark:text-gray-300">
-                           Reached out, waiting for response on initial product overview
-                           & proposal.
-                        </p>
-                     </div>
-
-                     <div className="rounded-xl border border-gray-100 bg-gray-50/70 p-4 dark:border-gray-700/60 dark:bg-gray-900/40">
-                        <div className="flex items-center justify-between">
-                           <span className="text-xs font-bold text-gray-900 dark:text-white">
-                              Anay Karn
-                           </span>
-                           <span className="text-[11px] text-gray-500 dark:text-gray-400">
-                              July 27, 2026 at 10:15 AM
-                           </span>
-                        </div>
-                        <p className="mt-2 text-sm text-gray-700 dark:text-gray-300">
-                           Lead assigned from referral partner. Initial requirement sheet
-                           received.
-                        </p>
-                     </div>
-                  </div>
-
-                  <div className="mt-6 space-y-3 border-t border-gray-100 pt-4 dark:border-gray-700">
-                     <div>
-                        <div className="mb-1 block">
-                           <Label htmlFor="new-comment" defaultValue="Add New Comment" />
-                        </div>
-                        <Textarea
-                           id="new-comment"
-                           placeholder="Type your comment here..."
-                           rows={3}
-                           disabled
-                           className="cursor-not-allowed"
-                        />
-                     </div>
-
-                     <div className="flex justify-end">
-                        <Button color="purple" disabled>
-                           Submit Comment
-                        </Button>
-                     </div>
-                  </div>
-               </div>
             </div>
          </div>
       </div>
