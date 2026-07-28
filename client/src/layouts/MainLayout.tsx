@@ -10,6 +10,7 @@ const pageTitles: Record<string, { title: string; subtitle: string }> = {
   "/reports": { title: "Reports", subtitle: "View analytics and reports" },
   "/settings": { title: "Settings", subtitle: "Configure your workspace" },
   "/profile": { title: "User Profile", subtitle: "View and manage your account details" },
+  "/leads/:id": { title: "Lead Management", subtitle: "View and manage lead details" },
 };
 
 export default function MainLayout() {

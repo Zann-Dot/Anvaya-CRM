@@ -7,6 +7,7 @@ import Agents from "./pages/Agents";
 import Reports from "./pages/Reports";
 import Settings from "./pages/Settings";
 import Profile from "./pages/Profile";
+import LeadManagement from "./pages/LeadManagement";
 
 export default function App() {
 
@@ -20,6 +21,7 @@ export default function App() {
         <Route path="/reports" element={<Reports />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/leads/:id" element={<LeadManagement />} />
       </Route>
     </Routes>
   );

@@ -1,4 +1,5 @@
 import { format } from "date-fns"
+import { Link } from "react-router-dom";
 
 export interface Lead {
    readonly _id: string;
@@ -62,7 +63,7 @@ export default function LeadCard({ lead }: LeadCardProps) {
    const cfg = statusConfig[lead.status];
 
    return (
-      <div className="group flex items-center gap-4 rounded-2xl border border-gray-100 bg-white p-4 transition-all duration-200 hover:border-violet-200 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:border-violet-700">
+      <Link to={`/leads/${lead._id}`} className="group flex items-center gap-4 rounded-2xl border border-gray-100 bg-white p-4 transition-all duration-200 hover:border-violet-200 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:border-violet-700">
 
          <div className="relative shrink-0">
             <img
@@ -120,6 +121,6 @@ export default function LeadCard({ lead }: LeadCardProps) {
                />
             </svg>
          </button>
-      </div>
+      </Link>
    );
 }
