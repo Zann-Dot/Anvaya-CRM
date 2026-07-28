@@ -93,6 +93,17 @@ leadsRouter.get("/leads", async (req, res) => {
     }
 });
 
+leadsRouter.get("/leads/details/:id", async (req, res) => {
+    try {
+        const lead = await Leads.findById(req.params.id);
+        if (!lead)
+            return res.status(404).json({ error: "Lead not found" });
+        res.json(lead);
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+})
+
 leadsRouter.put("/leads/:id", async (req, res) => {
     try {
         const {
