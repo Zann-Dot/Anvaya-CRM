@@ -95,7 +95,7 @@ leadsRouter.get("/leads", async (req, res) => {
 
 leadsRouter.get("/leads/details/:id", async (req, res) => {
     try {
-        const lead = await Leads.findById(req.params.id);
+        const lead = await Leads.findById(req.params.id).populate("salesAgent");
         if (!lead)
             return res.status(404).json({ error: "Lead not found" });
         res.json(lead);
