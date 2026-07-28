@@ -1,20 +1,13 @@
-import { useState } from "react";
-import { Button } from "flowbite-react";
 import {
-   HiOutlinePlus,
    HiOutlineUserGroup,
    HiOutlineCollection,
    HiOutlineTrendingUp,
    HiOutlineCheckCircle,
-   HiOutlineFilter,
-   HiOutlineViewGrid,
-   HiOutlineViewList,
 } from "react-icons/hi";
 import StatsCard from "../components/StatsCard";
-import LeadCard, { type Lead } from "../components/LeadCard";
-import LEADS from "../utilis/Leads";
 import useMain from "../context/MainProvider";
 import LeadsSection from "../components/LeadsSection";
+import { format } from "date-fns";
 
 const STATUS_FILTERS = [
    "All",
@@ -25,33 +18,8 @@ const STATUS_FILTERS = [
    "Closed",
 ] as const;
 
-type FilterType = (typeof STATUS_FILTERS)[number];
-
-const filterBadgeColor: Record<FilterType, string> = {
-   All: "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300",
-   New: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
-   Contacted:
-      "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
-   Qualified:
-      "bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400",
-   Proposal:
-      "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400",
-   Closed:
-      "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
-};
-
-const activeFilterStyle: Record<FilterType, string> = {
-   All: "bg-gray-800 text-white dark:bg-gray-200 dark:text-gray-900",
-   New: "bg-blue-600 text-white",
-   Contacted: "bg-amber-500 text-white",
-   Qualified: "bg-violet-600 text-white",
-   Proposal: "bg-orange-500 text-white",
-   Closed: "bg-green-600 text-white",
-};
-
 export default function Dashboard() {
    const { dashboardReport } = useMain();
-
 
    const stats = [
       {
@@ -98,7 +66,7 @@ export default function Dashboard() {
             <div className="relative flex items-center justify-between">
                <div>
                   <p className="text-sm font-medium text-violet-200">
-                     Wednesday, July 23, 2026
+                     {format(Date(), "EEEEEEEEE, MMMMMMMMM dd, yyyy")}
                   </p>
                   <h2 className="mt-1 text-2xl font-bold">Good morning, Rohan! 👋</h2>
                   <p className="mt-1 text-sm text-violet-200">

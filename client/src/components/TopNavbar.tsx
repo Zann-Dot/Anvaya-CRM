@@ -1,5 +1,5 @@
 import { DarkThemeToggle } from "flowbite-react";
-import { HiOutlineBell, HiOutlineChevronDown } from "react-icons/hi";
+import { HiOutlineChevronDown } from "react-icons/hi";
 
 interface TopNavbarProps {
   title: string;
@@ -19,11 +19,6 @@ export default function TopNavbar({ title, subtitle }: TopNavbarProps) {
       </div>
 
       <div className="flex items-center gap-3">
-        <button className="relative rounded-xl border border-gray-200 bg-gray-50 p-2 text-gray-600 transition hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700">
-          <HiOutlineBell className="h-5 w-5" />
-          <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-violet-500" />
-        </button>
-
         <DarkThemeToggle className="rounded-xl border border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800" />
 
         <button className="flex items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 px-3 py-1.5 transition hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
