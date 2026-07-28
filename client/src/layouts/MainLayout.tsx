@@ -9,6 +9,7 @@ const pageTitles: Record<string, { title: string; subtitle: string }> = {
   "/agents": { title: "Agents", subtitle: "Manage your team of agents" },
   "/reports": { title: "Reports", subtitle: "View analytics and reports" },
   "/settings": { title: "Settings", subtitle: "Configure your workspace" },
+  "/profile": { title: "User Profile", subtitle: "View and manage your account details" },
 };
 
 export default function MainLayout() {

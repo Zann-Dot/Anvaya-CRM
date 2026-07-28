@@ -81,10 +81,18 @@ export default function AppSidebar() {
 
 
          <div className="border-t border-gray-200 p-4 dark:border-gray-700">
-            <div className="flex cursor-pointer items-center gap-3 rounded-xl p-2 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800">
+            <NavLink
+               to="/profile"
+               className={({ isActive }) =>
+                  `flex cursor-pointer items-center gap-3 rounded-xl p-2 transition-colors ${isActive
+                     ? "bg-violet-50 dark:bg-violet-950/40 ring-1 ring-violet-200 dark:ring-violet-800"
+                     : "hover:bg-gray-50 dark:hover:bg-gray-800"
+                  }`
+               }
+            >
                <div className="relative">
                   <img
-                     src="https://api.dicebear.com/9.x/avataaars/svg?seed=Anvaya"
+                     src="https://upload.wikimedia.org/wikipedia/commons/0/03/Twitter_default_profile_400x400.png"
                      alt="User Avatar"
                      className="h-9 w-9 rounded-full object-cover ring-2 ring-violet-200 dark:ring-violet-700"
                   />
@@ -92,14 +100,14 @@ export default function AppSidebar() {
                </div>
                <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-semibold text-gray-900 dark:text-white">
-                     Username
+                     Anay Karn
                   </p>
                   <p className="truncate text-xs text-gray-500 dark:text-gray-400">
                      Admin
                   </p>
                </div>
                <HiOutlineCog className="h-4 w-4 shrink-0 text-gray-400" />
-            </div>
+            </NavLink>
          </div>
       </aside>
    );

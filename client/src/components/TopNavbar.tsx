@@ -77,7 +77,7 @@ export default function TopNavbar({ title, subtitle }: TopNavbarProps) {
         </div>
         <div className="flex items-center gap-2.5 text-xs text-gray-600 dark:text-gray-300">
           <HiOutlineOfficeBuilding className="h-4 w-4 shrink-0 text-violet-500" />
-          <span className="truncate">San Francisco, CA • HQ</span>
+          <span className="truncate">Noida, Uttar Pradesh • HQ</span>
         </div>
       </div>
     </div>
@@ -100,12 +100,12 @@ export default function TopNavbar({ title, subtitle }: TopNavbarProps) {
         <Popover content={companyProfileContent} placement="bottom-end">
           <button className="flex items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 px-3 py-1.5 transition hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
             <img
-              src="https://api.dicebear.com/9.x/avataaars/svg?seed=Anvaya"
+              src="https://upload.wikimedia.org/wikipedia/commons/0/03/Twitter_default_profile_400x400.png"
               alt="avatar"
               className="h-7 w-7 rounded-full object-cover ring-1 ring-violet-300 dark:ring-violet-600"
             />
             <span className="hidden text-sm font-medium text-gray-700 sm:block dark:text-gray-300">
-              User
+              Anay
             </span>
             <HiOutlineChevronDown className="h-3.5 w-3.5 text-gray-400" />
           </button>
