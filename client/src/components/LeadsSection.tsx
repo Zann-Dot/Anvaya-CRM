@@ -9,6 +9,7 @@ import { useState } from "react";
 import { Button, Spinner } from "flowbite-react";
 import LeadCard, { Lead } from "./LeadCard";
 import { useLeads } from "../hooks/useLeads";
+import LEADS from "../utilis/Leads";
 
 interface LeadsSectionProp {
     STATUS_FILTERS: readonly [
@@ -24,9 +25,14 @@ interface LeadsSectionProp {
 export default function LeadsSection({ STATUS_FILTERS }: LeadsSectionProp) {
     type FilterType = (typeof STATUS_FILTERS)[number];
     const [viewMode, setViewMode] = useState<"grid" | "list">("list");
-    const [activeFilter, setActiveFilter] = useState();
+    const [activeFilter, setActiveFilter] = useState<FilterType>();
 
     const { data: leads, isLoading, isError } = useLeads();
+
+    const filteredLeads =
+        activeFilter && activeFilter !== "All"
+            ? LEADS.filter((lead) => lead.status === activeFilter)
+            : LEADS;
 
     const filterBadgeColor: Record<FilterType, string> = {
         All: "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300",
@@ -59,7 +65,7 @@ export default function LeadsSection({ STATUS_FILTERS }: LeadsSectionProp) {
                         Lead Management
                     </h3>
                     <span className="ml-1 rounded-full bg-violet-100 px-2.5 py-0.5 text-xs font-semibold text-violet-700 dark:bg-violet-900/30 dark:text-violet-400">
-                        {leads?.length}
+                        {filteredLeads?.length}
                     </span>
                 </div>
 
@@ -103,8 +109,10 @@ export default function LeadsSection({ STATUS_FILTERS }: LeadsSectionProp) {
                     return (
                         <button
                             key={filter}
-
-                            className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition-all duration-200 ${filterBadgeColor[filter]
+                            onClick={() => setActiveFilter(filter)}
+                            className={`flex cursor-pointer items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition-all duration-200 ${activeFilter === filter
+                                ? activeFilterStyle[filter]
+                                : filterBadgeColor[filter]
                                 }`}
                         >
                             {filter}
@@ -122,7 +130,7 @@ export default function LeadsSection({ STATUS_FILTERS }: LeadsSectionProp) {
                             <Spinner aria-label="Center-aligned spinner example" />
                         </div>
                     </div>
-                ) : (leads?.length === 0 || isError) ? (
+                ) : filteredLeads?.length === 0 || isError ? (
                     <div className="flex flex-col items-center justify-center py-16 text-center">
                         <div className="mb-3 rounded-2xl bg-gray-100 p-4 dark:bg-gray-700">
                             <HiOutlineCollection className="h-8 w-8 text-gray-400" />
@@ -135,13 +143,13 @@ export default function LeadsSection({ STATUS_FILTERS }: LeadsSectionProp) {
                         </p>
                     </div>
                 ) : (
-                    leads?.map((lead: Lead) => <LeadCard key={lead._id} lead={lead} />)
+                    filteredLeads?.map((lead: Lead) => <LeadCard key={lead._id} lead={lead} />)
                 )}
             </div>
 
             <div className="flex items-center justify-between border-t border-gray-100 px-5 py-3 dark:border-gray-700">
                 <p className="text-xs text-gray-400">
-                    Showing {leads?.length} of {leads?.length} leads
+                    Showing {filteredLeads?.length} of {LEADS?.length} leads
                 </p>
                 <button className="text-xs font-medium text-violet-600 hover:text-violet-700 hover:underline dark:text-violet-400 dark:hover:text-violet-300">
                     View all leads →
@@ -153,11 +161,11 @@ export default function LeadsSection({ STATUS_FILTERS }: LeadsSectionProp) {
 
 {
     /* <span
-                                    className={`rounded-full px-1.5 py-0.5 text-[10px] font-bold ${isActive
-                                        ? "bg-white/25 text-white"
-                                        : "bg-black/10 text-inherit dark:bg-white/10"
-                                        }`}
-                                >
-                                    {count}
-                                </span> */
+                                      className={`rounded-full px-1.5 py-0.5 text-[10px] font-bold ${isActive
+                                          ? "bg-white/25 text-white"
+                                          : "bg-black/10 text-inherit dark:bg-white/10"
+                                          }`}
+                                  >
+                                      {count}
+                                  </span> */
 }

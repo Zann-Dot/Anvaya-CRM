@@ -64,9 +64,9 @@ export default function Dashboard() {
       },
       {
          label: "Active Leads",
-         value: 1,
-         change: "5",
-         positive: true,
+         value: dashboardReport?.activeLeads,
+         change: dashboardReport?.changeInActiveLeads,
+         positive: dashboardReport?.changeInActiveLeads >= 0,
          icon: <HiOutlineUserGroup className="h-6 w-6" />,
          color: "bg-blue-500",
       },
