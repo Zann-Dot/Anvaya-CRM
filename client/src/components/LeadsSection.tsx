@@ -9,7 +9,7 @@ import { useState } from "react";
 import { Button, Spinner } from "flowbite-react";
 import LeadCard, { Lead } from "./LeadCard";
 import { useLeads } from "../hooks/useLeads";
-import LEADS from "../utilis/Leads";
+// import LEADS from "../utilis/Leads";
 
 interface LeadsSectionProp {
     STATUS_FILTERS: readonly [
@@ -31,8 +31,8 @@ export default function LeadsSection({ STATUS_FILTERS }: LeadsSectionProp) {
 
     const filteredLeads =
         activeFilter && activeFilter !== "All"
-            ? LEADS.filter((lead) => lead.status === activeFilter)
-            : LEADS;
+            ? leads.filter((lead: Lead) => lead.status === activeFilter)
+            : leads;
 
     const filterBadgeColor: Record<FilterType, string> = {
         All: "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300",
@@ -149,7 +149,7 @@ export default function LeadsSection({ STATUS_FILTERS }: LeadsSectionProp) {
 
             <div className="flex items-center justify-between border-t border-gray-100 px-5 py-3 dark:border-gray-700">
                 <p className="text-xs text-gray-400">
-                    Showing {filteredLeads?.length} of {LEADS?.length} leads
+                    Showing {filteredLeads?.length} of {leads?.length} leads
                 </p>
                 <button className="text-xs font-medium text-violet-600 hover:text-violet-700 hover:underline dark:text-violet-400 dark:hover:text-violet-300">
                     View all leads →

@@ -68,11 +68,12 @@ export default function Dashboard() {
                   <p className="text-sm font-medium text-violet-200">
                      {format(Date(), "EEEEEEEEE, MMMMMMMMM dd, yyyy")}
                   </p>
-                  <h2 className="mt-1 text-2xl font-bold">Good morning, Rohan! 👋</h2>
+                  <h2 className="mt-1 text-2xl font-bold">Good morning, Anay! 👋</h2>
                   <p className="mt-1 text-sm text-violet-200">
                      You have{" "}
                      <span className="font-semibold text-white">
-                        {dashboardReport?.totalLeadsOfTheMonth} new leads
+                        {dashboardReport?.activeLeads} new{" "}
+                        {dashboardReport?.activeLeads <= 1 ? "lead" : "leads"}
                      </span>{" "}
                      waiting for review.
                   </p>
@@ -86,9 +87,7 @@ export default function Dashboard() {
             ))}
          </div>
 
-         <LeadsSection
-            STATUS_FILTERS={STATUS_FILTERS}
-         />
+         <LeadsSection STATUS_FILTERS={STATUS_FILTERS} />
       </div>
    );
 }
