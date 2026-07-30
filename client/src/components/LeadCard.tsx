@@ -13,7 +13,9 @@ export interface Lead {
    timeToClose: number;
    salesAgent: {
       name: string;
-      email: string
+      email: string;
+      _id: string;
+      createdAt: string
    };
    createdAt: string;
    updatedAt: string;

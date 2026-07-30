@@ -1,10 +1,21 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import React, {
+    createContext,
+    useContext,
+    useState,
+    useEffect,
+    ChangeEvent,
+} from "react";
+import { useCreateComment, NewComment } from "../hooks/useComments";
 
 interface MainContextType {
     dashboardReport: any;
     loading: boolean;
     error: string | null;
     fetchDashboardReport: () => Promise<void>;
+    handleComments: (
+        e: ChangeEvent<HTMLTextAreaElement, HTMLTextAreaElement>,
+    ) => void;
+    postComment: (leadId: string | undefined, author: string | undefined) => void;
 }
 
 const MainContext = createContext<MainContextType | null>(null);
@@ -21,6 +32,8 @@ export function MainProvider({ children }: React.PropsWithChildren) {
     const [dashboardReport, setDashboardReport] = useState<any>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [comment, setComment] = useState("");
+    const { mutate: addComment } = useCreateComment();
 
     async function fetchDashboardReport() {
         try {
@@ -38,6 +51,19 @@ export function MainProvider({ children }: React.PropsWithChildren) {
         }
     }
 
+    const handleComments = (e: React.ChangeEvent<HTMLTextAreaElement>) =>
+        setComment(e.target.value);
+
+    function postComment(leadId: string | undefined, author: string | undefined) {
+        const newComment: NewComment = {
+            leadId,
+            author,
+            commentText: comment,
+        };
+        const response = addComment(newComment);
+        console.log(response);
+    }
+
     useEffect(() => {
         fetchDashboardReport();
     }, []);
@@ -49,6 +75,8 @@ export function MainProvider({ children }: React.PropsWithChildren) {
                 loading,
                 error,
                 fetchDashboardReport,
+                handleComments,
+                postComment,
             }}
         >
             {children}

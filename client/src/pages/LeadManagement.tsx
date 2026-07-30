@@ -1,4 +1,4 @@
-import { Badge, Button } from "flowbite-react";
+import { Badge, Button, Label, Textarea } from "flowbite-react";
 import {
    HiOutlineUser,
    HiOutlineUserCircle,
@@ -8,14 +8,19 @@ import {
    HiOutlinePencil,
    HiOutlineFire,
    HiOutlineCheckCircle,
+   HiOutlineChatAlt2,
 } from "react-icons/hi";
 import { useParams } from "react-router-dom";
 import { useLead } from "../hooks/useLeads";
 import { format } from "date-fns";
+import { useComments } from "../hooks/useComments";
+import useMain from "../context/MainProvider";
 
 export default function LeadManagement() {
    const { id } = useParams();
    const { data: lead } = useLead(id);
+   const { data: comments } = useComments(id);
+   const { handleComments, postComment } = useMain();
 
    return (
       <div className="mx-auto max-w-7xl space-y-6 p-6">
@@ -173,6 +178,67 @@ export default function LeadManagement() {
                   </div>
                </div>
             </div>
+         </div>
+
+         <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+            <div className="mb-4 flex items-center justify-between border-b border-gray-100 pb-3 dark:border-gray-700">
+               <div className="flex items-center gap-2">
+                  <HiOutlineChatAlt2 className="h-5 w-5 text-violet-600 dark:text-violet-400" />
+                  <h3 className="text-base font-bold text-gray-900 dark:text-white">
+                     Comments Section
+                  </h3>
+               </div>
+               <Badge color="purple" size="xs">
+                  {comments?.length} Comments
+               </Badge>
+            </div>
+
+            <div className="space-y-4">
+               {comments?.map((c) => (
+                  <div
+                     key={c._id}
+                     className="rounded-xl border border-gray-100 bg-gray-50/70 p-4 dark:border-gray-700/60 dark:bg-gray-900/40"
+                  >
+                     <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-gray-900 dark:text-white">
+                           {c?.author.name}
+                        </span>
+                        <span className="text-[11px] text-gray-500 dark:text-gray-400">
+                           {format(c.createdAt, "PP")} at {format(c.createdAt, "p")}
+                        </span>
+                     </div>
+                     <p className="mt-2 text-sm text-gray-700 dark:text-gray-300">
+                        {c.commentText}
+                     </p>
+                  </div>
+               ))}
+            </div>
+
+            <form className="mt-6 space-y-3 border-t border-gray-100 pt-4 dark:border-gray-700">
+               <div>
+                  <div className="mb-1 block">
+                     <Label htmlFor="new-comment" defaultValue="Add New Comment" />
+                  </div>
+                  <Textarea
+                     id="new-comment"
+                     placeholder="Type your comment here..."
+                     rows={3}
+                     onChange={handleComments}
+                  />
+               </div>
+
+               <div className="flex justify-end">
+                  <Button
+                     onClick={() =>
+                        lead && postComment(lead?._id, lead?.salesAgent._id)
+                     }
+                     color="purple"
+                     className="cursor-pointer"
+                  >
+                     Submit Comment
+                  </Button>
+               </div>
+            </form>
          </div>
       </div>
    );
