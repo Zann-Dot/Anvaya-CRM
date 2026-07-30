@@ -8,6 +8,7 @@ import {
 import { useState } from "react";
 import { Button, Spinner } from "flowbite-react";
 import LeadCard from "./LeadCard";
+import AddLeadModal from "./AddLeadModal";
 import { useLeads } from "../hooks/useLeads";
 // import LEADS from "../utilis/Leads";
 
@@ -26,6 +27,7 @@ export default function LeadsSection({ STATUS_FILTERS }: LeadsSectionProp) {
     type FilterType = (typeof STATUS_FILTERS)[number];
     const [viewMode, setViewMode] = useState<"grid" | "list">("list");
     const [activeFilter, setActiveFilter] = useState<FilterType>();
+    const [openModal, setOpenModal] = useState(false);
 
     const { data: leads, isLoading, isError } = useLeads();
 
@@ -70,7 +72,6 @@ export default function LeadsSection({ STATUS_FILTERS }: LeadsSectionProp) {
                 </div>
 
                 <div className="flex items-center gap-2">
-                    {/* View Toggle */}
                     <div className="flex rounded-xl border border-gray-200 p-1 dark:border-gray-700">
                         <button
                             onClick={() => setViewMode("list")}
@@ -92,10 +93,11 @@ export default function LeadsSection({ STATUS_FILTERS }: LeadsSectionProp) {
                         </button>
                     </div>
 
-                    {/* Add Lead Button */}
+
                     <Button
                         size="sm"
-                        className="border-0 bg-linear-to-r from-violet-600 to-indigo-600 text-white shadow-md hover:from-violet-700 hover:to-indigo-700 focus:ring-violet-300"
+                        onClick={() => setOpenModal(true)}
+                        className="cursor-pointer border-0 bg-linear-to-r from-violet-600 to-indigo-600 text-white shadow-md hover:from-violet-700 hover:to-indigo-700 focus:ring-violet-300"
                     >
                         <HiOutlinePlus className="mr-1.5 h-4 w-4" />
                         Add Lead
@@ -155,17 +157,9 @@ export default function LeadsSection({ STATUS_FILTERS }: LeadsSectionProp) {
                     View all leads →
                 </button>
             </div>
+
+            <AddLeadModal show={openModal} onClose={() => setOpenModal(false)} />
         </div>
     );
 }
 
-{
-    /* <span
-                                      className={`rounded-full px-1.5 py-0.5 text-[10px] font-bold ${isActive
-                                          ? "bg-white/25 text-white"
-                                          : "bg-black/10 text-inherit dark:bg-white/10"
-                                          }`}
-                                  >
-                                      {count}
-                                  </span> */
-}
