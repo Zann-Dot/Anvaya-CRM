@@ -1,3 +1,5 @@
+import { NewLead } from "../hooks/useLeads";
+
 export async function fetchLeads() {
   const response = await fetch("/api/leads");
   const data = await response.json();
@@ -7,6 +9,17 @@ export async function fetchLeads() {
 
 export async function fetchLeadById(leadId: string | undefined) {
     const response = await fetch(`/api/leads/details/${leadId}`);
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error);
+    return data;
+}
+
+export async function addNewLead(newLead: NewLead) {
+  const response = await fetch(`/api/leads`,{
+    method: "POST",
+    headers: {"COntent-Type": "application/json"},
+    body: JSON.stringify(newLead)
+  });
     const data = await response.json();
     if (!response.ok) throw new Error(data.error);
     return data;
