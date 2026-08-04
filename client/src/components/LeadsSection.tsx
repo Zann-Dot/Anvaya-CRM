@@ -93,7 +93,6 @@ export default function LeadsSection({ STATUS_FILTERS }: LeadsSectionProp) {
                         </button>
                     </div>
 
-
                     <Button
                         size="sm"
                         onClick={() => setOpenModal(true)}
@@ -158,8 +157,11 @@ export default function LeadsSection({ STATUS_FILTERS }: LeadsSectionProp) {
                 </button>
             </div>
 
-            <AddLeadModal show={openModal} onClose={() => setOpenModal(false)} />
+            <AddLeadModal
+                isEdit={false}
+                show={openModal}
+                onClose={() => setOpenModal(false)}
+            />
         </div>
     );
 }
-
