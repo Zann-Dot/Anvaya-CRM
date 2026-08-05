@@ -69,7 +69,7 @@ export default function AddLeadModal({
       const status = formData.get("leadStatus");
       const priority = formData.get("priority");
       const timeToClose = formData.get("timeToClose");
-      const tags = formData.get("tags");
+      const tags = selectedTags;
 
       const newLead: NewLead = {
          name,

@@ -14,7 +14,7 @@ export interface NewLead {
     source: FormDataEntryValue | null | string;
     salesAgent: FormDataEntryValue | null | string;
     status: FormDataEntryValue | null | string;
-    tags: FormDataEntryValue | null | string;
+    tags: FormDataEntryValue | null | string[];
     timeToClose: number | FormDataEntryValue | null;
     priority: FormDataEntryValue | null | string;
 }
