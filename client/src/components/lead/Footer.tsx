@@ -23,7 +23,7 @@ export default function Footer({
                 </span>{" "}
                 of{" "}
                 <span className="font-semibold text-gray-900 dark:text-white">
-                    {data?.totalPage}
+                    {data?.totalLeads}
                 </span>{" "}
                 leads
             </p>
@@ -42,10 +42,10 @@ export default function Footer({
                 </span>
                 <button
                     onClick={() => {
-                        if (data && !isPlaceholderData && page < data?.totalPage)
+                        if (data && !isPlaceholderData && page < data?.totalPages)
                             setPage((prev) => prev + 1);
                     }}
-                    disabled={data && isPlaceholderData && page >= data?.totalPage}
+                    disabled={data && isPlaceholderData && page >= data?.totalPages}
                     className="inline-flex cursor-pointer items-center gap-1 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-400 transition-colors duration-200 ease-in-out hover:bg-gray-50 hover:text-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-500 dark:hover:bg-gray-900/20 dark:hover:text-gray-400"
                 >
                     Next

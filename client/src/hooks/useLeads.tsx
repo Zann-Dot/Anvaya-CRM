@@ -26,7 +26,8 @@ interface MutateLeadVariables {
 
 export interface LeadResponse {
     leads: Lead[];
-    totalPage: number;
+    totalLeads: number;
+    totalPages: number;
     currentPage: number;
 }
 
