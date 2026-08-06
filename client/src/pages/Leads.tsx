@@ -1,4 +1,4 @@
-import { Button } from "flowbite-react";
+import { Button, Spinner } from "flowbite-react";
 import { HiOutlinePlus, HiOutlineCollection } from "react-icons/hi";
 import FilterLead from "../components/lead/FilterLead";
 import Footer from "../components/lead/Footer";
@@ -8,7 +8,7 @@ import AddLeadModal from "../components/AddLeadModal";
 import { useState } from "react";
 
 export default function Leads() {
-  const { data: leads } = useLeads();
+  const { data: leads, isLoading, isError } = useLeads();
   const [openModal, setOpenModal] = useState(false);
   const agents = Array.from(
     new Set(leads?.map((l) => l.salesAgent?.name).filter(Boolean)),
@@ -25,9 +25,11 @@ export default function Leads() {
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
               Leads
             </h1>
-            <span className="rounded-full bg-violet-100 px-2.5 py-0.5 text-xs font-semibold text-violet-700 dark:bg-violet-900/30 dark:text-violet-300">
-              {leads?.length} total
-            </span>
+            {!isLoading && (
+              <span className="rounded-full bg-violet-100 px-2.5 py-0.5 text-xs font-semibold text-violet-700 dark:bg-violet-900/30 dark:text-violet-300">
+                {leads?.length} total
+              </span>
+            )}
           </div>
           <p className="mt-1 pl-1 text-sm text-gray-500 dark:text-gray-400">
             Track, filter and manage your sales pipeline.
@@ -45,7 +47,29 @@ export default function Leads() {
 
       <div className="rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
         <FilterLead agents={agents} />
-        <LeadsTable leads={leads} />
+
+        {isLoading ? (
+          <div className="group flex items-center justify-center gap-4 rounded-2xl border border-gray-100 bg-white p-4 transition-all duration-200 hover:border-violet-200 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:border-violet-700">
+            <div className="text-center">
+              <Spinner aria-label="Center-aligned spinner example" />
+            </div>
+          </div>
+        ) : leads?.length === 0 || isError ? (
+          <div className="flex flex-col items-center justify-center py-16 text-center">
+            <div className="mb-3 rounded-2xl bg-gray-100 p-4 dark:bg-gray-700">
+              <HiOutlineCollection className="h-8 w-8 text-gray-400" />
+            </div>
+            <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+              No leads found
+            </p>
+            <p className="text-xs text-gray-400">
+              Try changing the filter or add a new lead
+            </p>
+          </div>
+        ) : (
+          <LeadsTable leads={leads} />
+        )}
+
         <Footer leads={leads} />
       </div>
 
