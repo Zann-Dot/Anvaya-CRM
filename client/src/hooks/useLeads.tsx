@@ -24,10 +24,17 @@ interface MutateLeadVariables {
     leadId?: string;
 }
 
-export function useLeads() {
-    return useQuery<Lead[]>({
-        queryKey: ["leads"],
-        queryFn: fetchLeads,
+export interface LeadResponse {
+    leads: Lead[];
+    totalPage: number;
+    currentPage: number;
+}
+
+export function useLeads(limit: number, page: number) {
+    return useQuery<LeadResponse>({
+        queryKey: ["leads", page],
+        queryFn: () => fetchLeads(limit, page),
+        placeholderData: (previousData) => previousData
     });
 }
 

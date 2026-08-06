@@ -8,10 +8,16 @@ import AddLeadModal from "../components/AddLeadModal";
 import { useState } from "react";
 
 export default function Leads() {
-  const { data: leads, isLoading, isError } = useLeads();
   const [openModal, setOpenModal] = useState(false);
+  const [page, setPage] = useState(1);
+  const {
+    data,
+    isLoading,
+    isError,
+    isPlaceholderData,
+  } = useLeads(10, page);
   const agents = Array.from(
-    new Set(leads?.map((l) => l.salesAgent?.name).filter(Boolean)),
+    new Set(data?.leads?.map((l) => l.salesAgent?.name).filter(Boolean)),
   );
 
   return (
@@ -27,7 +33,7 @@ export default function Leads() {
             </h1>
             {!isLoading && (
               <span className="rounded-full bg-violet-100 px-2.5 py-0.5 text-xs font-semibold text-violet-700 dark:bg-violet-900/30 dark:text-violet-300">
-                {leads?.length} total
+                {data?.leads?.length} total
               </span>
             )}
           </div>
@@ -54,7 +60,7 @@ export default function Leads() {
               <Spinner aria-label="Center-aligned spinner example" />
             </div>
           </div>
-        ) : leads?.length === 0 || isError ? (
+        ) : data?.leads?.length === 0 || isError ? (
           <div className="flex flex-col items-center justify-center py-16 text-center">
             <div className="mb-3 rounded-2xl bg-gray-100 p-4 dark:bg-gray-700">
               <HiOutlineCollection className="h-8 w-8 text-gray-400" />
@@ -67,10 +73,15 @@ export default function Leads() {
             </p>
           </div>
         ) : (
-          <LeadsTable leads={leads} />
+          <LeadsTable leads={data?.leads} />
         )}
 
-        <Footer leads={leads} />
+        <Footer
+          data={data}
+          page={page}
+          setPage={setPage}
+          isPlaceholderData={isPlaceholderData}
+        />
       </div>
 
       <AddLeadModal
