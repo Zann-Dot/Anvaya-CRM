@@ -86,11 +86,11 @@ leadsRouter.get("/leads", async (req, res) => {
         }
 
         const totalLeads = await Leads.countDocuments();
-        const leads = (await Leads.find(query)
+        const leads = await Leads.find(query)
+            .sort({ _id: -1 })
             .populate("salesAgent")
             .skip((page - 1) * limit)
-            .limit(limit))
-            .reverse();
+            .limit(limit)
 
         if (!Array.isArray(leads) || !leads)
             return res.status(409).json({ error: "cannot find leads" });
