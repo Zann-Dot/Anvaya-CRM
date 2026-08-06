@@ -82,7 +82,7 @@ leadsRouter.get("/leads", async (req, res) => {
             query.source = source;
         }
 
-        const leads = await Leads.find(query).populate("salesAgent");
+        const leads = (await Leads.find(query).populate("salesAgent")).reverse();
 
         if (!Array.isArray(leads) || !leads)
             return res.status(409).json({ error: "cannot find leads" });
@@ -96,13 +96,12 @@ leadsRouter.get("/leads", async (req, res) => {
 leadsRouter.get("/leads/details/:id", async (req, res) => {
     try {
         const lead = await Leads.findById(req.params.id).populate("salesAgent");
-        if (!lead)
-            return res.status(404).json({ error: "Lead not found" });
+        if (!lead) return res.status(404).json({ error: "Lead not found" });
         res.json(lead);
     } catch (error) {
-        res.status(500).json({ error: error.message })
+        res.status(500).json({ error: error.message });
     }
-})
+});
 
 leadsRouter.put("/leads/:id", async (req, res) => {
     try {
