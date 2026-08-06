@@ -2,19 +2,19 @@ import { HiOutlineChevronLeft, HiOutlineChevronRight } from "react-icons/hi";
 import { Lead } from "../LeadCard";
 
 interface FooterProps {
-    LEADS: Lead[];
+    leads?: NoInfer<Lead[]>;
 }
-export default function Footer({ LEADS }: FooterProps) {
+export default function Footer({ leads }: FooterProps) {
     return (
         <div className="flex flex-col gap-3 border-t border-gray-100 px-4 py-3 sm:flex-row sm:items-center sm:justify-between dark:border-gray-700">
             <p className="text-xs text-gray-500 dark:text-gray-400">
                 Showing{" "}
                 <span className="font-semibold text-gray-900 dark:text-white">
-                    {LEADS.length}
+                    {leads?.length}
                 </span>{" "}
                 of{" "}
                 <span className="font-semibold text-gray-900 dark:text-white">
-                    {LEADS.length}
+                    {leads?.length}
                 </span>{" "}
                 leads
             </p>

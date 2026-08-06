@@ -12,7 +12,7 @@ import { Lead } from "../LeadCard";
 import { format } from "date-fns";
 
 interface LeadsTableProps {
-   LEADS: Lead[];
+   leads?: NoInfer<Lead[]>;
 }
 
 const STATUS_COLOR: Record<string, string> = {
@@ -42,32 +42,32 @@ const PRIORITY_COLOR: Record<string, string> = {
    Low: "bg-gray-50 text-gray-600 ring-1 ring-gray-200 dark:bg-gray-700/40 dark:text-gray-400 dark:ring-gray-600",
 };
 
-export default function LeadsTable({ LEADS }: LeadsTableProps) {
+export default function LeadsTable({ leads }: LeadsTableProps) {
    return (
       <div className="overflow-x-auto">
          <Table hoverable>
             <TableHead className="bg-gray-50 text-xs tracking-wide text-gray-500 uppercase dark:bg-gray-700/50 dark:text-gray-400">
-               <TableHeadCell className="w-10 px-4">
-                  <input
-                     type="checkbox"
-                     className="h-4 w-4 rounded border-gray-300 text-violet-600 accent-violet-600"
-                     readOnly
-                  />
-               </TableHeadCell>
-               <TableHeadCell>Lead</TableHeadCell>
-               <TableHeadCell>Status</TableHeadCell>
-               <TableHeadCell>Sales Agent</TableHeadCell>
-               <TableHeadCell>Priority</TableHeadCell>
-               <TableHeadCell>Time to Close</TableHeadCell>
-               <TableHeadCell>Tags</TableHeadCell>
-               <TableHeadCell>Created</TableHeadCell>
-               <TableHeadCell className="text-right">Actions</TableHeadCell>
+               <TableRow>
+                  <TableHeadCell className="w-10 px-4">
+                     <input
+                        type="checkbox"
+                        className="h-4 w-4 rounded border-gray-300 text-violet-600 accent-violet-600"
+                        readOnly
+                     />
+                  </TableHeadCell>
+                  <TableHeadCell>Lead</TableHeadCell>
+                  <TableHeadCell>Status</TableHeadCell>
+                  <TableHeadCell>Sales Agent</TableHeadCell>
+                  <TableHeadCell>Priority</TableHeadCell>
+                  <TableHeadCell>Time to Close</TableHeadCell>
+                  <TableHeadCell>Tags</TableHeadCell>
+                  <TableHeadCell>Created</TableHeadCell>
+                  <TableHeadCell className="text-right">Actions</TableHeadCell>
+               </TableRow>
             </TableHead>
 
             <TableBody className="divide-y divide-gray-100 dark:divide-gray-700">
-               {LEADS.map((lead) => {
-                  const agentName = lead.salesAgent?.name ?? "Unassigned";
-                  const agentInitial = agentName.charAt(0).toUpperCase();
+               {leads?.map((lead) => {
                   const createdDate = lead.createdAt
                      ? format(new Date(lead.createdAt), "dd MMM yyyy")
                      : "—";
@@ -77,7 +77,7 @@ export default function LeadsTable({ LEADS }: LeadsTableProps) {
                         key={lead._id}
                         className="bg-white transition-colors hover:bg-violet-50/40 dark:bg-gray-800 dark:hover:bg-gray-700/30"
                      >
-                        {/* Checkbox */}
+
                         <TableCell className="px-4 py-3">
                            <input
                               type="checkbox"
@@ -121,12 +121,15 @@ export default function LeadsTable({ LEADS }: LeadsTableProps) {
 
                         <TableCell className="py-3">
                            <div className="flex items-center gap-2">
-                              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-violet-100 text-xs font-bold text-violet-700 dark:bg-violet-900/40 dark:text-violet-300">
-                                 {agentInitial}
+                              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-violet-100 text-xs font-semibold text-violet-700 dark:bg-violet-900/40 dark:text-violet-300">
+                                 {lead.salesAgent?.name?.charAt(0) || "A"}
                               </div>
-                              <span className="text-xs font-medium text-gray-800 dark:text-gray-200">
-                                 {agentName}
-                              </span>
+                              <div>
+                                 <p className="text-xs font-medium text-gray-900 dark:text-white">
+                                    {lead.salesAgent?.name || "Unassigned"}
+                                 </p>
+                                 <p className="text-[11px] text-gray-400">{lead.salesAgent?.email}</p>
+                              </div>
                            </div>
                         </TableCell>
 
