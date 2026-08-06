@@ -65,7 +65,10 @@ leadsRouter.post("/leads", async (req, res) => {
 leadsRouter.get("/leads", async (req, res) => {
     try {
         const { salesAgent, status, tags, source } = req.query;
+        const page = parseInt(req.query.page, 10) || 1;
+        const limit = parseInt(req.query.limit, 10) || 10
         const query = {};
+
         if (salesAgent) {
             query.salesAgent = salesAgent;
         }
@@ -82,12 +85,22 @@ leadsRouter.get("/leads", async (req, res) => {
             query.source = source;
         }
 
-        const leads = (await Leads.find(query).populate("salesAgent")).reverse();
+        const totalLeads = await Leads.countDocuments();
+        const leads = (await Leads.find(query)
+            .populate("salesAgent")
+            .skip((page - 1) * limit)
+            .limit(limit))
+            .reverse();
 
         if (!Array.isArray(leads) || !leads)
             return res.status(409).json({ error: "cannot find leads" });
 
-        res.json(leads);
+        res.json({
+            leads,
+            totalLeads,
+            totalPages: Math.ceil(totalLeads / limit),
+            currentPage: page
+        });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
