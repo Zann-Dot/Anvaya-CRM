@@ -18,8 +18,6 @@ export default function Footer({
     isPlaceholderData,
 }: FooterProps) {
 
-    console.log(isPlaceholderData);
-
     return (
         <div className="flex flex-col gap-3 border-t border-gray-100 px-4 py-3 sm:flex-row sm:items-center sm:justify-between dark:border-gray-700">
             <p className="text-xs text-gray-500 dark:text-gray-400">

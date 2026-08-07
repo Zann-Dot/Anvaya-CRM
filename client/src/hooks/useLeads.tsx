@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
     addNewLead,
+    deleteLead,
     fetchLeadById,
     fetchLeads,
     updateLead,
@@ -41,7 +42,7 @@ export function useLeads(limit: number, page: number) {
 
 export function useLead(leadId: string | undefined) {
     return useQuery<Lead>({
-        queryKey: ["lead", leadId],
+        queryKey: ["leads", leadId],
         queryFn: () => fetchLeadById(leadId),
     });
 }
@@ -51,12 +52,24 @@ export function useMutateLead(isEdit: boolean) {
     return useMutation({
         mutationFn: ({ lead, leadId }: MutateLeadVariables) =>
             isEdit ? updateLead(lead, leadId) : addNewLead(lead),
+
         onSuccess: (_data, variables) => {
             if (variables.leadId) {
-                queryClient.invalidateQueries({ queryKey: ["lead", variables.leadId] });
+                queryClient.invalidateQueries({ queryKey: ["leads", variables.leadId] });
             }
             queryClient.invalidateQueries({ queryKey: ["leads"] });
         },
         onError: (error) => console.error(error.message),
     });
+}
+
+export function useDeleteLead() {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: deleteLead,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["leads"] })
+        },
+        onError: (error) => console.error(error.message)
+    })
 }

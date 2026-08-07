@@ -10,9 +10,11 @@ import {
 } from "flowbite-react";
 import { Lead } from "../LeadCard";
 import { format } from "date-fns";
+import { Dispatch, SetStateAction } from "react";
 
 interface LeadsTableProps {
    leads?: NoInfer<Lead[]>;
+   setLeadIds: Dispatch<SetStateAction<string[]>>;
 }
 
 const STATUS_COLOR: Record<string, string> = {
@@ -42,7 +44,15 @@ const PRIORITY_COLOR: Record<string, string> = {
    Low: "bg-gray-50 text-gray-600 ring-1 ring-gray-200 dark:bg-gray-700/40 dark:text-gray-400 dark:ring-gray-600",
 };
 
-export default function LeadsTable({ leads }: LeadsTableProps) {
+export default function LeadsTable({ leads, setLeadIds }: LeadsTableProps) {
+   function hadnleLeadIds(leadId: string) {
+      setLeadIds((prev) =>
+         prev.includes(leadId)
+            ? prev.filter((id) => id !== leadId)
+            : [...prev, leadId],
+      );
+   }
+
    return (
       <div className="overflow-x-auto">
          <Table hoverable>
@@ -77,12 +87,11 @@ export default function LeadsTable({ leads }: LeadsTableProps) {
                         key={lead._id}
                         className="bg-white transition-colors hover:bg-violet-50/40 dark:bg-gray-800 dark:hover:bg-gray-700/30"
                      >
-
                         <TableCell className="px-4 py-3">
                            <input
                               type="checkbox"
                               className="h-4 w-4 rounded border-gray-300 text-violet-600 accent-violet-600"
-                              readOnly
+                              onChange={() => hadnleLeadIds(lead._id)}
                            />
                         </TableCell>
 
@@ -128,7 +137,9 @@ export default function LeadsTable({ leads }: LeadsTableProps) {
                                  <p className="text-xs font-medium text-gray-900 dark:text-white">
                                     {lead.salesAgent?.name || "Unassigned"}
                                  </p>
-                                 <p className="text-[11px] text-gray-400">{lead.salesAgent?.email}</p>
+                                 <p className="text-[11px] text-gray-400">
+                                    {lead.salesAgent?.email}
+                                 </p>
                               </div>
                            </div>
                         </TableCell>

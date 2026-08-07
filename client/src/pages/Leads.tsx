@@ -1,14 +1,15 @@
 import { Button, Spinner } from "flowbite-react";
-import { HiOutlinePlus, HiOutlineCollection } from "react-icons/hi";
+import { HiOutlinePlus, HiOutlineCollection, HiTrash } from "react-icons/hi";
 import FilterLead from "../components/lead/FilterLead";
 import Footer from "../components/lead/Footer";
 import LeadsTable from "../components/lead/LeadsTable";
-import { useLeads } from "../hooks/useLeads";
+import { useDeleteLead, useLeads } from "../hooks/useLeads";
 import AddLeadModal from "../components/AddLeadModal";
 import { useState } from "react";
 
 export default function Leads() {
   const [openModal, setOpenModal] = useState(false);
+  const [leadIds, setLeadIds] = useState<string[]>([]);
   const [page, setPage] = useState(1);
   const {
     data,
@@ -16,9 +17,12 @@ export default function Leads() {
     isError,
     isPlaceholderData,
   } = useLeads(10, page);
+  const { mutate: deleteLeads } = useDeleteLead();
+
   const agents = Array.from(
     new Set(data?.leads?.map((l) => l.salesAgent?.name).filter(Boolean)),
   );
+
 
   return (
     <div className="mx-auto max-w-7xl space-y-6 p-4 sm:p-6">
@@ -54,6 +58,16 @@ export default function Leads() {
       <div className="rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
         <FilterLead agents={agents} />
 
+        <div className="flex justify-end px-11 bg-gray-100 dark:bg-gray-900/30 border-b border-gray-100 p-4 dark:border-gray-700">
+          <Button
+            onClick={() => deleteLeads(leadIds)}
+            className="cursor-pointer border transition-colors duration-200 ease-in-out hover:bg-white border-violet-600 bg-transparent dark:bg-transparent hover:dark:bg-gray-900/20 text-violet-600 shadow-md sm:self-auto"
+          >
+            <HiTrash className="mr-1.5 h-4 w-4" />
+            Delete Selected
+          </Button>
+        </div>
+
         {isLoading ? (
           <div className="group flex items-center justify-center gap-4 rounded-2xl border border-gray-100 bg-white p-4 transition-all duration-200 hover:border-violet-200 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:border-violet-700">
             <div className="text-center">
@@ -73,7 +87,7 @@ export default function Leads() {
             </p>
           </div>
         ) : (
-          <LeadsTable leads={data?.leads} />
+          <LeadsTable leads={data?.leads} setLeadIds={setLeadIds} />
         )}
 
         <Footer
