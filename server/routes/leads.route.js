@@ -1,6 +1,7 @@
 import express from "express";
 import { SalesAgent } from "../models/salesAgent.model.js";
 import { Leads } from "../models/leads.model.js";
+import { Types } from "mongoose";
 const leadsRouter = express.Router();
 
 leadsRouter.post("/leads", async (req, res) => {
@@ -66,7 +67,7 @@ leadsRouter.get("/leads", async (req, res) => {
     try {
         const { salesAgent, status, tags, source } = req.query;
         const page = parseInt(req.query.page, 10) || 1;
-        const limit = parseInt(req.query.limit, 10) || 10
+        const limit = parseInt(req.query.limit, 10) || 10;
         const query = {};
 
         if (salesAgent) {
@@ -90,7 +91,7 @@ leadsRouter.get("/leads", async (req, res) => {
             .sort({ _id: -1 })
             .populate("salesAgent")
             .skip((page - 1) * limit)
-            .limit(limit)
+            .limit(limit);
 
         if (!Array.isArray(leads) || !leads)
             return res.status(409).json({ error: "cannot find leads" });
@@ -99,7 +100,7 @@ leadsRouter.get("/leads", async (req, res) => {
             leads,
             totalLeads,
             totalPages: Math.ceil(totalLeads / limit),
-            currentPage: page
+            currentPage: page,
         });
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -180,19 +181,23 @@ leadsRouter.put("/leads/:id", async (req, res) => {
     }
 });
 
-leadsRouter.delete("/leads/:id", async (req, res) => {
+leadsRouter.delete("/leads", async (req, res) => {
     try {
-        const deletedLead = await Leads.findByIdAndDelete(req.params.id);
+        const { leadIds } = req.body;
 
-        if (!deletedLead)
-            return (
-                res.status(404),
-                json({ error: `Lead with ID '${req.params.id}' not found.` })
-            );
+        if (!Array.isArray(leadIds) || leadIds.length === 0)
+            return res.status(400).json({ error: "Provide atleast 1 lead ID" });
+
+        const objectIds = leadIds.map((id) => new Types.ObjectId(id));
+        const deletedLeads = await Leads.deleteMany({ _id: { $in: objectIds } });
+
+        if (deletedLeads.deletedCount === 0)
+            return res.status(404).json({ error: "No leads deleted" })
 
         res.json({
             success: true,
-            message: "Lead deleted successfully.",
+            message: `${deletedLeads.deletedCount} ${deletedLeads.deletedCount === 1 ? "lead" : "leads"} deleted successfully.`,
+            deletedLeads,
         });
     } catch (error) {
         res.status(500).json({ error: error.message });
