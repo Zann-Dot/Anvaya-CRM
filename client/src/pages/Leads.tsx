@@ -12,7 +12,10 @@ export default function Leads() {
    const [openModal, setOpenModal] = useState(false);
    const [leadIds, setLeadIds] = useState<string[]>([]);
    const [page, setPage] = useState(1);
-   const { data, isLoading, isError, isPlaceholderData, isFetching } = useLeads(10, page);
+   const { data, isLoading, isError, isPlaceholderData, isFetching } = useLeads(
+      10,
+      page,
+   );
    const { mutate: deleteLeads, isPending } = useDeleteLead();
    const { setToastNotification, setIsPending, setNotificationActive } =
       useMain();
@@ -22,6 +25,7 @@ export default function Leads() {
    );
 
    const isTableLoading = isLoading || isPending || isFetching;
+
 
    function handleDeleteLead() {
       setIsPending(isTableLoading);
@@ -46,7 +50,7 @@ export default function Leads() {
          setNotificationActive(false);
       }, 2500);
    }
-
+   console.log(leadIds);
    return (
       <div className="mx-auto max-w-7xl space-y-6 p-4 sm:p-6">
          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -81,25 +85,53 @@ export default function Leads() {
          <div className="rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
             <FilterLead agents={agents} />
 
-            <div className="flex justify-end border-b border-gray-100 bg-gray-100 p-4 px-11 dark:border-gray-700 dark:bg-gray-900/30">
-               <Button
-                  onClick={handleDeleteLead}
-                  className="cursor-pointer border border-violet-600 bg-transparent text-violet-600 shadow-md transition-colors duration-200 ease-in-out hover:bg-white sm:self-auto dark:bg-transparent hover:dark:bg-gray-900/20"
-               >
-                  {isTableLoading ? (
-                     <Spinner className="mb-0.5 mr-1.5" size="sm" color="purple" />
-                  ) : (
-                     <HiTrash className="mr-1.5 h-4 w-4" />
-                  )}
-                  {isTableLoading ? "Deleting..." : "Delete Selected"}
-               </Button>
-            </div>
+            {leadIds.length !== 0 && (
+               <div className="flex justify-end border-b border-gray-100 bg-gray-100 p-4 px-11 dark:border-gray-700 dark:bg-gray-900/30">
+                  <Button
+                     onClick={handleDeleteLead}
+                     className="cursor-pointer border border-violet-600 bg-transparent text-violet-600 shadow-md transition-colors duration-200 ease-in-out hover:bg-white sm:self-auto dark:bg-transparent hover:dark:bg-gray-900/20"
+                  >
+                     {isTableLoading ? (
+                        <Spinner className="mr-1.5 mb-0.5" size="sm" color="purple" />
+                     ) : (
+                        <HiTrash className="mr-1.5 h-4 w-4" />
+                     )}
+                     {isTableLoading ? "Deleting..." : "Delete Selected"}
+                  </Button>
+               </div>
+            )}
 
             {isTableLoading ? (
-               <div className="group flex items-center justify-center gap-4 rounded-2xl border border-gray-100 bg-white p-4 transition-all duration-200 hover:border-violet-200 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:border-violet-700">
-                  <div className="text-center">
-                     <Spinner color="purple" aria-label="Center-aligned spinner example" />
+               <div role="status" className="w-full animate-pulse space-y-4 p-6">
+                  <div className="flex items-center justify-between border-b border-gray-200 pb-3 dark:border-gray-700">
+                     <div className="h-4 w-4 rounded bg-gray-200 dark:bg-gray-700"></div>
+                     <div className="h-4 w-28 rounded bg-gray-200 dark:bg-gray-700"></div>
+                     <div className="h-4 w-24 rounded bg-gray-200 dark:bg-gray-700"></div>
+                     <div className="h-4 w-20 rounded bg-gray-200 dark:bg-gray-700"></div>
+                     <div className="h-4 w-16 rounded bg-gray-200 dark:bg-gray-700"></div>
+                     <div className="h-4 w-12 rounded bg-gray-200 dark:bg-gray-700"></div>
                   </div>
+
+                  {[...Array(5)].map((_, i) => (
+                     <div
+                        key={i}
+                        className="flex items-center justify-between border-b border-gray-100 py-3 dark:border-gray-700/60"
+                     >
+                        <div className="h-4 w-4 rounded bg-gray-200 dark:bg-gray-700"></div>
+                        <div className="flex items-center gap-3">
+                           <div className="h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-700"></div>
+                           <div className="space-y-1.5">
+                              <div className="h-3.5 w-24 rounded bg-gray-200 dark:bg-gray-700"></div>
+                              <div className="h-3 w-32 rounded bg-gray-100 dark:bg-gray-700/50"></div>
+                           </div>
+                        </div>
+                        <div className="h-3.5 w-24 rounded bg-gray-200 dark:bg-gray-700"></div>
+                        <div className="h-5 w-16 rounded-full bg-gray-200 dark:bg-gray-700"></div>
+                        <div className="h-5 w-14 rounded-full bg-gray-200 dark:bg-gray-700"></div>
+                        <div className="h-4 w-10 rounded bg-gray-200 dark:bg-gray-700"></div>
+                     </div>
+                  ))}
+                  <span className="sr-only">Loading...</span>
                </div>
             ) : data?.leads?.length === 0 || isError ? (
                <div className="flex flex-col items-center justify-center py-16 text-center">
@@ -114,7 +146,11 @@ export default function Leads() {
                   </p>
                </div>
             ) : (
-               <LeadsTable leads={data?.leads} setLeadIds={setLeadIds} />
+               <LeadsTable
+                  leads={data?.leads}
+                  leadIds={leadIds}
+                  setLeadIds={setLeadIds}
+               />
             )}
 
             <Footer

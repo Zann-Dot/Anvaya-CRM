@@ -10,11 +10,12 @@ import {
 } from "flowbite-react";
 import { Lead } from "../LeadCard";
 import { format } from "date-fns";
-import { Dispatch, SetStateAction, useState } from "react";
+import { ChangeEvent, Dispatch, SetStateAction } from "react";
 import { Link } from "react-router-dom";
 
 interface LeadsTableProps {
    leads?: NoInfer<Lead[]>;
+   leadIds: string[];
    setLeadIds: Dispatch<SetStateAction<string[]>>;
 }
 
@@ -45,19 +46,24 @@ const PRIORITY_COLOR: Record<string, string> = {
    Low: "bg-gray-50 text-gray-600 ring-1 ring-gray-200 dark:bg-gray-700/40 dark:text-gray-400 dark:ring-gray-600",
 };
 
-export default function LeadsTable({ leads, setLeadIds }: LeadsTableProps) {
-   const [isSelectAll, setSelectAll] = useState(false);
-   function handleLeadIds(leadId: string) {
-      setLeadIds((prev) =>
-         prev.includes(leadId)
-            ? prev.filter((id) => id !== leadId)
-            : [...prev, leadId],
-      );
+export default function LeadsTable({
+   leads,
+   leadIds,
+   setLeadIds,
+}: LeadsTableProps) {
+
+   function handleLeadIds(e: ChangeEvent<HTMLInputElement>) {
+      const { checked, value } = e.target;
+      checked
+         ? setLeadIds((prev) => [...prev, value])
+         : setLeadIds((prev) => prev.filter((id) => id !== value))
    }
 
-   function handleSelectAll() {
-      setSelectAll(!isSelectAll);
-      leads && setLeadIds(leads?.map(l => l._id));
+   function handleSelectAll(e: ChangeEvent<HTMLInputElement>) {
+      const { checked } = e.target
+      leads && checked
+         ? setLeadIds(leads?.map((l) => l._id))
+         : setLeadIds([]);
    }
 
    return (
@@ -97,9 +103,10 @@ export default function LeadsTable({ leads, setLeadIds }: LeadsTableProps) {
                         <TableCell className="px-4 py-3">
                            <input
                               type="checkbox"
+                              value={lead._id}
                               className="h-4 w-4 rounded border-gray-300 text-violet-600 accent-violet-600"
-                              onChange={() => handleLeadIds(lead._id)}
-                              checked={isSelectAll}
+                              onChange={handleLeadIds}
+                              checked={leadIds.includes(lead._id)}
                            />
                         </TableCell>
 
