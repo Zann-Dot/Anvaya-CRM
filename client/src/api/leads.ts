@@ -40,7 +40,7 @@ export async function deleteLead(leadIds: string[]) {
    const response = await fetch(`/api/leads`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(leadIds)
+      body: JSON.stringify({ leadIds })
    });
    const data = await response.json();
    if (!response.ok) throw new Error(data.error);

@@ -4,8 +4,17 @@ import React, {
     useState,
     useEffect,
     ChangeEvent,
+    Dispatch,
+    SetStateAction,
 } from "react";
 import { useCreateComment, NewComment } from "../hooks/useComments";
+
+export type ToastNotificationDetails = {
+    isError: boolean | null;
+    isSuccess: boolean | null;
+    successMessage?: string;
+    errorMessage?: string;
+};
 
 interface MainContextType {
     dashboardReport: any;
@@ -16,6 +25,12 @@ interface MainContextType {
         e: ChangeEvent<HTMLTextAreaElement, HTMLTextAreaElement>,
     ) => void;
     postComment: (leadId: string | undefined, author: string | undefined) => void;
+    setToastNotification: Dispatch<SetStateAction<ToastNotificationDetails>>;
+    setIsPending: Dispatch<SetStateAction<boolean>>;
+    isPending: boolean;
+    toastNotification: ToastNotificationDetails;
+    setNotificationActive: Dispatch<SetStateAction<boolean>>,
+    isNotificationActive: boolean
 }
 
 const MainContext = createContext<MainContextType | null>(null);
@@ -32,6 +47,16 @@ export function MainProvider({ children }: React.PropsWithChildren) {
     const [dashboardReport, setDashboardReport] = useState<any>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+
+    const [isPending, setIsPending] = useState(false);
+    const [isNotificationActive, setNotificationActive] = useState(false);
+    const [toastNotification, setToastNotification] =
+        useState<ToastNotificationDetails>({
+            isError: null,
+            isSuccess: null,
+            successMessage: "",
+            errorMessage: "",
+        });
     const [comment, setComment] = useState("");
     const { mutate: addComment } = useCreateComment();
 
@@ -60,8 +85,7 @@ export function MainProvider({ children }: React.PropsWithChildren) {
             author,
             commentText: comment,
         };
-        const response = addComment(newComment);
-        console.log(response);
+        addComment(newComment);
     }
 
     useEffect(() => {
@@ -77,6 +101,12 @@ export function MainProvider({ children }: React.PropsWithChildren) {
                 fetchDashboardReport,
                 handleComments,
                 postComment,
+                setToastNotification,
+                setIsPending,
+                isPending,
+                toastNotification,
+                setNotificationActive,
+                isNotificationActive
             }}
         >
             {children}
