@@ -10,7 +10,8 @@ import {
 } from "flowbite-react";
 import { Lead } from "../LeadCard";
 import { format } from "date-fns";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
+import { Link } from "react-router-dom";
 
 interface LeadsTableProps {
    leads?: NoInfer<Lead[]>;
@@ -45,12 +46,18 @@ const PRIORITY_COLOR: Record<string, string> = {
 };
 
 export default function LeadsTable({ leads, setLeadIds }: LeadsTableProps) {
-   function hadnleLeadIds(leadId: string) {
+   const [isSelectAll, setSelectAll] = useState(false);
+   function handleLeadIds(leadId: string) {
       setLeadIds((prev) =>
          prev.includes(leadId)
             ? prev.filter((id) => id !== leadId)
             : [...prev, leadId],
       );
+   }
+
+   function handleSelectAll() {
+      setSelectAll(!isSelectAll);
+      leads && setLeadIds(leads?.map(l => l._id));
    }
 
    return (
@@ -62,7 +69,7 @@ export default function LeadsTable({ leads, setLeadIds }: LeadsTableProps) {
                      <input
                         type="checkbox"
                         className="h-4 w-4 rounded border-gray-300 text-violet-600 accent-violet-600"
-                        readOnly
+                        onChange={handleSelectAll}
                      />
                   </TableHeadCell>
                   <TableHeadCell>Lead</TableHeadCell>
@@ -91,7 +98,8 @@ export default function LeadsTable({ leads, setLeadIds }: LeadsTableProps) {
                            <input
                               type="checkbox"
                               className="h-4 w-4 rounded border-gray-300 text-violet-600 accent-violet-600"
-                              onChange={() => hadnleLeadIds(lead._id)}
+                              onChange={() => handleLeadIds(lead._id)}
+                              checked={isSelectAll}
                            />
                         </TableCell>
 
@@ -177,12 +185,13 @@ export default function LeadsTable({ leads, setLeadIds }: LeadsTableProps) {
                         </TableCell>
 
                         <TableCell className="py-3 text-right">
-                           <button
-                              type="button"
-                              className="rounded-lg px-3 py-1 text-xs font-medium text-violet-600 hover:bg-violet-50 dark:text-violet-400 dark:hover:bg-violet-900/20"
+                           <Link
+                              to={`/leads/${lead._id}`}
+                              className="flex flex-col items-center rounded-lg px-3 py-1 text-xs font-medium text-violet-600 hover:bg-violet-50 dark:text-violet-400 dark:hover:bg-violet-900/20"
                            >
-                              View →
-                           </button>
+                              View
+                              <span>→</span>
+                           </Link>
                         </TableCell>
                      </TableRow>
                   );
