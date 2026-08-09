@@ -1,5 +1,5 @@
-import { Button, Spinner } from "flowbite-react";
-import { HiOutlinePlus, HiOutlineCollection, HiTrash } from "react-icons/hi";
+import { Button } from "flowbite-react";
+import { HiOutlinePlus, HiOutlineCollection } from "react-icons/hi";
 import FilterLead from "../components/lead/FilterLead";
 import Footer from "../components/lead/Footer";
 import LeadsTable from "../components/lead/LeadsTable";
@@ -7,7 +7,7 @@ import { useDeleteLead, useLeads } from "../hooks/useLeads";
 import AddLeadModal from "../components/AddLeadModal";
 import { useState } from "react";
 import useMain from "../context/MainProvider";
-import { AnimatePresence, motion } from "motion/react";
+import DeleteBar from "../components/lead/DeleteBar";
 
 export default function Leads() {
    const [openModal, setOpenModal] = useState(false);
@@ -37,6 +37,7 @@ export default function Leads() {
                isSuccess: true,
                successMessage: "Lead deleted successfully",
             });
+            setLeadIds([]);
          },
          onError: () => {
             setToastNotification({
@@ -86,40 +87,11 @@ export default function Leads() {
          <div className="rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
             <FilterLead agents={agents} />
 
-            <AnimatePresence initial={false}>
-               {leadIds.length !== 0 && (
-                  <motion.div
-                     key="delete-bar-wrapper"
-                     initial={{ height: 0, opacity: 0 }}
-                     animate={{ height: "auto", opacity: 1 }}
-                     exit={{ height: 0, opacity: 0 }}
-                     transition={{ duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-                     className="overflow-hidden"
-                  >
-                     <motion.div
-                        key="delete-bar"
-                        initial={{ y: "-100%" }}
-                        animate={{ y: "0%" }}
-                        exit={{ y: "-100%" }}
-                        transition={{ duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-                        className="flex justify-end border-b border-gray-100 bg-violet-50/30 p-4 px-11 dark:border-gray-700 dark:bg-gray-900/20"
-                     >
-                        <Button
-                           onClick={handleDeleteLead}
-                           disabled={isTableLoading}
-                           className="cursor-pointer border border-violet-600 bg-transparent text-violet-600 shadow-md transition-colors duration-200 ease-in-out hover:bg-white dark:bg-transparent hover:dark:bg-gray-900/20 disabled:cursor-not-allowed disabled:opacity-60 sm:self-auto"
-                        >
-                           {isTableLoading ? (
-                              <Spinner className="mr-1.5 mb-0.5" size="sm" color="purple" />
-                           ) : (
-                              <HiTrash className="mr-1.5 h-4 w-4" />
-                           )}
-                           {isTableLoading ? "Deleting..." : "Delete Selected"}
-                        </Button>
-                     </motion.div>
-                  </motion.div>
-               )}
-            </AnimatePresence>
+            <DeleteBar
+               leadIds={leadIds}
+               handleDeleteLead={handleDeleteLead}
+               isTableLoading={isTableLoading}
+            />
 
             {isTableLoading ? (
                <div role="status" className="w-full animate-pulse space-y-4 p-6">
