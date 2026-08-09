@@ -8,25 +8,25 @@ import AddLeadModal from "../components/AddLeadModal";
 import { useState } from "react";
 import useMain from "../context/MainProvider";
 import DeleteBar from "../components/lead/DeleteBar";
+import { useDebounce } from "../hooks/useDebounce";
 
 export default function Leads() {
    const [openModal, setOpenModal] = useState(false);
    const [leadIds, setLeadIds] = useState<string[]>([]);
    const [page, setPage] = useState(1);
+   const [searchParams, setSearchParams] = useState("");
+   const debouncedValue = useDebounce(searchParams, 300);
+
    const { data, isLoading, isError, isPlaceholderData, isFetching } = useLeads(
       10,
       page,
+      debouncedValue
    );
    const { mutate: deleteLeads, isPending } = useDeleteLead();
    const { setToastNotification, setIsPending, setNotificationActive } =
       useMain();
 
-   const agents = Array.from(
-      new Set(data?.leads?.map((l) => l.salesAgent?.name).filter(Boolean)),
-   );
-
    const isTableLoading = isLoading || isPending || isFetching;
-
 
    function handleDeleteLead() {
       setIsPending(isTableLoading);
@@ -85,7 +85,7 @@ export default function Leads() {
          </div>
 
          <div className="rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
-            <FilterLead agents={agents} />
+            <FilterLead data={data} setSearchParams={setSearchParams} />
 
             <DeleteBar
                leadIds={leadIds}

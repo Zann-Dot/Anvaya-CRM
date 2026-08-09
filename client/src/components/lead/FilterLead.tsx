@@ -5,10 +5,20 @@ import {
     HiOutlineSortAscending,
     HiOutlineUser,
 } from "react-icons/hi";
+import { LeadResponse } from "../../hooks/useLeads";
+import { Dispatch, SetStateAction } from "react";
 type FilterLeadProps = {
-    agents: string[];
+    data?: NoInfer<LeadResponse>;
+    setSearchParams: Dispatch<SetStateAction<string>>
 };
-export default function FilterLead({ agents }: FilterLeadProps) {
+export default function FilterLead({ data, setSearchParams }: FilterLeadProps) {
+
+    const agents = Array.from(
+        new Set(data?.leads?.map((l) => l.salesAgent?.name).filter(Boolean)),
+    );
+
+
+
     return (
         <div className="flex flex-col gap-3 border-b border-gray-100 p-4 lg:flex-row lg:items-center lg:justify-between dark:border-gray-700">
             <TextInput
@@ -17,7 +27,7 @@ export default function FilterLead({ agents }: FilterLeadProps) {
                 icon={HiOutlineSearch}
                 placeholder="Search leads by name, company or email…"
                 className="w-full lg:max-w-xs"
-                readOnly
+                onChange={(e) => setSearchParams(e.target.value)}
             />
 
             <div className="flex flex-wrap items-center gap-2.5">
