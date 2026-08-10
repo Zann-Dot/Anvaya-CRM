@@ -16,6 +16,7 @@ export default function Leads() {
    const [leadIds, setLeadIds] = useState<string[]>([]);
    const [page, setPage] = useState(1);
    const [searchParams, setSearchParams] = useState("");
+
    const filters: Filter = {
       status: "",
       agent: "",
@@ -28,7 +29,8 @@ export default function Leads() {
 
    if (filter.status && filter.status !== "all")
       params.set("status", filter.status);
-   if (filter.agent) params.set("salesAgent", filter.agent);
+   if (filter.agent && filter.agent !== "all")
+      params.set("salesAgent", filter.agent);
 
    const { data, isLoading, isError, isPlaceholderData, isFetching } = useLeads(
       10,
@@ -100,7 +102,6 @@ export default function Leads() {
 
          <div className="rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
             <FilterLead
-               data={data}
                setSearchParams={setSearchParams}
                dispatch={dispatch}
             />

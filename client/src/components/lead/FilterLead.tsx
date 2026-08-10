@@ -5,23 +5,19 @@ import {
     HiOutlineSortAscending,
     HiOutlineUser,
 } from "react-icons/hi";
-import { LeadResponse } from "../../hooks/useLeads";
 import { ActionDispatch, Dispatch, SetStateAction } from "react";
 import { FilterAction } from "../../hooks/useFilterReducer";
+import { useAgents } from "../../hooks/useAgents";
 
 type FilterLeadProps = {
-    data?: NoInfer<LeadResponse>;
     setSearchParams: Dispatch<SetStateAction<string>>;
     dispatch: ActionDispatch<[action: FilterAction]>
 };
 export default function FilterLead({
-    data,
     setSearchParams,
     dispatch
 }: FilterLeadProps) {
-    const agents = Array.from(
-        new Set(data?.leads?.map((l) => l.salesAgent?.name).filter(Boolean)),
-    );
+    const { data: agents } = useAgents();
 
     return (
         <div className="flex flex-col gap-3 border-b border-gray-100 p-4 lg:flex-row lg:items-center lg:justify-between dark:border-gray-700">
@@ -58,21 +54,24 @@ export default function FilterLead({
                         className="w-40"
                         onChange={(e) => dispatch({ type: "AGENT", value: e.target.value })}
                     >
-                        <option>All Agents</option>
-                        {agents.map((a) => (
-                            <option key={a}>{a}</option>
+                        <option value="all">All Agents</option>
+                        {agents?.map((a) => (
+                            <option key={a._id} value={a._id}>{a.name}</option>
                         ))}
                     </Select>
                 </div>
 
                 <div className="flex items-center gap-1.5">
                     <HiOutlineSortAscending className="h-4 w-4 shrink-0 text-gray-400" />
-                    <Select id="sort-by" className="w-48">
-                        <option>Sort: Default</option>
-                        <option>Priority: High → Low</option>
-                        <option>Priority: Low → High</option>
-                        <option>Time to Close: Shortest</option>
-                        <option>Time to Close: Longest</option>
+                    <Select
+                        id="sort-by"
+                        className="w-48"
+                    >
+                        <option value="default">Sort: Default</option>
+                        <option value="desc">Priority: High → Low</option>
+                        <option value="asec">Priority: Low → High</option>
+                        <option value="Ttc_short">Time to Close: Shortest</option>
+                        <option value="Ttc_longest">Time to Close: Longest</option>
                     </Select>
                 </div>
             </div>
