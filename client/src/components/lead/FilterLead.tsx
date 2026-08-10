@@ -6,18 +6,22 @@ import {
     HiOutlineUser,
 } from "react-icons/hi";
 import { LeadResponse } from "../../hooks/useLeads";
-import { Dispatch, SetStateAction } from "react";
+import { ActionDispatch, Dispatch, SetStateAction } from "react";
+import { FilterAction } from "../../pages/Leads";
+
 type FilterLeadProps = {
     data?: NoInfer<LeadResponse>;
-    setSearchParams: Dispatch<SetStateAction<string>>
+    setSearchParams: Dispatch<SetStateAction<string>>;
+    dispatch: ActionDispatch<[action: FilterAction]>
 };
-export default function FilterLead({ data, setSearchParams }: FilterLeadProps) {
-
+export default function FilterLead({
+    data,
+    setSearchParams,
+    dispatch
+}: FilterLeadProps) {
     const agents = Array.from(
         new Set(data?.leads?.map((l) => l.salesAgent?.name).filter(Boolean)),
     );
-
-
 
     return (
         <div className="flex flex-col gap-3 border-b border-gray-100 p-4 lg:flex-row lg:items-center lg:justify-between dark:border-gray-700">
@@ -33,8 +37,12 @@ export default function FilterLead({ data, setSearchParams }: FilterLeadProps) {
             <div className="flex flex-wrap items-center gap-2.5">
                 <div className="flex items-center gap-1.5">
                     <HiOutlineFilter className="h-4 w-4 shrink-0 text-gray-400" />
-                    <Select id="filter-status" className="w-36">
-                        <option>All Statuses</option>
+                    <Select
+                        id="filter-status"
+                        className="w-36"
+                        onChange={(e) => dispatch({ type: "STATUS", value: e.target.value })}
+                    >
+                        <option value="all">All Statuses</option>
                         <option>New</option>
                         <option>Contacted</option>
                         <option>Qualified</option>
@@ -45,7 +53,11 @@ export default function FilterLead({ data, setSearchParams }: FilterLeadProps) {
 
                 <div className="flex items-center gap-1.5">
                     <HiOutlineUser className="h-4 w-4 shrink-0 text-gray-400" />
-                    <Select id="filter-agent" className="w-40">
+                    <Select
+                        id="filter-agent"
+                        className="w-40"
+                        onChange={(e) => dispatch({ type: "AGENT", value: e.target.value })}
+                    >
                         <option>All Agents</option>
                         {agents.map((a) => (
                             <option key={a}>{a}</option>

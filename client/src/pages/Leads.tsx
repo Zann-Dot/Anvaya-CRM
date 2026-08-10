@@ -5,22 +5,53 @@ import Footer from "../components/lead/Footer";
 import LeadsTable from "../components/lead/LeadsTable";
 import { useDeleteLead, useLeads } from "../hooks/useLeads";
 import AddLeadModal from "../components/AddLeadModal";
-import { useState } from "react";
+import { useReducer, useState } from "react";
 import useMain from "../context/MainProvider";
 import DeleteBar from "../components/lead/DeleteBar";
 import { useDebounce } from "../hooks/useDebounce";
+
+interface Filter {
+   status: string;
+   agent: string;
+   sort: string;
+}
+
+type FilterActionType = "STATUS" | "AGENT" | "SORT";
+
+export interface FilterAction {
+   type: FilterActionType;
+   value: string;
+}
+
+function filterReducer(filter: Filter, action: FilterAction): Filter {
+   return { ...filter, [action.type.toLowerCase()]: action.value };
+}
 
 export default function Leads() {
    const [openModal, setOpenModal] = useState(false);
    const [leadIds, setLeadIds] = useState<string[]>([]);
    const [page, setPage] = useState(1);
    const [searchParams, setSearchParams] = useState("");
-   const debouncedValue = useDebounce(searchParams, 300);
+   const filters: Filter = {
+      status: "",
+      agent: "",
+      sort: "",
+   };
+
+   const [filter, dispatch] = useReducer(filterReducer, filters);
+
+   const params = new URLSearchParams();
+   const search = useDebounce(searchParams, 300);
+
+   if (filter.status && filter.status !== "all")
+      params.set("status", filter.status);
+   if (filter.agent) params.set("salesAgent", filter.agent);
 
    const { data, isLoading, isError, isPlaceholderData, isFetching } = useLeads(
       10,
       page,
-      debouncedValue
+      search,
+      params.toString(),
    );
    const { mutate: deleteLeads, isPending } = useDeleteLead();
    const { setToastNotification, setIsPending, setNotificationActive } =
@@ -85,7 +116,11 @@ export default function Leads() {
          </div>
 
          <div className="rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
-            <FilterLead data={data} setSearchParams={setSearchParams} />
+            <FilterLead
+               data={data}
+               setSearchParams={setSearchParams}
+               dispatch={dispatch}
+            />
 
             <DeleteBar
                leadIds={leadIds}

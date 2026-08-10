@@ -32,11 +32,16 @@ export interface LeadResponse {
     currentPage: number;
 }
 
-export function useLeads(limit: number, page: number, debouncedValue: string) {
+export function useLeads(
+    limit: number,
+    page: number,
+    debouncedValue: string,
+    filter: string,
+) {
     return useQuery<LeadResponse>({
-        queryKey: ["leads", { page, search: debouncedValue }],
-        queryFn: () => fetchLeads(limit, page, debouncedValue),
-        placeholderData: (previousData) => previousData
+        queryKey: ["leads", { page, search: debouncedValue, filter }],
+        queryFn: () => fetchLeads(limit, page, debouncedValue, filter),
+        placeholderData: (previousData) => previousData,
     });
 }
 
@@ -55,7 +60,9 @@ export function useMutateLead(isEdit: boolean) {
 
         onSuccess: (_data, variables) => {
             if (variables.leadId) {
-                queryClient.invalidateQueries({ queryKey: ["leads", variables.leadId] });
+                queryClient.invalidateQueries({
+                    queryKey: ["leads", variables.leadId],
+                });
             }
             queryClient.invalidateQueries({ queryKey: ["leads"] });
         },
@@ -68,8 +75,8 @@ export function useDeleteLead() {
     return useMutation({
         mutationFn: deleteLead,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["leads"] })
+            queryClient.invalidateQueries({ queryKey: ["leads"] });
         },
-        onError: (error) => console.error(error.message)
-    })
+        onError: (error) => console.error(error.message),
+    });
 }
