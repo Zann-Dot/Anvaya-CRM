@@ -12,16 +12,19 @@ const LeadSchema = new Schema({
     name: {
         type: String,
         required: [true, 'Lead contact name is required'],
-        set: capitalizeString
+        set: capitalizeString,
+        index: true
     },
     company: {
         type: String,
         required: [true, 'Company name is required'],
-        set: capitalizeString
+        set: capitalizeString,
+        index: true
     },
     email: {
         type: String,
         required: [true, 'email is required'],
+        index: true,
         match: [/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Please provide a valid email address"]
     },
     avatar: {

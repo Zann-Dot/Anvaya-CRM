@@ -65,10 +65,19 @@ leadsRouter.post("/leads", async (req, res) => {
 
 leadsRouter.get("/leads", async (req, res) => {
     try {
-        const { salesAgent, status, tags, source } = req.query;
+        const { search, salesAgent, status, tags, source } = req.query;
         const page = parseInt(req.query.page, 10) || 1;
         const limit = parseInt(req.query.limit, 10) || 10;
         const query = {};
+
+        if (search) {
+            const searchTerm = search ? search.trim() : "";
+            query.$or = [
+                { name: { $regex: searchTerm, $options: "i" } },
+                { company: { $regex: searchTerm, $options: "i" } },
+                { email: { $regex: searchTerm, $options: "i" } }
+            ]
+        }
 
         if (salesAgent) {
             query.salesAgent = salesAgent;
@@ -86,12 +95,15 @@ leadsRouter.get("/leads", async (req, res) => {
             query.source = source;
         }
 
-        const totalLeads = await Leads.countDocuments();
-        const leads = await Leads.find(query)
-            .sort({ _id: -1 })
-            .populate("salesAgent")
-            .skip((page - 1) * limit)
-            .limit(limit);
+        const [totalLeads, leads] = await Promise.all([
+            Leads.countDocuments(query),
+            Leads.find(query)
+                .sort({ createdAt: -1 })
+                .populate("salesAgent")
+                .skip((page - 1) * limit)
+                .limit(limit)
+                .lean(),
+        ]);
 
         if (!Array.isArray(leads) || !leads)
             return res.status(409).json({ error: "cannot find leads" });
@@ -192,7 +204,7 @@ leadsRouter.delete("/leads", async (req, res) => {
         const deletedLeads = await Leads.deleteMany({ _id: { $in: objectIds } });
 
         if (deletedLeads.deletedCount === 0)
-            return res.status(404).json({ error: "No leads deleted" })
+            return res.status(404).json({ error: "No leads deleted" });
 
         res.json({
             success: true,
