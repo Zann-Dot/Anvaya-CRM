@@ -5,27 +5,11 @@ import Footer from "../components/lead/Footer";
 import LeadsTable from "../components/lead/LeadsTable";
 import { useDeleteLead, useLeads } from "../hooks/useLeads";
 import AddLeadModal from "../components/AddLeadModal";
-import { useReducer, useState } from "react";
+import { useState } from "react";
 import useMain from "../context/MainProvider";
 import DeleteBar from "../components/lead/DeleteBar";
 import { useDebounce } from "../hooks/useDebounce";
-
-interface Filter {
-   status: string;
-   agent: string;
-   sort: string;
-}
-
-type FilterActionType = "STATUS" | "AGENT" | "SORT";
-
-export interface FilterAction {
-   type: FilterActionType;
-   value: string;
-}
-
-function filterReducer(filter: Filter, action: FilterAction): Filter {
-   return { ...filter, [action.type.toLowerCase()]: action.value };
-}
+import useFilterReducer, { Filter } from "../hooks/useFilterReducer";
 
 export default function Leads() {
    const [openModal, setOpenModal] = useState(false);
@@ -38,10 +22,9 @@ export default function Leads() {
       sort: "",
    };
 
-   const [filter, dispatch] = useReducer(filterReducer, filters);
-
    const params = new URLSearchParams();
    const search = useDebounce(searchParams, 300);
+   const { filter, dispatch } = useFilterReducer(filters)
 
    if (filter.status && filter.status !== "all")
       params.set("status", filter.status);

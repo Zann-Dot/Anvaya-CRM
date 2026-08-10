@@ -7,7 +7,7 @@ import {
 } from "react-icons/hi";
 import { LeadResponse } from "../../hooks/useLeads";
 import { ActionDispatch, Dispatch, SetStateAction } from "react";
-import { FilterAction } from "../../pages/Leads";
+import { FilterAction } from "../../hooks/useFilterReducer";
 
 type FilterLeadProps = {
     data?: NoInfer<LeadResponse>;
