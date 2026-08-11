@@ -20,7 +20,10 @@ export default function Leads() {
    const filters: Filter = {
       status: "",
       agent: "",
-      sort: "",
+      sort: {
+         sortType: "",
+         value: ""
+      }
    };
 
    const params = new URLSearchParams();
@@ -29,8 +32,12 @@ export default function Leads() {
 
    if (filter.status && filter.status !== "all")
       params.set("status", filter.status);
+
    if (filter.agent && filter.agent !== "all")
       params.set("salesAgent", filter.agent);
+
+   if (filter.sort.sortType && filter.sort.value !== "all")
+      params.set(filter.sort.sortType, filter.sort.value);
 
    const { data, isLoading, isError, isPlaceholderData, isFetching } = useLeads(
       10,

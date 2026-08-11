@@ -11,11 +11,11 @@ import { useAgents } from "../../hooks/useAgents";
 
 type FilterLeadProps = {
     setSearchParams: Dispatch<SetStateAction<string>>;
-    dispatch: ActionDispatch<[action: FilterAction]>
+    dispatch: ActionDispatch<[action: FilterAction]>;
 };
 export default function FilterLead({
     setSearchParams,
-    dispatch
+    dispatch,
 }: FilterLeadProps) {
     const { data: agents } = useAgents();
 
@@ -36,7 +36,9 @@ export default function FilterLead({
                     <Select
                         id="filter-status"
                         className="w-36"
-                        onChange={(e) => dispatch({ type: "STATUS", value: e.target.value })}
+                        onChange={(e) =>
+                            dispatch({ type: "STATUS", value: e.target.value })
+                        }
                     >
                         <option value="all">All Statuses</option>
                         <option>New</option>
@@ -56,7 +58,9 @@ export default function FilterLead({
                     >
                         <option value="all">All Agents</option>
                         {agents?.map((a) => (
-                            <option key={a._id} value={a._id}>{a.name}</option>
+                            <option key={a._id} value={a._id}>
+                                {a.name}
+                            </option>
                         ))}
                     </Select>
                 </div>
@@ -66,12 +70,19 @@ export default function FilterLead({
                     <Select
                         id="sort-by"
                         className="w-48"
+                        onChange={(e) =>
+                            dispatch({
+                                type: "SORT",
+                                value: e.target.value,
+                                sort: e.target.options[e.target.selectedIndex].dataset.sort
+                            })
+                        }
                     >
-                        <option value="default">Sort: Default</option>
-                        <option value="desc">Priority: High → Low</option>
-                        <option value="asec">Priority: Low → High</option>
-                        <option value="Ttc_short">Time to Close: Shortest</option>
-                        <option value="Ttc_longest">Time to Close: Longest</option>
+                        <option value="all">Sort: Default</option>
+                        <option data-sort="priority" value="asc">Priority: High → Low</option>
+                        <option data-sort="priority" value="desc">Priority: Low → High</option>
+                        <option data-sort="timeToClose" value="desc">Time to Close: Longest</option>
+                        <option data-sort="timeToClose" value="asc">Time to Close: Shortest</option>
                     </Select>
                 </div>
             </div>
