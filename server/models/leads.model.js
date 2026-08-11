@@ -61,9 +61,19 @@ const LeadSchema = new Schema({
         enum: ['High', 'Medium', 'Low'],
         default: 'Medium',
     },
+    priorityWeight: {
+        type: Number,
+        default: 2
+    },
     closedAt: {
         type: Date,
     },
 }, { timestamps: true });
+
+LeadSchema.pre("save", function (next) {
+    const weight = { HIGH: 1, MEDIUM: 2, LOW: 3 };
+    this.priorityWeight = weight[this.priority] || 2;
+    next();
+})
 
 export const Leads = model('Lead', LeadSchema);
