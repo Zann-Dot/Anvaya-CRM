@@ -65,40 +65,35 @@ leadsRouter.post("/leads", async (req, res) => {
 
 leadsRouter.get("/leads", async (req, res) => {
     try {
-        const { search, salesAgent, status, tags, source } = req.query;
+        const { search, salesAgent, status, tags, source, priority, timeToClose } =
+            req.query;
         const page = parseInt(req.query.page, 10) || 1;
         const limit = parseInt(req.query.limit, 10) || 10;
         const query = {};
+        let sort = { createdAt: -1 };
 
         if (search) {
             const searchTerm = search ? search.trim() : "";
+            const searchTermRegex = { $regex: searchTerm, $options: "i" };
             query.$or = [
-                { name: { $regex: searchTerm, $options: "i" } },
-                { company: { $regex: searchTerm, $options: "i" } },
-                { email: { $regex: searchTerm, $options: "i" } }
-            ]
+                { name: searchTermRegex },
+                { company: searchTermRegex },
+                { email: searchTermRegex },
+            ];
         }
 
-        if (salesAgent) {
-            query.salesAgent = salesAgent;
-        }
+        if (salesAgent) query.salesAgent = salesAgent;
+        if (status) query.status = status;
+        if (tags) query.tags = { $in: tags };
+        if (source) query.source = source;
+        if (priority) sort = { priority };
+        if (timeToClose) sort = { timeToClose };
 
-        if (status) {
-            query.status = status;
-        }
-
-        if (tags) {
-            query.tags = { $in: tags };
-        }
-
-        if (source) {
-            query.source = source;
-        }
 
         const [totalLeads, leads] = await Promise.all([
             Leads.countDocuments(query),
             Leads.find(query)
-                .sort({ createdAt: -1 })
+                .sort(sort)
                 .populate("salesAgent")
                 .skip((page - 1) * limit)
                 .limit(limit)
