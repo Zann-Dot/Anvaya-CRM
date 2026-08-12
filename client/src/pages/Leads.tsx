@@ -171,12 +171,14 @@ export default function Leads() {
                />
             )}
 
-            <Footer
-               data={data}
-               page={page}
-               setPage={setPage}
-               isPlaceholderData={isPlaceholderData}
-            />
+            {!isTableLoading && (
+               <Footer
+                  data={data}
+                  page={page}
+                  setPage={setPage}
+                  isPlaceholderData={isPlaceholderData}
+               />
+            )}
          </div>
 
          <AddLeadModal
