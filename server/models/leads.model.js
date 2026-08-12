@@ -76,7 +76,7 @@ LeadSchema.pre("save", function (next) {
     next();
 });
 
-LeadSchema.pre("findOneAndUpdate", function (next) {
+LeadSchema.pre("findOneAndUpdate", async function () {
     const update = this.getUpdate();
     const priority = update.priority || (update.$set && update.$set.priority);
     if (priority) {
