@@ -35,8 +35,8 @@ export interface LeadResponse {
 export function useLeads(
     limit: number,
     page: number,
-    debouncedValue: string,
-    filter: string,
+    debouncedValue?: string,
+    filter?: string,
 ) {
     return useQuery<LeadResponse>({
         queryKey: ["leads", { page, search: debouncedValue, filter }],

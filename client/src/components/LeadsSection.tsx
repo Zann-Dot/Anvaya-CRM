@@ -10,6 +10,7 @@ import { Button, Spinner } from "flowbite-react";
 import LeadCard from "./LeadCard";
 import AddLeadModal from "./AddLeadModal";
 import { useLeads } from "../hooks/useLeads";
+import { Link } from "react-router-dom";
 // import LEADS from "../utilis/Leads";
 
 interface LeadsSectionProp {
@@ -29,13 +30,12 @@ export default function LeadsSection({ STATUS_FILTERS }: LeadsSectionProp) {
     const [activeFilter, setActiveFilter] = useState<FilterType>();
     const [openModal, setOpenModal] = useState(false);
 
-    const { data: leads, isLoading, isError } = useLeads();
 
-    const filteredLeads =
-        activeFilter && activeFilter !== "All"
-            ? leads?.filter((lead) => lead.status === activeFilter)
-            : leads;
+    const params = activeFilter && activeFilter !== "All"
+        ? `status=${activeFilter}`
+        : ""
 
+    const { data, isLoading, isError, isFetching } = useLeads(3, 1, "", params);
     const filterBadgeColor: Record<FilterType, string> = {
         All: "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300",
         New: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
@@ -64,11 +64,8 @@ export default function LeadsSection({ STATUS_FILTERS }: LeadsSectionProp) {
                 <div className="flex items-center gap-2">
                     <HiOutlineCollection className="h-5 w-5 text-violet-500" />
                     <h3 className="text-base font-bold text-gray-900 dark:text-white">
-                        Lead Management
+                        Newely Added Leads
                     </h3>
-                    <span className="ml-1 rounded-full bg-violet-100 px-2.5 py-0.5 text-xs font-semibold text-violet-700 dark:bg-violet-900/30 dark:text-violet-400">
-                        {filteredLeads?.length}
-                    </span>
                 </div>
 
                 <div className="flex items-center gap-2">
@@ -125,13 +122,13 @@ export default function LeadsSection({ STATUS_FILTERS }: LeadsSectionProp) {
             <div
                 className={`p-4 ${viewMode === "grid" ? "grid grid-cols-1 gap-3 sm:grid-cols-2" : "flex flex-col gap-3"}`}
             >
-                {isLoading ? (
+                {isLoading || isFetching ? (
                     <div className="group flex items-center justify-center gap-4 rounded-2xl border border-gray-100 bg-white p-4 transition-all duration-200 hover:border-violet-200 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:border-violet-700">
                         <div className="text-center">
                             <Spinner aria-label="Center-aligned spinner example" />
                         </div>
                     </div>
-                ) : filteredLeads?.length === 0 || isError ? (
+                ) : data?.leads?.length === 0 || isError ? (
                     <div className="flex flex-col items-center justify-center py-16 text-center">
                         <div className="mb-3 rounded-2xl bg-gray-100 p-4 dark:bg-gray-700">
                             <HiOutlineCollection className="h-8 w-8 text-gray-400" />
@@ -144,17 +141,17 @@ export default function LeadsSection({ STATUS_FILTERS }: LeadsSectionProp) {
                         </p>
                     </div>
                 ) : (
-                    filteredLeads?.map((lead) => <LeadCard key={lead._id} lead={lead} />)
+                    data?.leads?.map((lead) => <LeadCard key={lead._id} lead={lead} />)
                 )}
             </div>
 
             <div className="flex items-center justify-between border-t border-gray-100 px-5 py-3 dark:border-gray-700">
                 <p className="text-xs text-gray-400">
-                    Showing {filteredLeads?.length} of {leads?.length} leads
+                    Showing {data?.leads?.length} of {data?.totalLeads} leads
                 </p>
-                <button className="text-xs font-medium text-violet-600 hover:text-violet-700 hover:underline dark:text-violet-400 dark:hover:text-violet-300">
+                <Link to={`/leads`} className="text-xs font-medium text-violet-600 hover:text-violet-700 hover:underline dark:text-violet-400 dark:hover:text-violet-300">
                     View all leads →
-                </button>
+                </Link>
             </div>
 
             <AddLeadModal
