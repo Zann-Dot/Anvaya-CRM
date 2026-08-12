@@ -79,13 +79,14 @@ LeadSchema.pre("save", function (next) {
 LeadSchema.pre("findOneAndUpdate", async function () {
     const update = this.getUpdate();
     const priority = update.priority || (update.$set && update.$set.priority);
+
     if (priority) {
-        const weight = { HIGH: 1, MEDIUM: 2, LOW: 3 };
-        const calculateUpdate = weight[priority] || 2
+        const weight = { High: 1, Medium: 2, Low: 3 };
+        const calculateWeight = weight[priority] || 2
         if (update.$set) {
-            update.$set.priorityWeight = calculateUpdate
+            update.$set.priorityWeight = calculateWeight
         } else {
-            update.priorityWeight = calculateUpdate
+            update.priorityWeight = calculateWeight
         }
     }
 })
