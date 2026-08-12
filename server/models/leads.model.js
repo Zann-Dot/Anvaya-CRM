@@ -74,6 +74,20 @@ LeadSchema.pre("save", function (next) {
     const weight = { HIGH: 1, MEDIUM: 2, LOW: 3 };
     this.priorityWeight = weight[this.priority] || 2;
     next();
+});
+
+LeadSchema.pre("findOneAndUpdate", function (next) {
+    const update = this.getUpdate();
+    const priority = update.priority || (update.$set && update.$set.priority);
+    if (priority) {
+        const weight = { HIGH: 1, MEDIUM: 2, LOW: 3 };
+        const calculateUpdate = weight[priority] || 2
+        if (update.$set) {
+            update.$set.priorityWeight = calculateUpdate
+        } else {
+            update.priorityWeight = calculateUpdate
+        }
+    }
 })
 
 export const Leads = model('Lead', LeadSchema);
