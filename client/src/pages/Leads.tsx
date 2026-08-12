@@ -121,19 +121,19 @@ export default function Leads() {
 
             {isTableLoading ? (
                <div role="status" className="w-full animate-pulse space-y-4 p-6">
-                  <div className="flex items-center justify-between border-b border-gray-200 pb-3 dark:border-gray-700">
+                  <div className="grid grid-cols-6 border-b border-gray-200 pb-3 dark:border-gray-700">
                      <div className="h-4 w-4 rounded bg-gray-200 dark:bg-gray-700"></div>
-                     <div className="h-4 w-28 rounded bg-gray-200 dark:bg-gray-700"></div>
-                     <div className="h-4 w-24 rounded bg-gray-200 dark:bg-gray-700"></div>
-                     <div className="h-4 w-20 rounded bg-gray-200 dark:bg-gray-700"></div>
-                     <div className="h-4 w-16 rounded bg-gray-200 dark:bg-gray-700"></div>
-                     <div className="h-4 w-12 rounded bg-gray-200 dark:bg-gray-700"></div>
+                     <div className="h-4 w-40 rounded bg-gray-200 dark:bg-gray-700"></div>
+                     <div className="justify-self-end  h-4 w-24 rounded bg-gray-200 dark:bg-gray-700"></div>
+                     <div className="justify-self-end h-4 w-20 rounded bg-gray-200 dark:bg-gray-700"></div>
+                     <div className="justify-self-end h-4 w-16 rounded bg-gray-200 dark:bg-gray-700"></div>
+                     <div className="justify-self-end h-4 w-12 rounded bg-gray-200 dark:bg-gray-700"></div>
                   </div>
 
                   {[...Array(5)].map((_, i) => (
                      <div
                         key={i}
-                        className="flex items-center justify-between border-b border-gray-100 py-3 dark:border-gray-700/60"
+                        className="grid grid-cols-6 border-b border-gray-100 py-3 dark:border-gray-700/60"
                      >
                         <div className="h-4 w-4 rounded bg-gray-200 dark:bg-gray-700"></div>
                         <div className="flex items-center gap-3">
@@ -143,10 +143,10 @@ export default function Leads() {
                               <div className="h-3 w-32 rounded bg-gray-100 dark:bg-gray-700/50"></div>
                            </div>
                         </div>
-                        <div className="h-3.5 w-24 rounded bg-gray-200 dark:bg-gray-700"></div>
-                        <div className="h-5 w-16 rounded-full bg-gray-200 dark:bg-gray-700"></div>
-                        <div className="h-5 w-14 rounded-full bg-gray-200 dark:bg-gray-700"></div>
-                        <div className="h-4 w-10 rounded bg-gray-200 dark:bg-gray-700"></div>
+                        <div className="justify-self-end h-3.5 w-24 rounded bg-gray-200 dark:bg-gray-700"></div>
+                        <div className="justify-self-end h-5 w-20 rounded-full bg-gray-200 dark:bg-gray-700"></div>
+                        <div className="justify-self-end h-5 w-14 rounded-full bg-gray-200 dark:bg-gray-700"></div>
+                        <div className="justify-self-end h-4 w-12 rounded bg-gray-200 dark:bg-gray-700"></div>
                      </div>
                   ))}
                   <span className="sr-only">Loading...</span>
