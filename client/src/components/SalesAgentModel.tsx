@@ -1,6 +1,7 @@
 import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, TextInput } from 'flowbite-react'
 import { Dispatch, SetStateAction } from 'react'
 import { HiOutlineUserAdd } from 'react-icons/hi'
+import { useCreateAgent } from '../hooks/useAgents'
 
 interface SalesAgentModelProps {
     showAddModal: boolean,
@@ -8,6 +9,22 @@ interface SalesAgentModelProps {
 }
 
 export default function SalesAgentModel({ showAddModal, setShowAddModal }: SalesAgentModelProps) {
+    const { mutate: addAgent } = useCreateAgent();
+
+    function handleAgent(formData: FormData) {
+        const name = formData.get("name") as string;
+        const email = formData.get("email") as string;
+
+        const agentPayload = { name, email }
+        addAgent(agentPayload, {
+            onSuccess: () => {
+                console.log("agent add successfully");
+
+            },
+            onError: () => console.error("something went wrong")
+        })
+    }
+
     return (
         <Modal
             show={showAddModal}
@@ -22,43 +39,47 @@ export default function SalesAgentModel({ showAddModal, setShowAddModal }: Sales
                     </span>
                 </div>
             </ModalHeader>
-            <ModalBody className="space-y-4">
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    <div>
-                        <div className="mb-2 block">
-                            <Label htmlFor="agent-name" defaultValue="Full Name" />
+            <form action={handleAgent}>
+                <ModalBody className="space-y-4">
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="agent-name" defaultValue="Full Name" />
+                            </div>
+                            <TextInput
+                                id="agent-name"
+                                placeholder="e.g. Alex Morgan"
+                                required
+                                name='name'
+                            />
                         </div>
-                        <TextInput
-                            id="agent-name"
-                            placeholder="e.g. Alex Morgan"
-                            required
-                        />
-                    </div>
-                    <div>
-                        <div className="mb-2 block">
-                            <Label htmlFor="agent-email" defaultValue="Email Address" />
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="agent-email" defaultValue="Email Address" />
+                            </div>
+                            <TextInput
+                                id="agent-email"
+                                type="email"
+                                placeholder="alex.morgan@anvaya.com"
+                                required
+                                name='email'
+                            />
                         </div>
-                        <TextInput
-                            id="agent-email"
-                            type="email"
-                            placeholder="alex.morgan@anvaya.com"
-                            required
-                        />
                     </div>
-
-                </div>
-            </ModalBody>
-            <ModalFooter className="border-t border-gray-200 dark:border-gray-800">
-                <Button
-                    onClick={() => setShowAddModal(false)}
-                    className="cursor-pointer bg-linear-to-r from-violet-600 to-indigo-600 text-white hover:bg-violet-700"
-                >
-                    Save Agent
-                </Button>
-                <Button className='cursor-pointer' color="gray" onClick={() => setShowAddModal(false)}>
-                    Cancel
-                </Button>
-            </ModalFooter>
+                </ModalBody>
+                <ModalFooter className="border-t border-gray-200 dark:border-gray-800">
+                    <Button
+                        // onClick={() => setShowAddModal(false)}
+                        type='submit'
+                        className="cursor-pointer bg-linear-to-r from-violet-600 to-indigo-600 text-white hover:bg-violet-700"
+                    >
+                        Save Agent
+                    </Button>
+                    <Button className='cursor-pointer' color="gray" onClick={() => setShowAddModal(false)}>
+                        Cancel
+                    </Button>
+                </ModalFooter>
+            </form>
         </Modal>
     )
 }
