@@ -21,79 +21,13 @@ import {
   HiOutlineFilter,
 } from "react-icons/hi";
 import SalesAgentModel from "../components/SalesAgentModel";
-
-
-const INITIAL_AGENTS = [
-  {
-    id: "AGT-001",
-    name: "Sarah Jenkins",
-    email: "sarah.jenkins@anvaya.com",
-    phone: "+1 (555) 234-5678",
-    role: "Senior Account Executive",
-    region: "North America",
-    status: "Active",
-    dealsClosed: 28,
-    revenue: "$340,000",
-    avatar:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150",
-  },
-  {
-    id: "AGT-002",
-    name: "John Doe",
-    email: "john.doe@anvaya.com",
-    phone: "+1 (555) 345-6789",
-    role: "Enterprise Sales Lead",
-    region: "Europe & UK",
-    status: "Active",
-    dealsClosed: 22,
-    revenue: "$285,000",
-    avatar:
-      "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150",
-  },
-  {
-    id: "AGT-003",
-    name: "Jane Smith",
-    email: "jane.smith@anvaya.com",
-    phone: "+1 (555) 456-7890",
-    role: "Regional Sales Manager",
-    region: "Asia Pacific",
-    status: "On Call",
-    dealsClosed: 35,
-    revenue: "$420,000",
-    avatar:
-      "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150",
-  },
-  {
-    id: "AGT-004",
-    name: "Michael Chen",
-    email: "michael.chen@anvaya.com",
-    phone: "+1 (555) 567-8901",
-    role: "Inbound Sales Specialist",
-    region: "North America",
-    status: "Active",
-    dealsClosed: 19,
-    revenue: "$195,000",
-    avatar:
-      "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150",
-  },
-  {
-    id: "AGT-005",
-    name: "Emily Rodriguez",
-    email: "emily.rodriguez@anvaya.com",
-    phone: "+1 (555) 678-9012",
-    role: "Sales Development Rep",
-    region: "Latin America",
-    status: "Offline",
-    dealsClosed: 12,
-    revenue: "$110,000",
-    avatar:
-      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150",
-  },
-];
+import { useAgents } from "../hooks/useAgents";
 
 export default function Agents() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState("all");
+
+  const { data: agents } = useAgents();
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -125,7 +59,6 @@ export default function Agents() {
 
   return (
     <div className="mx-auto max-w-7xl space-y-6 p-4 sm:p-6 lg:p-8">
-
       <div className="flex flex-col gap-4 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between dark:border-gray-800 dark:bg-gray-900">
         <div className="flex items-center gap-4">
           <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-linear-to-br from-violet-600 to-indigo-600 text-white shadow-lg shadow-violet-500/20">
@@ -231,7 +164,7 @@ export default function Agents() {
 
                 <Button
                   onClick={() => setShowAddModal(true)}
-                  className="bg-linear-to-r from-violet-600 to-indigo-600 text-white shadow-md shadow-violet-500/20 hover:from-violet-700 hover:to-indigo-700"
+                  className="cursor-pointer bg-linear-to-r from-violet-600 to-indigo-600 text-white shadow-md shadow-violet-500/20 hover:from-violet-700 hover:to-indigo-700"
                   size="sm"
                 >
                   <HiOutlineUserAdd className="mr-2 h-4 w-4" />
@@ -243,18 +176,20 @@ export default function Agents() {
             <div className="overflow-x-auto">
               <Table hoverable>
                 <TableHead className="bg-gray-50 dark:bg-gray-800">
-                  <TableHeadCell>Sales Agent</TableHeadCell>
-                  <TableHeadCell>Contact Information</TableHeadCell>
+                  <TableRow>
+                    <TableHeadCell>Sales Agent</TableHeadCell>
+                    <TableHeadCell>Contact Information</TableHeadCell>
 
-                  <TableHeadCell>Status</TableHeadCell>
-                  <TableHeadCell>
-                    <span className="sr-only">Actions</span>
-                  </TableHeadCell>
+                    <TableHeadCell>Status</TableHeadCell>
+                    <TableHeadCell>
+                      <span className="sr-only">Actions</span>
+                    </TableHeadCell>
+                  </TableRow>
                 </TableHead>
                 <TableBody className="divide-y divide-gray-200 dark:divide-gray-800">
-                  {INITIAL_AGENTS.map((agent) => (
+                  {agents?.map((agent) => (
                     <TableRow
-                      key={agent.id}
+                      key={agent._id}
                       className="bg-white transition-colors hover:bg-gray-50 dark:bg-gray-900 dark:hover:bg-gray-800/50"
                     >
                       <TableCell className="font-medium whitespace-nowrap text-gray-900 dark:text-white">
@@ -323,7 +258,10 @@ export default function Agents() {
         </div>
       </div>
 
-      <SalesAgentModel showAddModal={showAddModal} setShowAddModal={setShowAddModal} />
+      <SalesAgentModel
+        showAddModal={showAddModal}
+        setShowAddModal={setShowAddModal}
+      />
     </div>
   );
 }

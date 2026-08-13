@@ -32,7 +32,6 @@ export default function SalesAgentModel({ showAddModal, setShowAddModal }: Sales
                             id="agent-name"
                             placeholder="e.g. Alex Morgan"
                             required
-                            readOnly
                         />
                     </div>
                     <div>
@@ -44,7 +43,6 @@ export default function SalesAgentModel({ showAddModal, setShowAddModal }: Sales
                             type="email"
                             placeholder="alex.morgan@anvaya.com"
                             required
-                            readOnly
                         />
                     </div>
 
@@ -53,11 +51,11 @@ export default function SalesAgentModel({ showAddModal, setShowAddModal }: Sales
             <ModalFooter className="border-t border-gray-200 dark:border-gray-800">
                 <Button
                     onClick={() => setShowAddModal(false)}
-                    className="bg-violet-600 text-white hover:bg-violet-700"
+                    className="cursor-pointer bg-linear-to-r from-violet-600 to-indigo-600 text-white hover:bg-violet-700"
                 >
                     Save Agent
                 </Button>
-                <Button color="gray" onClick={() => setShowAddModal(false)}>
+                <Button className='cursor-pointer' color="gray" onClick={() => setShowAddModal(false)}>
                     Cancel
                 </Button>
             </ModalFooter>
