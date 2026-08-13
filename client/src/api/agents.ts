@@ -8,7 +8,7 @@ export async function fetchAgents() {
 export async function addAgent(agent: { name: string; email: string }) {
     const response = await fetch("/api/agents", {
         method: "POST",
-        headers: { "Content-Type": "aaplication/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(agent)
     });
     const data = await response.json();
