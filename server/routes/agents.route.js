@@ -19,7 +19,7 @@ agentRouter.post("/agents", async (req, res) => {
         await SalesAgent.create({ name, email });
         res.json({
             success: true,
-            message: "Agent added to database successfully.",
+            message: "Agent added successfully.",
         });
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -38,5 +38,19 @@ agentRouter.get("/agents", async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 })
+
+agentRouter.delete("/agents/:id", async (req, res) => {
+    try {
+        const deletedAgent = await SalesAgent.findByIdAndDelete(req.params.id);
+        if (!deletedAgent)
+            return res.status(404).json({ error: "Agent not found" });
+        res.json({
+            success: true,
+            message: "Agent deleted successfully"
+        })
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
 
 export default agentRouter;
