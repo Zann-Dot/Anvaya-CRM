@@ -1,7 +1,8 @@
 import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, TextInput } from 'flowbite-react'
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction, useEffect } from 'react'
 import { HiOutlineUserAdd } from 'react-icons/hi'
-import { useCreateAgent } from '../hooks/useAgents'
+import { useAgents, useCreateAgent } from '../hooks/useAgents'
+import useMain from '../context/MainProvider'
 
 interface SalesAgentModelProps {
     showAddModal: boolean,
@@ -9,20 +10,38 @@ interface SalesAgentModelProps {
 }
 
 export default function SalesAgentModel({ showAddModal, setShowAddModal }: SalesAgentModelProps) {
-    const { mutate: addAgent } = useCreateAgent();
+    const { mutate: addAgent, isPending, isSuccess, isError, error } = useCreateAgent();
+    const { setToastNotification, setNotificationActive, setIsPending } = useMain();
+
+    useEffect(() => {
+        setIsPending(isPending);
+        isSuccess
+            ? setToastNotification({
+                isError,
+                isSuccess,
+                successMessage: "Agent added successfully"
+            })
+            : setToastNotification({
+                isError,
+                isSuccess,
+                errorMessage: error?.message
+            });
+
+    }, [isPending, isSuccess, isError])
 
     function handleAgent(formData: FormData) {
         const name = formData.get("name") as string;
         const email = formData.get("email") as string;
-
         const agentPayload = { name, email }
-        addAgent(agentPayload, {
-            onSuccess: () => {
-                console.log("agent add successfully");
 
-            },
-            onError: () => console.error("something went wrong")
-        })
+        addAgent(agentPayload);
+
+        setNotificationActive(true);
+        !isPending && setTimeout(() => {
+            setNotificationActive(false);
+            setShowAddModal(false);
+            setIsPending(false);
+        }, 2300);
     }
 
     return (
@@ -69,7 +88,6 @@ export default function SalesAgentModel({ showAddModal, setShowAddModal }: Sales
                 </ModalBody>
                 <ModalFooter className="border-t border-gray-200 dark:border-gray-800">
                     <Button
-                        // onClick={() => setShowAddModal(false)}
                         type='submit'
                         className="cursor-pointer bg-linear-to-r from-violet-600 to-indigo-600 text-white hover:bg-violet-700"
                     >

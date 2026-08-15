@@ -98,7 +98,7 @@ export default function Agents() {
                 >
                   <span>All Sales Agents</span>
                   <span className="rounded-full bg-white/20 px-2 py-0.5 text-[10px]">
-                    5
+                    {agents?.length}
                   </span>
                 </button>
                 <button
@@ -114,10 +114,10 @@ export default function Agents() {
                     Active Agents
                   </span>
                   <span className="rounded-full bg-gray-200 px-2 py-0.5 text-[10px] text-gray-700 dark:bg-gray-700 dark:text-gray-300">
-                    3
+                    {agents?.length}
                   </span>
                 </button>
-                <button
+                {/* <button
                   type="button"
                   onClick={() => setSelectedFilter("oncall")}
                   className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-xs font-medium transition-colors ${selectedFilter === "oncall"
@@ -132,7 +132,7 @@ export default function Agents() {
                   <span className="rounded-full bg-gray-200 px-2 py-0.5 text-[10px] text-gray-700 dark:bg-gray-700 dark:text-gray-300">
                     1
                   </span>
-                </button>
+                </button> */}
               </div>
             </div>
           </Card>

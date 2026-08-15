@@ -1,45 +1,58 @@
 import { Spinner, Toast } from "flowbite-react";
 import { HiCheck, HiX } from "react-icons/hi";
 import { ToastNotificationDetails } from "../context/MainProvider";
+import { motion } from "motion/react";
 
 interface ToastNotificationProps {
     isPending: boolean;
     toastNotification: ToastNotificationDetails;
 }
 
+const MotionToast = motion.create(Toast);
+
 export function ToastNotification({
     isPending,
     toastNotification,
 }: ToastNotificationProps) {
+
     return (
-        <div className="fixed top-5 right-10 z-60 flex flex-col gap-4">
+        <motion.div
+            className="fixed top-5 right-10 z-60 flex flex-col gap-4">
             {isPending && (
                 <Toast>
                     <Spinner aria-label="Default status example" />
                 </Toast>
             )}
 
-            {toastNotification?.isSuccess && (
-                <Toast>
+            {toastNotification.isSuccess && (
+                <MotionToast
+                    initial={{ y: -100 }}
+                    animate={{ y: 0 }}
+                    transition={{ duration: 0.2, ease: "circOut" }}
+                >
                     <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200">
                         <HiCheck className="h-5 w-5" />
                     </div>
                     <div className="ml-3 text-sm font-normal">
                         {toastNotification?.successMessage}
                     </div>
-                </Toast>
+                </MotionToast>
             )}
 
             {toastNotification?.isError && (
-                <Toast>
+                <MotionToast
+                    initial={{ y: -100 }}
+                    animate={{ y: 0 }}
+                    transition={{ duration: 0.2, ease: "circOut" }}
+                >
                     <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-red-100 text-red-500 dark:bg-red-800 dark:text-red-200">
                         <HiX className="h-5 w-5" />
                     </div>
                     <div className="ml-3 text-sm font-normal">
                         {toastNotification?.errorMessage}
                     </div>
-                </Toast>
+                </MotionToast>
             )}
-        </div>
+        </motion.div>
     );
 }
