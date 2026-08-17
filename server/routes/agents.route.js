@@ -8,16 +8,15 @@ agentRouter.post("/agents", async (req, res) => {
         if (!name || !email)
             return res.status(400).json({ error: "Invalid name or email inputs" });
 
-        const agent = await SalesAgent.findOne({ email });
+        const agent = await SalesAgent.findOneAndUpdate({ email });
         if (agent)
-            return res
-                .status(409)
-                .json({
-                    error: `Sales agent with email '${email}' already exists.`,
-                });
+            return res.status(200).json({
+                success: true,
+                message: "Agent updated successfully"
+            });
 
         await SalesAgent.create({ name, email });
-        res.json({
+        res.status(201).json({
             success: true,
             message: "Agent added successfully.",
         });
