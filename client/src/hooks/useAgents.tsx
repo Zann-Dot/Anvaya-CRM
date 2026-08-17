@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { addAgent, fetchAgents } from "../api/agents";
+import { addAgent, deleteAgent, fetchAgents } from "../api/agents";
 
 export interface Agent {
     _id: string,
@@ -19,6 +19,17 @@ export function useCreateAgent() {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: addAgent,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["agents"] })
+        },
+        onError: (error) => console.error(error.message)
+    })
+}
+
+export function useDeleteAgent() {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: deleteAgent,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["agents"] })
         },

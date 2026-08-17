@@ -21,7 +21,7 @@ import {
   HiOutlineFilter,
 } from "react-icons/hi";
 import SalesAgentModel from "../components/SalesAgentModel";
-import { useAgents } from "../hooks/useAgents";
+import { useAgents, useDeleteAgent } from "../hooks/useAgents";
 
 export default function Agents() {
   const [showAddModal, setShowAddModal] = useState(false);
@@ -30,6 +30,7 @@ export default function Agents() {
   const [selectedFilter, setSelectedFilter] = useState("all");
 
   const { data: agents } = useAgents();
+  const { mutate: deleteAgent } = useDeleteAgent();
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -234,14 +235,15 @@ export default function Agents() {
                               setIsEdit(true);
                               setAgentId(agent._id);
                             }}
-                            title="Edit Agent (UI only)"
+                            title="Edit Agent"
                             className="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 hover:text-violet-600 dark:hover:bg-gray-800 dark:hover:text-violet-400"
                           >
                             <HiOutlinePencil className="h-4 w-4" />
                           </button>
                           <button
                             type="button"
-                            title="Delete Agent (UI only)"
+                            title="Delete Agent"
+                            onClick={() => deleteAgent(agent._id)}
                             className="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 hover:text-rose-600 dark:hover:bg-gray-800 dark:hover:text-rose-400"
                           >
                             <HiOutlineTrash className="h-4 w-4" />
