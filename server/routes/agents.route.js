@@ -31,12 +31,36 @@ agentRouter.post("/agents", async (req, res) => {
 
 agentRouter.get("/agents", async (req, res) => {
     try {
-        const agents = await SalesAgent.find({});
+        const { search } = req.query;
+        const page = parseInt(req.query.page, 5) || 1;
+        const limit = parseInt(req.query.limit, 5) || 5;
+        const searchTerm = search.trim() ? search : ""
+        let query = {}
+        if (search) {
+            const searchTermRegex = { $regex: searchTerm, $options: "i" };
+            query.$or = [
+                { name: searchTermRegex },
+                { email: searchTermRegex }
+            ]
+        }
+
+        const [totalAgents, agents] = await Promise.all([
+            SalesAgent.countDocuments(query),
+            SalesAgent.find(query)
+                .sort({ createdAt: -1 })
+                .skip((page - 1) * limit)
+                .limit(limit)
+        ])
 
         if (!Array.isArray(agents) || !agents)
             return res.status(404).json({ error: "Agents not found" });
 
-        res.json(agents);
+        res.json({
+            agents,
+            totalAgents,
+            totalPages: Math.ceil(totalAgents / limit),
+            currentPage: page,
+        });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
