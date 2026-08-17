@@ -25,6 +25,8 @@ import { useAgents } from "../hooks/useAgents";
 
 export default function Agents() {
   const [showAddModal, setShowAddModal] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+  const [agentId, setAgentId] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("all");
 
   const { data: agents } = useAgents();
@@ -163,7 +165,10 @@ export default function Agents() {
                 </div>
 
                 <Button
-                  onClick={() => setShowAddModal(true)}
+                  onClick={() => {
+                    setShowAddModal(true);
+                    setIsEdit(false);
+                  }}
                   className="cursor-pointer bg-linear-to-r from-violet-600 to-indigo-600 text-white shadow-md shadow-violet-500/20 hover:from-violet-700 hover:to-indigo-700"
                   size="sm"
                 >
@@ -223,6 +228,11 @@ export default function Agents() {
                         <div className="flex items-center gap-2">
                           <button
                             type="button"
+                            onClick={() => {
+                              setShowAddModal(true);
+                              setIsEdit(true);
+                              setAgentId(agent._id);
+                            }}
                             title="Edit Agent (UI only)"
                             className="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 hover:text-violet-600 dark:hover:bg-gray-800 dark:hover:text-violet-400"
                           >
@@ -261,6 +271,8 @@ export default function Agents() {
       <SalesAgentModel
         showAddModal={showAddModal}
         setShowAddModal={setShowAddModal}
+        isEdit={isEdit}
+        agentId={agentId}
       />
     </div>
   );
