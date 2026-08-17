@@ -22,6 +22,8 @@ import {
 } from "react-icons/hi";
 import SalesAgentModel from "../components/SalesAgentModel";
 import { useAgents, useDeleteAgent } from "../hooks/useAgents";
+import useNotification from "../hooks/useNotification";
+import useMain from "../context/MainProvider";
 
 export default function Agents() {
   const [showAddModal, setShowAddModal] = useState(false);
@@ -29,10 +31,19 @@ export default function Agents() {
   const [agentId, setAgentId] = useState<string | undefined>(undefined);
   const [selectedFilter, setSelectedFilter] = useState("all");
 
+  const { setNotificationActive } = useMain();
   const { data: agents, isLoading, isFetching } = useAgents();
-  const { mutate: deleteAgent } = useDeleteAgent();
+  const {
+    mutate: deleteAgent,
+    isError,
+    isSuccess,
+    isPending,
+    error,
+    data,
+  } = useDeleteAgent();
 
-  const isAgentLoading = isLoading || isFetching
+  useNotification(isPending, isSuccess, isError, error, data);
+  const isAgentLoading = isLoading || isFetching;
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -67,8 +78,7 @@ export default function Agents() {
       <div className="flex flex-col gap-4 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between dark:border-gray-800 dark:bg-gray-900">
         {isAgentLoading ? (
           <div role="status" className="w-full animate-pulse space-y-4">
-            <div className="w-1/2 py-3 bg-gray-200 rounded-lg dark:bg-gray-700">
-            </div>
+            <div className="w-1/2 rounded-lg bg-gray-200 py-3 dark:bg-gray-700"></div>
           </div>
         ) : (
           <>
@@ -99,8 +109,7 @@ export default function Agents() {
               <div className="flex items-center justify-between border-b border-gray-100 pb-3 dark:border-gray-800">
                 {isAgentLoading ? (
                   <div role="status" className="w-full animate-pulse space-y-4">
-                    <div className="w-1/2 py-2 bg-gray-200 rounded-lg dark:bg-gray-700">
-                    </div>
+                    <div className="w-1/2 rounded-lg bg-gray-200 py-2 dark:bg-gray-700"></div>
                   </div>
                 ) : (
                   <span className="flex items-center gap-2 text-xs font-semibold tracking-wider text-gray-500 uppercase dark:text-gray-400">
@@ -111,10 +120,8 @@ export default function Agents() {
               <div className="space-y-1.5">
                 {isAgentLoading ? (
                   <div role="status" className="w-full animate-pulse space-y-4">
-                    <div className="w-1/2 py-2 bg-gray-200 rounded-lg dark:bg-gray-700">
-                    </div>
-                    <div className="w-1/2 py-2 bg-gray-200 rounded-lg dark:bg-gray-700">
-                    </div>
+                    <div className="w-1/2 rounded-lg bg-gray-200 py-2 dark:bg-gray-700"></div>
+                    <div className="w-1/2 rounded-lg bg-gray-200 py-2 dark:bg-gray-700"></div>
                   </div>
                 ) : (
                   <>
@@ -156,8 +163,8 @@ export default function Agents() {
                         }`}
                     >
                       <span className="flex items-center gap-2">
-                        <span className="h-2 w-2 rounded-full bg-amber-500" /> On
-                        Call
+                        <span className="h-2 w-2 rounded-full bg-amber-500" />{" "}
+                        On Call
                       </span>
                       <span className="rounded-full bg-gray-200 px-2 py-0.5 text-[10px] text-gray-700 dark:bg-gray-700 dark:text-gray-300">
                         1
@@ -173,28 +180,26 @@ export default function Agents() {
         <div className="space-y-4 lg:col-span-3">
           {isAgentLoading ? (
             <div className="rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
-
-              <div role="status" className="w-full animate-pulse flex flex-col gap-4 border-b border-gray-200 p-5 sm:flex-row sm:items-center sm:justify-between dark:border-gray-800">
-                <div className="w-1/2 py-4 bg-gray-200 rounded-lg dark:bg-gray-700">
-                </div>
+              <div
+                role="status"
+                className="flex w-full animate-pulse flex-col gap-4 border-b border-gray-200 p-5 sm:flex-row sm:items-center sm:justify-between dark:border-gray-800"
+              >
+                <div className="w-1/2 rounded-lg bg-gray-200 py-4 dark:bg-gray-700"></div>
 
                 <div className="flex flex-wrap items-center gap-3">
-                  <div className="w-40 py-3 bg-gray-200 rounded-lg dark:bg-gray-700">
-                  </div>
+                  <div className="w-40 rounded-lg bg-gray-200 py-3 dark:bg-gray-700"></div>
 
-                  <div className="w-20 py-3 bg-gray-200 rounded-lg dark:bg-gray-700">
-                  </div>
+                  <div className="w-20 rounded-lg bg-gray-200 py-3 dark:bg-gray-700"></div>
                 </div>
               </div>
 
-              <div className="overflow-x-auto animate-pulse">
+              <div className="animate-pulse overflow-x-auto">
                 <Table hoverable>
                   <TableHead className="bg-gray-50 dark:bg-gray-800">
                     <TableRow>
                       {[...Array(3)].map((_, i) => (
                         <TableHeadCell key={i}>
-                          <div className="w-20 py-1.5 bg-gray-100 rounded-lg dark:bg-gray-600">
-                          </div>
+                          <div className="w-20 rounded-lg bg-gray-100 py-1.5 dark:bg-gray-600"></div>
                         </TableHeadCell>
                       ))}
                     </TableRow>
@@ -206,18 +211,15 @@ export default function Agents() {
                         className="bg-white transition-colors hover:bg-gray-50 dark:bg-gray-900 dark:hover:bg-gray-800/50"
                       >
                         <TableCell className="font-medium whitespace-nowrap text-gray-900 dark:text-white">
-                          <div className="w-20 py-1.5 bg-gray-200 rounded-lg dark:bg-gray-700">
-                          </div>
+                          <div className="w-20 rounded-lg bg-gray-200 py-1.5 dark:bg-gray-700"></div>
                         </TableCell>
 
                         <TableCell>
-                          <div className="w-20 py-1.5 bg-gray-200 rounded-lg dark:bg-gray-700">
-                          </div>
+                          <div className="w-20 rounded-lg bg-gray-200 py-1.5 dark:bg-gray-700"></div>
                         </TableCell>
 
                         <TableCell>
-                          <div className="w-20 py-1.5 bg-gray-200 rounded-lg dark:bg-gray-700">
-                          </div>
+                          <div className="w-20 rounded-lg bg-gray-200 py-1.5 dark:bg-gray-700"></div>
                         </TableCell>
                       </TableRow>
                     ))}
@@ -226,11 +228,9 @@ export default function Agents() {
               </div>
 
               <div className="flex items-center justify-between border-t border-gray-200 p-4 text-xs text-gray-500 dark:border-gray-800 dark:text-gray-400">
-                <div className="w-30 py-px bg-gray-200 rounded-lg dark:bg-gray-800">
-                </div>
+                <div className="w-30 rounded-lg bg-gray-200 py-px dark:bg-gray-800"></div>
               </div>
             </div>
-
           ) : (
             <div className="rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
               <div className="flex flex-col gap-4 border-b border-gray-200 p-5 sm:flex-row sm:items-center sm:justify-between dark:border-gray-800">
@@ -259,7 +259,7 @@ export default function Agents() {
                     onClick={() => {
                       setShowAddModal(true);
                       setIsEdit(false);
-                      setAgentId(undefined)
+                      setAgentId(undefined);
                     }}
                     className="cursor-pointer bg-linear-to-r from-violet-600 to-indigo-600 text-white shadow-md shadow-violet-500/20 hover:from-violet-700 hover:to-indigo-700"
                     size="sm"
@@ -333,7 +333,10 @@ export default function Agents() {
                             <button
                               type="button"
                               title="Delete Agent"
-                              onClick={() => deleteAgent(agent._id)}
+                              onClick={() => {
+                                deleteAgent(agent._id);
+                                setNotificationActive(true);
+                              }}
                               className="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 hover:text-rose-600 dark:hover:bg-gray-800 dark:hover:text-rose-400"
                             >
                               <HiOutlineTrash className="h-4 w-4" />
@@ -359,8 +362,6 @@ export default function Agents() {
               </div>
             </div>
           )}
-
-
         </div>
       </div>
 

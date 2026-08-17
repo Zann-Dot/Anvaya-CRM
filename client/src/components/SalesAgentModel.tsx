@@ -7,10 +7,11 @@ import {
     ModalHeader,
     TextInput,
 } from "flowbite-react";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { HiOutlineUserAdd } from "react-icons/hi";
 import { useAgents, useCreateAgent } from "../hooks/useAgents";
 import useMain from "../context/MainProvider";
+import useNotification from "../hooks/useNotification";
 
 interface SalesAgentModelProps {
     showAddModal: boolean;
@@ -23,7 +24,7 @@ export default function SalesAgentModel({
     showAddModal,
     setShowAddModal,
     isEdit,
-    agentId
+    agentId,
 }: SalesAgentModelProps) {
     const {
         mutate: mutateAgent,
@@ -31,43 +32,22 @@ export default function SalesAgentModel({
         isSuccess,
         isError,
         error,
-
+        data,
     } = useCreateAgent();
     const { data: agents } = useAgents();
-    const agent = agents?.find(a => a._id === agentId);
+    const { setNotificationActive } = useMain();
+    const agent = agents?.find((a) => a._id === agentId);
 
-    const { setToastNotification, setNotificationActive, setIsPending } =
-        useMain();
 
-    useEffect(() => {
-        setIsPending(isPending);
-        isSuccess
-            ? setToastNotification({
-                isError,
-                isSuccess,
-                successMessage: "Agent added successfully",
-            })
-            : setToastNotification({
-                isError,
-                isSuccess,
-                errorMessage: error?.message,
-            });
-    }, [isPending, isSuccess, isError]);
+    useNotification(isPending, isSuccess, isError, error, data);
 
     function handleAgent(formData: FormData) {
         const name = formData.get("name") as string;
         const email = formData.get("email") as string;
         const agentPayload = { agentId, name, email };
-
         mutateAgent(agentPayload);
-
         setNotificationActive(true);
-        !isPending &&
-            setTimeout(() => {
-                setNotificationActive(false);
-                setShowAddModal(false);
-                setIsPending(false);
-            }, 2300);
+        setShowAddModal(false);
     }
 
     return (
