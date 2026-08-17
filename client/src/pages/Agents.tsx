@@ -24,15 +24,18 @@ import SalesAgentModel from "../components/SalesAgentModel";
 import { useAgents, useDeleteAgent } from "../hooks/useAgents";
 import useNotification from "../hooks/useNotification";
 import useMain from "../context/MainProvider";
+import { useDebounce } from "../hooks/useDebounce";
 
 export default function Agents() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [agentId, setAgentId] = useState<string | undefined>(undefined);
   const [selectedFilter, setSelectedFilter] = useState("all");
+  const [search, setSearch] = useState("");
 
   const { setNotificationActive } = useMain();
-  const { data: agentRes, isLoading, isFetching } = useAgents();
+  const debouncedValue = useDebounce(search, 400);
+  const { data: agentRes, isLoading, isFetching } = useAgents(debouncedValue);
   const {
     mutate: deleteAgent,
     isError,
@@ -247,11 +250,12 @@ export default function Agents() {
                   <div className="w-full sm:w-64">
                     <TextInput
                       id="search-agent"
-                      type="text"
+                      type="search"
                       placeholder="Search by name or email..."
                       icon={HiOutlineSearch}
                       sizing="sm"
-                      readOnly
+                      onChange={(e) => setSearch(e.target.value)}
+                      value={search}
                     />
                   </div>
 
