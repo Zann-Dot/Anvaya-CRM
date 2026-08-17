@@ -8,8 +8,15 @@ export interface Agent {
     createdAt: string
 }
 
+export interface AgentResponse {
+    agents: Agent[];
+    totalAgents: number;
+    totalPages: number;
+    currentPage: number
+}
+
 export function useAgents() {
-    return useQuery<Agent[]>({
+    return useQuery<AgentResponse>({
         queryKey: ["agents"],
         queryFn: fetchAgents
     })

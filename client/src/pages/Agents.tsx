@@ -32,7 +32,7 @@ export default function Agents() {
   const [selectedFilter, setSelectedFilter] = useState("all");
 
   const { setNotificationActive } = useMain();
-  const { data: agents, isLoading, isFetching } = useAgents();
+  const { data: agentRes, isLoading, isFetching } = useAgents();
   const {
     mutate: deleteAgent,
     isError,
@@ -135,7 +135,7 @@ export default function Agents() {
                     >
                       <span>All Sales Agents</span>
                       <span className="rounded-full bg-white/20 px-2 py-0.5 text-[10px]">
-                        {agents?.length}
+                        {agentRes?.agents?.length}
                       </span>
                     </button>
                     <button
@@ -151,7 +151,7 @@ export default function Agents() {
                         Active Agents
                       </span>
                       <span className="rounded-full bg-gray-200 px-2 py-0.5 text-[10px] text-gray-700 dark:bg-gray-700 dark:text-gray-300">
-                        {agents?.length}
+                        {agentRes?.agents?.length}
                       </span>
                     </button>
                     <button
@@ -284,7 +284,7 @@ export default function Agents() {
                     </TableRow>
                   </TableHead>
                   <TableBody className="divide-y divide-gray-200 dark:divide-gray-800">
-                    {agents?.map((agent) => (
+                    {agentRes?.agents?.map((agent) => (
                       <TableRow
                         key={agent._id}
                         className="bg-white transition-colors hover:bg-gray-50 dark:bg-gray-900 dark:hover:bg-gray-800/50"
