@@ -34,8 +34,8 @@ export default function SalesAgentModel({
       error,
       data,
    } = useCreateAgent();
-   const { data: agentRes } = useAgents();
-   const { setNotificationActive } = useMain();
+   const { setNotificationActive, page } = useMain();
+   const { data: agentRes } = useAgents(page);
    const agent = agentRes?.agents?.find((a) => a._id === agentId);
 
    useNotification(isPending, isSuccess, isError, error, data);

@@ -30,7 +30,9 @@ interface MainContextType {
     isPending: boolean;
     toastNotification: ToastNotificationDetails;
     setNotificationActive: Dispatch<SetStateAction<boolean>>,
-    isNotificationActive: boolean
+    isNotificationActive: boolean,
+    page: number,
+    setPage: Dispatch<SetStateAction<number>>
 }
 
 const MainContext = createContext<MainContextType | null>(null);
@@ -48,6 +50,7 @@ export function MainProvider({ children }: React.PropsWithChildren) {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
+    const [page, setPage] = useState(1);
     const [isPending, setIsPending] = useState(false);
     const [isNotificationActive, setNotificationActive] = useState(false);
     const [toastNotification, setToastNotification] =
@@ -106,7 +109,9 @@ export function MainProvider({ children }: React.PropsWithChildren) {
                 isPending,
                 toastNotification,
                 setNotificationActive,
-                isNotificationActive
+                isNotificationActive,
+                page,
+                setPage
             }}
         >
             {children}
