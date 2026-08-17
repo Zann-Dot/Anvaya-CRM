@@ -25,6 +25,7 @@ import { useAgents, useDeleteAgent } from "../hooks/useAgents";
 import useNotification from "../hooks/useNotification";
 import useMain from "../context/MainProvider";
 import { useDebounce } from "../hooks/useDebounce";
+import Footer from "../components/agents/Footer";
 
 export default function Agents() {
   const [showAddModal, setShowAddModal] = useState(false);
@@ -33,13 +34,12 @@ export default function Agents() {
   const [selectedFilter, setSelectedFilter] = useState("all");
   const [search, setSearch] = useState("");
 
-  const { setNotificationActive, page, setPage } = useMain();
+  const { setNotificationActive, page } = useMain();
   const debouncedValue = useDebounce(search, 400);
   const {
     data: agentRes,
     isLoading,
     isFetching,
-    isPlaceholderData,
   } = useAgents(page, debouncedValue);
 
   const {
@@ -359,42 +359,7 @@ export default function Agents() {
                 </Table>
               </div>
 
-              <div className="flex items-center justify-between border-t border-gray-200 p-4 text-xs text-gray-500 dark:border-gray-800 dark:text-gray-400">
-                <span>
-                  Showing {agentRes?.agents?.length} of {agentRes?.totalAgents}{" "}
-                  agents
-                </span>
-                <div className="flex items-center gap-1">
-                  <Button
-                    onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-                    disabled={page === 1}
-                    className="cursor-pointer disabled:cursor-default"
-                    color="light"
-                    size="xs"
-                  >
-                    Previous
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      if (
-                        agentRes &&
-                        !isPlaceholderData &&
-                        page < agentRes?.totalPages
-                      )
-                        setPage((prev) => prev + 1);
-                    }}
-                    disabled={
-                      isPlaceholderData ||
-                      (agentRes && page >= agentRes?.totalPages)
-                    }
-                    className="cursor-pointer disabled:cursor-default"
-                    color="light"
-                    size="xs"
-                  >
-                    Next
-                  </Button>
-                </div>
-              </div>
+              <Footer />
             </div>
           )}
         </div>
