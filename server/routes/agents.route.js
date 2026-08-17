@@ -4,11 +4,11 @@ const agentRouter = express.Router();
 
 agentRouter.post("/agents", async (req, res) => {
     try {
-        const { name, email } = req.body;
+        const { agentId, name, email } = req.body;
         if (!name || !email)
             return res.status(400).json({ error: "Invalid name or email inputs" });
 
-        const agent = await SalesAgent.findOneAndUpdate({ email });
+        const agent = await SalesAgent.findByIdAndUpdate(agentId);
         if (agent)
             return res.status(200).json({
                 success: true,
