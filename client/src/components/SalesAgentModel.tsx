@@ -26,7 +26,7 @@ export default function SalesAgentModel({
     agentId
 }: SalesAgentModelProps) {
     const {
-        mutate: addAgent,
+        mutate: mutateAgent,
         isPending,
         isSuccess,
         isError,
@@ -38,6 +38,7 @@ export default function SalesAgentModel({
 
     const { setToastNotification, setNotificationActive, setIsPending } =
         useMain();
+
 
     useEffect(() => {
         setIsPending(isPending);
@@ -57,9 +58,9 @@ export default function SalesAgentModel({
     function handleAgent(formData: FormData) {
         const name = formData.get("name") as string;
         const email = formData.get("email") as string;
-        const agentPayload = { name, email };
+        const agentPayload = { agentId, name, email };
 
-        addAgent(agentPayload);
+        mutateAgent(agentPayload);
 
         setNotificationActive(true);
         !isPending &&
