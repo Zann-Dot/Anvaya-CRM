@@ -39,7 +39,6 @@ export default function SalesAgentModel({
     const { setToastNotification, setNotificationActive, setIsPending } =
         useMain();
 
-
     useEffect(() => {
         setIsPending(isPending);
         isSuccess

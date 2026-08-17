@@ -26,7 +26,7 @@ import { useAgents } from "../hooks/useAgents";
 export default function Agents() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-  const [agentId, setAgentId] = useState("");
+  const [agentId, setAgentId] = useState<string | undefined>(undefined);
   const [selectedFilter, setSelectedFilter] = useState("all");
 
   const { data: agents } = useAgents();
@@ -168,6 +168,7 @@ export default function Agents() {
                   onClick={() => {
                     setShowAddModal(true);
                     setIsEdit(false);
+                    setAgentId(undefined)
                   }}
                   className="cursor-pointer bg-linear-to-r from-violet-600 to-indigo-600 text-white shadow-md shadow-violet-500/20 hover:from-violet-700 hover:to-indigo-700"
                   size="sm"
