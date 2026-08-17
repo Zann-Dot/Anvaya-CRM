@@ -354,7 +354,7 @@ export default function Agents() {
               </div>
 
               <div className="flex items-center justify-between border-t border-gray-200 p-4 text-xs text-gray-500 dark:border-gray-800 dark:text-gray-400">
-                <span>Showing 1-5 of 5 agents</span>
+                <span>Showing {agentRes?.agents?.length} of {agentRes?.totalAgents} agents</span>
                 <div className="flex items-center gap-1">
                   <Button color="light" size="xs" disabled>
                     Previous
