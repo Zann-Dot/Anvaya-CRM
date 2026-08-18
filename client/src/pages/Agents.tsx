@@ -40,6 +40,7 @@ export default function Agents() {
     data: agentRes,
     isLoading,
     isFetching,
+    isError: isAgentError
   } = useAgents(page, debouncedValue);
 
   const {
@@ -281,7 +282,16 @@ export default function Agents() {
               </div>
 
               <div className="overflow-x-auto">
-                <Table hoverable>
+                {agentRes?.agents.length === 0 || isAgentError ? (
+                  <div className="flex flex-col items-center justify-center py-16 text-center">
+                    <div className="mb-3 rounded-2xl bg-gray-100 p-4 dark:bg-gray-700">
+                      <HiOutlineUserGroup className="h-8 w-8 text-gray-400" />
+                    </div>
+                    <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                      No agents found
+                    </p>
+                  </div>
+                ) : (<Table hoverable>
                   <TableHead className="bg-gray-50 dark:bg-gray-800">
                     <TableRow>
                       <TableHeadCell>Sales Agent</TableHeadCell>
@@ -357,6 +367,7 @@ export default function Agents() {
                     ))}
                   </TableBody>
                 </Table>
+                )}
               </div>
 
               <Footer />
