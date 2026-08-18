@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Badge, Button, Card, TextInput } from "flowbite-react";
 import {
   HiOutlineUserAdd,
@@ -13,18 +13,26 @@ import { useDebounce } from "../hooks/useDebounce";
 import Footer from "../components/agents/Footer";
 import AgentsSkeleton from "../components/agents/AgentsSkeleton";
 import AgentList from "../components/agents/AgentList";
+import { useSearchParams } from "react-router-dom";
 
 export default function Agents() {
   const [selectedFilter, setSelectedFilter] = useState("all");
   const [search, setSearch] = useState("");
-
-  const { setNotificationState, page } = useMain();
+  const [searchParams, setSearchParams] = useSearchParams()
+  const { setNotificationState, page, params } = useMain();
   const debouncedValue = useDebounce(search, 400);
+
+  search && params.set("search", debouncedValue);
+
+  useEffect(() => {
+    setSearchParams(params);
+  }, [debouncedValue, page]);
+
   const {
     data: agentRes,
     isLoading,
     isFetching,
-  } = useAgents(page, debouncedValue);
+  } = useAgents(params.toString());
 
   const isAgentLoading = isLoading || isFetching;
 

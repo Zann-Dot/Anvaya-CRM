@@ -15,10 +15,12 @@ export interface AgentResponse {
     currentPage: number
 }
 
-export function useAgents(page: number, debouncedValue?: string) {
+export function useAgents(params: string) {
+
+
     return useQuery<AgentResponse>({
-        queryKey: ["agents", { search: debouncedValue, page }],
-        queryFn: () => fetchAgents(page, debouncedValue),
+        queryKey: ["agents", params],
+        queryFn: () => fetchAgents(params),
         placeholderData: (prev) => prev
     })
 }

@@ -23,14 +23,14 @@ export default function SalesAgentModel() {
    } = useCreateAgent();
 
    const {
-      page,
+      params,
       isEdit,
       agentId,
       showAddModal,
       setShowAddModal,
       setNotificationActive,
    } = useMain();
-   const { data: agentRes } = useAgents(page);
+   const { data: agentRes } = useAgents(params.toString());
    const agent = agentRes?.agents?.find((a) => a._id === agentId);
 
    useNotification(isPending, isSuccess, isError, error, data);

@@ -3,8 +3,8 @@ import useMain from "../../context/MainProvider";
 import { useAgents } from "../../hooks/useAgents";
 
 export default function Footer() {
-    const { page, setPage } = useMain()
-    const { data: agentRes, isPlaceholderData } = useAgents(page)
+    const { params, setPage, page } = useMain()
+    const { data: agentRes, isPlaceholderData } = useAgents(params.toString())
     return (
         <div className="flex items-center justify-between border-t border-gray-200 p-4 text-xs text-gray-500 dark:border-gray-800 dark:text-gray-400">
             <span>

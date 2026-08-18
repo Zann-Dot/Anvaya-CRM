@@ -17,8 +17,9 @@ import useNotification from "../../hooks/useNotification";
 import { useAgents, useDeleteAgent } from "../../hooks/useAgents";
 
 export default function AgentList() {
-  const { page, setNotificationActive, setNotificationState } = useMain();
-  const { data: agentRes, isError: isAgentError } = useAgents(page);
+  const { params, setNotificationActive, setNotificationState } = useMain();
+
+  const { data: agentRes, isError: isAgentError } = useAgents(params.toString());
   const {
     mutate: deleteAgent,
     isError,

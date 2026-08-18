@@ -1,7 +1,6 @@
-export async function fetchAgents(page: number, search?: string) {
-    const response = await fetch(
-        `/api/agents?search=${decodeURIComponent(search ?? "")}&page=${page}`,
-    );
+export async function fetchAgents(params: string) {
+    console.log(params);
+    const response = await fetch(`/api/agents?${params}`);
     const data = await response.json();
     if (!response.ok) throw new Error(data.error);
     return data;

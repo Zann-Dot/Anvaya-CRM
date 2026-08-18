@@ -8,6 +8,7 @@ import React, {
     SetStateAction,
 } from "react";
 import { useCreateComment, NewComment } from "../hooks/useComments";
+import { useSearchParams } from "react-router-dom";
 
 export type ToastNotificationDetails = {
     isError: boolean | null;
@@ -42,6 +43,7 @@ interface MainContextType {
     isEdit: boolean;
     agentId?: string;
     setShowAddModal: Dispatch<SetStateAction<boolean>>;
+    params: URLSearchParams
 }
 
 const MainContext = createContext<MainContextType | null>(null);
@@ -74,6 +76,12 @@ export function MainProvider({ children }: React.PropsWithChildren) {
         });
     const [comment, setComment] = useState("");
     const { mutate: addComment } = useCreateComment();
+
+    const params = new URLSearchParams();
+
+    params.set("limit", "5");
+    page && params.set("page", String(page));
+
 
     async function fetchDashboardReport() {
         try {
@@ -139,6 +147,7 @@ export function MainProvider({ children }: React.PropsWithChildren) {
                 setShowAddModal,
                 isEdit,
                 agentId,
+                params
             }}
         >
             {children}
