@@ -34,7 +34,7 @@ agentRouter.get("/agents", async (req, res) => {
         const { search } = req.query;
         const page = parseInt(req.query.page, 5) || 1;
         const limit = parseInt(req.query.limit, 5) || 5;
-        const searchTerm = search.trim() ? search : ""
+        const searchTerm = search ? search.trim() : ""
         let query = {}
         if (search) {
             const searchTermRegex = { $regex: searchTerm, $options: "i" };
