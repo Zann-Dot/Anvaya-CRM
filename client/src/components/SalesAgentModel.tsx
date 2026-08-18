@@ -7,25 +7,12 @@ import {
    ModalHeader,
    TextInput,
 } from "flowbite-react";
-import { Dispatch, SetStateAction } from "react";
 import { HiOutlineUserAdd } from "react-icons/hi";
 import { useAgents, useCreateAgent } from "../hooks/useAgents";
 import useMain from "../context/MainProvider";
 import useNotification from "../hooks/useNotification";
 
-interface SalesAgentModelProps {
-   showAddModal: boolean;
-   isEdit: boolean;
-   agentId?: string;
-   setShowAddModal: Dispatch<SetStateAction<boolean>>;
-}
-
-export default function SalesAgentModel({
-   showAddModal,
-   setShowAddModal,
-   isEdit,
-   agentId,
-}: SalesAgentModelProps) {
+export default function SalesAgentModel() {
    const {
       mutate: mutateAgent,
       isPending,
@@ -34,7 +21,15 @@ export default function SalesAgentModel({
       error,
       data,
    } = useCreateAgent();
-   const { setNotificationActive, page } = useMain();
+
+   const {
+      page,
+      isEdit,
+      agentId,
+      showAddModal,
+      setShowAddModal,
+      setNotificationActive,
+   } = useMain();
    const { data: agentRes } = useAgents(page);
    const agent = agentRes?.agents?.find((a) => a._id === agentId);
 

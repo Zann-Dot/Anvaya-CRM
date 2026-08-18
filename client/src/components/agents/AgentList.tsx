@@ -4,8 +4,6 @@ import {
   HiOutlineTrash,
   HiOutlineUserGroup,
 } from "react-icons/hi";
-import useMain from "../../context/MainProvider";
-import { useAgents, useDeleteAgent } from "../../hooks/useAgents";
 import {
   Table,
   TableBody,
@@ -14,17 +12,12 @@ import {
   TableHeadCell,
   TableRow,
 } from "flowbite-react";
+import useMain from "../../context/MainProvider";
 import useNotification from "../../hooks/useNotification";
+import { useAgents, useDeleteAgent } from "../../hooks/useAgents";
 
-interface AgentListProps {
-  setNotificationState: (
-    modal: boolean,
-    edit: boolean,
-    agentId?: string | undefined,
-  ) => void;
-}
-export default function AgentList({ setNotificationState }: AgentListProps) {
-  const { page, setNotificationActive } = useMain();
+export default function AgentList() {
+  const { page, setNotificationActive, setNotificationState } = useMain();
   const { data: agentRes, isError: isAgentError } = useAgents(page);
   const {
     mutate: deleteAgent,
@@ -98,9 +91,8 @@ export default function AgentList({ setNotificationState }: AgentListProps) {
                     <button
                       type="button"
                       onClick={() => {
-                        setNotificationState(true, true, agent._id)
-                      }
-                      }
+                        setNotificationState(true, true, agent._id);
+                      }}
                       title="Edit Agent"
                       className="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 hover:text-violet-600 dark:hover:bg-gray-800 dark:hover:text-violet-400"
                     >

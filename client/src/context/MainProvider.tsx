@@ -29,10 +29,19 @@ interface MainContextType {
     setIsPending: Dispatch<SetStateAction<boolean>>;
     isPending: boolean;
     toastNotification: ToastNotificationDetails;
-    setNotificationActive: Dispatch<SetStateAction<boolean>>,
-    isNotificationActive: boolean,
-    page: number,
-    setPage: Dispatch<SetStateAction<number>>
+    setNotificationActive: Dispatch<SetStateAction<boolean>>;
+    isNotificationActive: boolean;
+    page: number;
+    setPage: Dispatch<SetStateAction<number>>;
+    setNotificationState: (
+        modal: boolean,
+        edit: boolean,
+        id?: string | undefined,
+    ) => void;
+    showAddModal: boolean;
+    isEdit: boolean;
+    agentId?: string;
+    setShowAddModal: Dispatch<SetStateAction<boolean>>;
 }
 
 const MainContext = createContext<MainContextType | null>(null);
@@ -50,6 +59,9 @@ export function MainProvider({ children }: React.PropsWithChildren) {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [isEdit, setIsEdit] = useState(false);
+    const [agentId, setAgentId] = useState<string | undefined>(undefined);
     const [page, setPage] = useState(1);
     const [isPending, setIsPending] = useState(false);
     const [isNotificationActive, setNotificationActive] = useState(false);
@@ -91,6 +103,16 @@ export function MainProvider({ children }: React.PropsWithChildren) {
         addComment(newComment);
     }
 
+    function setNotificationState(
+        modal: boolean,
+        edit: boolean,
+        id: string | undefined = undefined,
+    ) {
+        setShowAddModal(modal);
+        setIsEdit(edit);
+        setAgentId(id);
+    }
+
     useEffect(() => {
         fetchDashboardReport();
     }, []);
@@ -111,7 +133,12 @@ export function MainProvider({ children }: React.PropsWithChildren) {
                 setNotificationActive,
                 isNotificationActive,
                 page,
-                setPage
+                setPage,
+                setNotificationState,
+                showAddModal,
+                setShowAddModal,
+                isEdit,
+                agentId,
             }}
         >
             {children}

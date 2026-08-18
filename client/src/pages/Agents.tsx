@@ -1,28 +1,13 @@
 import { useState } from "react";
-import {
-  Badge,
-  Button,
-  Card,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeadCell,
-  TableRow,
-  TextInput,
-} from "flowbite-react";
+import { Badge, Button, Card, TextInput } from "flowbite-react";
 import {
   HiOutlineUserAdd,
-  HiOutlineMail,
   HiOutlineSearch,
   HiOutlineUserGroup,
-  HiOutlinePencil,
-  HiOutlineTrash,
   HiOutlineFilter,
 } from "react-icons/hi";
 import SalesAgentModel from "../components/SalesAgentModel";
-import { useAgents, useDeleteAgent } from "../hooks/useAgents";
-import useNotification from "../hooks/useNotification";
+import { useAgents } from "../hooks/useAgents";
 import useMain from "../context/MainProvider";
 import { useDebounce } from "../hooks/useDebounce";
 import Footer from "../components/agents/Footer";
@@ -30,13 +15,10 @@ import AgentsSkeleton from "../components/agents/AgentsSkeleton";
 import AgentList from "../components/agents/AgentList";
 
 export default function Agents() {
-  const [showAddModal, setShowAddModal] = useState(false);
-  const [isEdit, setIsEdit] = useState(false);
-  const [agentId, setAgentId] = useState<string | undefined>(undefined);
   const [selectedFilter, setSelectedFilter] = useState("all");
   const [search, setSearch] = useState("");
 
-  const { setNotificationActive, page } = useMain();
+  const { setNotificationState, page } = useMain();
   const debouncedValue = useDebounce(search, 400);
   const {
     data: agentRes,
@@ -73,16 +55,6 @@ export default function Agents() {
         return <Badge color="indigo">{status}</Badge>;
     }
   };
-
-  function setNotificationState(
-    modal: boolean,
-    edit: boolean,
-    agentId: string | undefined = undefined,
-  ) {
-    setShowAddModal(modal);
-    setIsEdit(edit);
-    setAgentId(agentId);
-  }
 
   return (
     <div className="mx-auto max-w-7xl space-y-6 p-4 sm:p-6 lg:p-8">
@@ -227,19 +199,14 @@ export default function Agents() {
                 </div>
               </div>
 
-              <AgentList setNotificationState={setNotificationState} />
+              <AgentList />
               <Footer />
             </div>
           )}
         </div>
       </div>
 
-      <SalesAgentModel
-        showAddModal={showAddModal}
-        setShowAddModal={setShowAddModal}
-        isEdit={isEdit}
-        agentId={agentId}
-      />
+      <SalesAgentModel />
     </div>
   );
 }
