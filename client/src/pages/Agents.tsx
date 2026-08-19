@@ -9,7 +9,6 @@ import {
 import SalesAgentModel from "../components/SalesAgentModel";
 import { useAgents } from "../hooks/useAgents";
 import useMain from "../context/MainProvider";
-import { useDebounce } from "../hooks/useDebounce";
 import Footer from "../components/agents/Footer";
 import AgentsSkeleton from "../components/agents/AgentsSkeleton";
 import AgentList from "../components/agents/AgentList";
@@ -17,22 +16,16 @@ import { useSearchParams } from "react-router-dom";
 
 export default function Agents() {
   const [selectedFilter, setSelectedFilter] = useState("all");
-  const [search, setSearch] = useState("");
-  const [searchParams, setSearchParams] = useSearchParams()
-  const { setNotificationState, page, params } = useMain();
-  const debouncedValue = useDebounce(search, 400);
-
-  search && params.set("search", debouncedValue);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { setNotificationState, params, search, setSearch } = useMain();
 
   useEffect(() => {
-    setSearchParams(params);
-  }, [debouncedValue, page]);
+    if (searchParams.toString() !== params.toString()) {
+      setSearchParams(params, { replace: true });
+    }
+  }, [params, searchParams, setSearchParams]);
 
-  const {
-    data: agentRes,
-    isLoading,
-    isFetching,
-  } = useAgents(params.toString());
+  const { data: agentRes, isLoading, isFetching, isError, isPlaceholderData } = useAgents(params.toString());
 
   const isAgentLoading = isLoading || isFetching;
 
@@ -207,14 +200,14 @@ export default function Agents() {
                 </div>
               </div>
 
-              <AgentList />
-              <Footer />
+              <AgentList agentRes={agentRes} isAgentError={isError} />
+              <Footer agentRes={agentRes} isPlaceholderData={isPlaceholderData} />
             </div>
           )}
         </div>
       </div>
 
-      <SalesAgentModel />
+      <SalesAgentModel agentRes={agentRes} />
     </div>
   );
 }

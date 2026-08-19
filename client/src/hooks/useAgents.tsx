@@ -15,9 +15,7 @@ export interface AgentResponse {
     currentPage: number
 }
 
-export function useAgents(params: string) {
-
-
+export function useAgents(params: string = "") {
     return useQuery<AgentResponse>({
         queryKey: ["agents", params],
         queryFn: () => fetchAgents(params),

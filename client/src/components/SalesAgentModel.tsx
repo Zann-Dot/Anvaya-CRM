@@ -8,11 +8,11 @@ import {
    TextInput,
 } from "flowbite-react";
 import { HiOutlineUserAdd } from "react-icons/hi";
-import { useAgents, useCreateAgent } from "../hooks/useAgents";
+import { AgentResponse, useCreateAgent } from "../hooks/useAgents";
 import useMain from "../context/MainProvider";
 import useNotification from "../hooks/useNotification";
 
-export default function SalesAgentModel() {
+export default function SalesAgentModel({ agentRes }: { agentRes?: NoInfer<AgentResponse> }) {
    const {
       mutate: mutateAgent,
       isPending,
@@ -23,14 +23,12 @@ export default function SalesAgentModel() {
    } = useCreateAgent();
 
    const {
-      params,
       isEdit,
       agentId,
       showAddModal,
       setShowAddModal,
       setNotificationActive,
    } = useMain();
-   const { data: agentRes } = useAgents(params.toString());
    const agent = agentRes?.agents?.find((a) => a._id === agentId);
 
    useNotification(isPending, isSuccess, isError, error, data);

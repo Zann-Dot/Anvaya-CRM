@@ -8,25 +8,43 @@ export default function useNotification(
     error: Error | null,
     data: any,
 ) {
-    const { setToastNotification, setNotificationActive, setIsPending } = useMain();
+    const { setToastNotification, setNotificationActive, setIsPending } =
+        useMain();
     useEffect(() => {
-        setIsPending(isPending);
-        isSuccess
-            ? setToastNotification({
-                isError,
-                isSuccess,
-                successMessage: data?.message,
-            })
-            : setToastNotification({
-                isError,
-                isSuccess,
-                errorMessage: error?.message,
-            });
+        if (!isPending && !isSuccess && !isError) return;
 
-        !isPending &&
-            setTimeout(() => {
+        setIsPending(isPending);
+        if (isSuccess) {
+            setToastNotification({
+                isError: false,
+                isSuccess: true,
+                successMessage: data?.message || "Operation successful",
+            });
+            setNotificationActive(true);
+        } else if (isError) {
+            setToastNotification({
+                isError: true,
+                isSuccess: false,
+                errorMessage: error?.message || "An error occurred",
+            });
+            setNotificationActive(true);
+        }
+
+        if (!isPending && (isSuccess || isError)) {
+            const timer = setTimeout(() => {
                 setNotificationActive(false);
                 setIsPending(false);
             }, 2300);
-    }, [isPending, isSuccess, isError]);
+            return () => clearTimeout(timer);
+        }
+    }, [
+        isPending,
+        isSuccess,
+        isError,
+        data,
+        error,
+        setIsPending,
+        setNotificationActive,
+        setToastNotification,
+    ]);
 }

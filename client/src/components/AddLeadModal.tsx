@@ -37,7 +37,7 @@ export default function AddLeadModal({
    isEdit,
    lead,
 }: AddLeadModalProps) {
-   const { data: agents } = useAgents();
+   const { data: agentRes } = useAgents();
    const { mutate, isPending, isError, isSuccess, reset } =
       useMutateLead(isEdit);
 
@@ -202,8 +202,8 @@ export default function AddLeadModal({
                            }
                         >
                            <option value="Select Sales Agent">Select Sales Agent</option>
-                           {agents &&
-                              agents.map((agent) => (
+                           {agentRes?.agents &&
+                              agentRes.agents.map((agent) => (
                                  <option key={agent._id} value={agent._id}>
                                     {agent.name}
                                  </option>

@@ -1,15 +1,18 @@
 import { Button } from "flowbite-react";
 import useMain from "../../context/MainProvider";
-import { useAgents } from "../../hooks/useAgents";
+import { AgentResponse } from "../../hooks/useAgents";
+interface FooterProps {
+    agentRes?: NoInfer<AgentResponse>;
+    isPlaceholderData: boolean
+}
 
-export default function Footer() {
-    const { params, setPage, page } = useMain()
-    const { data: agentRes, isPlaceholderData } = useAgents(params.toString())
+export default function Footer({ agentRes, isPlaceholderData }: FooterProps) {
+    const { setPage, page } = useMain()
     return (
         <div className="flex items-center justify-between border-t border-gray-200 p-4 text-xs text-gray-500 dark:border-gray-800 dark:text-gray-400">
             <span>
-                Showing {agentRes?.agents?.length} of {agentRes?.totalAgents}{" "}
-                agents
+                Showing {agentRes?.currentPage} of {agentRes?.totalPages}{" "}
+                Pages
             </span>
             <div className="flex items-center gap-1">
                 <Button

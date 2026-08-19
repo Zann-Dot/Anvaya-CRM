@@ -17,7 +17,7 @@ export default function FilterLead({
     setSearchParams,
     dispatch,
 }: FilterLeadProps) {
-    const { data: agents } = useAgents();
+    const { data: agentRes } = useAgents();
 
     return (
         <div className="flex flex-col gap-3 border-b border-gray-100 p-4 lg:flex-row lg:items-center lg:justify-between dark:border-gray-700">
@@ -57,7 +57,7 @@ export default function FilterLead({
                         onChange={(e) => dispatch({ type: "AGENT", value: e.target.value })}
                     >
                         <option value="all">All Agents</option>
-                        {agents?.map((a) => (
+                        {agentRes?.agents?.map((a) => (
                             <option key={a._id} value={a._id}>
                                 {a.name}
                             </option>

@@ -3,12 +3,13 @@ import React, {
     useContext,
     useState,
     useEffect,
+    useMemo,
     ChangeEvent,
     Dispatch,
     SetStateAction,
 } from "react";
 import { useCreateComment, NewComment } from "../hooks/useComments";
-import { useSearchParams } from "react-router-dom";
+import { useDebounce } from "../hooks/useDebounce";
 
 export type ToastNotificationDetails = {
     isError: boolean | null;
@@ -34,6 +35,8 @@ interface MainContextType {
     isNotificationActive: boolean;
     page: number;
     setPage: Dispatch<SetStateAction<number>>;
+    search: string;
+    setSearch: Dispatch<SetStateAction<string>>;
     setNotificationState: (
         modal: boolean,
         edit: boolean,
@@ -65,6 +68,9 @@ export function MainProvider({ children }: React.PropsWithChildren) {
     const [isEdit, setIsEdit] = useState(false);
     const [agentId, setAgentId] = useState<string | undefined>(undefined);
     const [page, setPage] = useState(1);
+    const [search, setSearch] = useState("");
+    const debouncedSearch = useDebounce(search, 400);
+
     const [isPending, setIsPending] = useState(false);
     const [isNotificationActive, setNotificationActive] = useState(false);
     const [toastNotification, setToastNotification] =
@@ -77,10 +83,13 @@ export function MainProvider({ children }: React.PropsWithChildren) {
     const [comment, setComment] = useState("");
     const { mutate: addComment } = useCreateComment();
 
-    const params = new URLSearchParams();
-
-    params.set("limit", "5");
-    page && params.set("page", String(page));
+    const params = useMemo(() => {
+        const p = new URLSearchParams();
+        p.set("limit", "5");
+        if (page) p.set("page", String(page));
+        if (debouncedSearch.trim()) p.set("search", debouncedSearch.trim());
+        return p;
+    }, [page, debouncedSearch]);
 
 
     async function fetchDashboardReport() {
@@ -142,6 +151,8 @@ export function MainProvider({ children }: React.PropsWithChildren) {
                 isNotificationActive,
                 page,
                 setPage,
+                search,
+                setSearch,
                 setNotificationState,
                 showAddModal,
                 setShowAddModal,

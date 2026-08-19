@@ -14,12 +14,17 @@ import {
 } from "flowbite-react";
 import useMain from "../../context/MainProvider";
 import useNotification from "../../hooks/useNotification";
-import { useAgents, useDeleteAgent } from "../../hooks/useAgents";
+import { AgentResponse, useDeleteAgent } from "../../hooks/useAgents";
 
-export default function AgentList() {
-  const { params, setNotificationActive, setNotificationState } = useMain();
+interface AgentListProps {
+  agentRes?: NoInfer<AgentResponse>,
+  isAgentError: boolean
 
-  const { data: agentRes, isError: isAgentError } = useAgents(params.toString());
+}
+
+export default function AgentList({ agentRes, isAgentError }: AgentListProps) {
+  const { setNotificationActive, setNotificationState } = useMain();
+
   const {
     mutate: deleteAgent,
     isError,
