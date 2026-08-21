@@ -32,21 +32,21 @@ export default function AgentList({
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "Active":
+      case "active":
         return (
           <Badge color="success" className="w-fit font-medium">
             <span className="mr-1 inline-block h-1.5 w-1.5 rounded-full bg-emerald-500" />
             Active
           </Badge>
         );
-      case "On Call":
+      case "oncall":
         return (
           <Badge color="warning" className="w-fit font-medium">
             <span className="mr-1 inline-block h-1.5 w-1.5 rounded-full bg-amber-500" />
             On Call
           </Badge>
         );
-      case "Offline":
+      case "offline":
         return (
           <Badge color="gray" className="w-fit font-medium">
             <span className="mr-1 inline-block h-1.5 w-1.5 rounded-full bg-gray-400" />
@@ -113,7 +113,7 @@ export default function AgentList({
                   </div>
                 </TableCell>
 
-                <TableCell>{getStatusBadge(agent.status)}</TableCell>
+                <TableCell>{getStatusBadge(agent.status.toLowerCase())}</TableCell>
 
                 <TableCell>
                   <div className="flex items-center gap-2">
