@@ -39,7 +39,6 @@ export default function SalesAgentModel({ agentRes }: { agentRes?: NoInfer<Agent
       const agentPayload = { agentId, name, email };
       mutateAgent(agentPayload);
       setNotificationActive(true);
-      setShowAddModal(false);
    }
 
    return (
