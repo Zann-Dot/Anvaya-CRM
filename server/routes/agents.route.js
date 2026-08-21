@@ -31,7 +31,7 @@ agentRouter.post("/agents", async (req, res) => {
 
 agentRouter.get("/agents", async (req, res) => {
     try {
-        const { search } = req.query;
+        const { search, status } = req.query;
         const page = parseInt(req.query.page, 5) || 1;
         const limit = parseInt(req.query.limit, 5) || 5;
         const searchTerm = search ? search.trim() : ""
@@ -43,6 +43,8 @@ agentRouter.get("/agents", async (req, res) => {
                 { email: searchTermRegex }
             ]
         }
+
+        if (status) query.status = status.trim();
 
         const [totalAgents, agents] = await Promise.all([
             SalesAgent.countDocuments(query),
