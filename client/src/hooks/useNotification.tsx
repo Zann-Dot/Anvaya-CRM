@@ -8,8 +8,24 @@ export default function useNotification(
     error: Error | null,
     data: any,
 ) {
-    const { setToastNotification, setNotificationActive, setIsPending, setShowAddModal } =
-        useMain();
+    const {
+        setToastNotification,
+        setNotificationActive,
+        setIsPending,
+        setShowAddModal,
+    } = useMain();
+
+    function reset() {
+        setToastNotification({
+            isError: null,
+            isSuccess: null,
+            successMessage: "",
+            errorMessage: "",
+        });
+        setNotificationActive(false);
+        setIsPending(false);
+    }
+
     useEffect(() => {
         if (!isPending && !isSuccess && !isError) return;
 
@@ -33,8 +49,7 @@ export default function useNotification(
         if (!isPending && (isSuccess || isError)) {
             setShowAddModal(false);
             const timer = setTimeout(() => {
-                setNotificationActive(false);
-                setIsPending(false);
+                reset();
             }, 2300);
             return () => clearTimeout(timer);
         }
