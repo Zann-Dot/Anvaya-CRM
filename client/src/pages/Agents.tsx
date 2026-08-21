@@ -131,7 +131,7 @@ export default function Agents() {
                         Active Agents
                       </span>
                       <span className="rounded-full bg-gray-200 px-2 py-0.5 text-[10px] text-gray-700 dark:bg-gray-700 dark:text-gray-300">
-
+                        {agentRes?.agents.filter(a => a.status.toLowerCase() === "active").length}
                       </span>
                     </button>
                     <button
@@ -147,7 +147,7 @@ export default function Agents() {
                         On Call
                       </span>
                       <span className="rounded-full bg-gray-200 px-2 py-0.5 text-[10px] text-gray-700 dark:bg-gray-700 dark:text-gray-300">
-
+                        {agentRes?.agents.filter(a => a.status.toLowerCase() === "oncall").length}
                       </span>
                     </button>
                     <button
@@ -163,7 +163,7 @@ export default function Agents() {
                         Offline
                       </span>
                       <span className="rounded-full bg-gray-200 px-2 py-0.5 text-[10px] text-gray-700 dark:bg-gray-700 dark:text-gray-300">
-
+                        {agentRes?.agents.filter(a => a.status.toLowerCase() === "offline").length}
                       </span>
                     </button>
                   </>
