@@ -13,28 +13,22 @@ import {
   TableRow,
 } from "flowbite-react";
 import useMain from "../../context/MainProvider";
-import useNotification from "../../hooks/useNotification";
-import { AgentResponse, useDeleteAgent } from "../../hooks/useAgents";
+import { AgentResponse } from "../../hooks/useAgents";
+import { UseMutateFunction } from "@tanstack/react-query";
 
 interface AgentListProps {
-  agentRes?: NoInfer<AgentResponse>,
-  isAgentError: boolean
-
+  agentRes?: NoInfer<AgentResponse>;
+  isAgentError: boolean;
+  deleteAgent: UseMutateFunction<any, Error, string | undefined, unknown>;
 }
 
-export default function AgentList({ agentRes, isAgentError }: AgentListProps) {
+export default function AgentList({
+  deleteAgent,
+  agentRes,
+  isAgentError,
+}: AgentListProps) {
   const { setNotificationActive, setNotificationState } = useMain();
 
-  const {
-    mutate: deleteAgent,
-    isError,
-    isSuccess,
-    isPending,
-    error,
-    data,
-  } = useDeleteAgent();
-
-  useNotification(isPending, isSuccess, isError, error, data);
   return (
     <div className="overflow-x-auto">
       {agentRes?.agents.length === 0 || isAgentError ? (

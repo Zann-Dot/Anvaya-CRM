@@ -7,12 +7,13 @@ import {
   HiOutlineFilter,
 } from "react-icons/hi";
 import SalesAgentModel from "../components/SalesAgentModel";
-import { useAgents } from "../hooks/useAgents";
+import { useAgents, useDeleteAgent } from "../hooks/useAgents";
 import useMain from "../context/MainProvider";
 import Footer from "../components/agents/Footer";
 import AgentsSkeleton from "../components/agents/AgentsSkeleton";
 import AgentList from "../components/agents/AgentList";
 import { useSearchParams } from "react-router-dom";
+import useNotification from "../hooks/useNotification";
 
 export default function Agents() {
   const [selectedFilter, setSelectedFilter] = useState("all");
@@ -25,7 +26,13 @@ export default function Agents() {
     }
   }, [params, searchParams, setSearchParams]);
 
-  const { data: agentRes, isLoading, isFetching, isError, isPlaceholderData } = useAgents(params.toString());
+  const {
+    data: agentRes,
+    isLoading,
+    isFetching,
+    isError: isAgentError,
+    isPlaceholderData,
+  } = useAgents(params.toString());
 
   const isAgentLoading = isLoading || isFetching;
 
@@ -56,6 +63,17 @@ export default function Agents() {
         return <Badge color="indigo">{status}</Badge>;
     }
   };
+
+  const {
+    mutate: deleteAgent,
+    isError,
+    isSuccess,
+    isPending,
+    error,
+    data,
+  } = useDeleteAgent();
+
+  useNotification(isPending, isSuccess, isError, error, data);
 
   return (
     <div className="mx-auto max-w-7xl space-y-6 p-4 sm:p-6 lg:p-8">
@@ -113,8 +131,8 @@ export default function Agents() {
                       type="button"
                       onClick={() => setSelectedFilter("all")}
                       className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-xs font-medium transition-colors ${selectedFilter === "all"
-                        ? "bg-violet-600 text-white"
-                        : "text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
+                          ? "bg-violet-600 text-white"
+                          : "text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
                         }`}
                     >
                       <span>All Sales Agents</span>
@@ -126,8 +144,8 @@ export default function Agents() {
                       type="button"
                       onClick={() => setSelectedFilter("active")}
                       className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-xs font-medium transition-colors ${selectedFilter === "active"
-                        ? "bg-violet-600 text-white"
-                        : "text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
+                          ? "bg-violet-600 text-white"
+                          : "text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
                         }`}
                     >
                       <span className="flex items-center gap-2">
@@ -142,8 +160,8 @@ export default function Agents() {
                       type="button"
                       onClick={() => setSelectedFilter("oncall")}
                       className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-xs font-medium transition-colors ${selectedFilter === "oncall"
-                        ? "bg-violet-600 text-white"
-                        : "text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
+                          ? "bg-violet-600 text-white"
+                          : "text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
                         }`}
                     >
                       <span className="flex items-center gap-2">
@@ -200,8 +218,11 @@ export default function Agents() {
                 </div>
               </div>
 
-              <AgentList agentRes={agentRes} isAgentError={isError} />
-              <Footer agentRes={agentRes} isPlaceholderData={isPlaceholderData} />
+              <AgentList deleteAgent={deleteAgent} agentRes={agentRes} isAgentError={isAgentError} />
+              <Footer
+                agentRes={agentRes}
+                isPlaceholderData={isPlaceholderData}
+              />
             </div>
           )}
         </div>
