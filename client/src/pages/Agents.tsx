@@ -36,33 +36,6 @@ export default function Agents() {
 
   const isAgentLoading = isLoading || isFetching;
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case "Active":
-        return (
-          <Badge color="success" className="w-fit font-medium">
-            <span className="mr-1 inline-block h-1.5 w-1.5 rounded-full bg-emerald-500" />
-            Active
-          </Badge>
-        );
-      case "On Call":
-        return (
-          <Badge color="warning" className="w-fit font-medium">
-            <span className="mr-1 inline-block h-1.5 w-1.5 rounded-full bg-amber-500" />
-            On Call
-          </Badge>
-        );
-      case "Offline":
-        return (
-          <Badge color="gray" className="w-fit font-medium">
-            <span className="mr-1 inline-block h-1.5 w-1.5 rounded-full bg-gray-400" />
-            Offline
-          </Badge>
-        );
-      default:
-        return <Badge color="indigo">{status}</Badge>;
-    }
-  };
 
   const {
     mutate: deleteAgent,
@@ -131,21 +104,21 @@ export default function Agents() {
                       type="button"
                       onClick={() => setSelectedFilter("all")}
                       className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-xs font-medium transition-colors ${selectedFilter === "all"
-                          ? "bg-violet-600 text-white"
-                          : "text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
+                        ? "bg-violet-600 text-white"
+                        : "text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
                         }`}
                     >
                       <span>All Sales Agents</span>
                       <span className="rounded-full bg-white/20 px-2 py-0.5 text-[10px]">
-                        {agentRes?.agents?.length}
+                        {agentRes?.totalAgents}
                       </span>
                     </button>
                     <button
                       type="button"
                       onClick={() => setSelectedFilter("active")}
                       className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-xs font-medium transition-colors ${selectedFilter === "active"
-                          ? "bg-violet-600 text-white"
-                          : "text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
+                        ? "bg-violet-600 text-white"
+                        : "text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
                         }`}
                     >
                       <span className="flex items-center gap-2">
@@ -160,8 +133,8 @@ export default function Agents() {
                       type="button"
                       onClick={() => setSelectedFilter("oncall")}
                       className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-xs font-medium transition-colors ${selectedFilter === "oncall"
-                          ? "bg-violet-600 text-white"
-                          : "text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
+                        ? "bg-violet-600 text-white"
+                        : "text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
                         }`}
                     >
                       <span className="flex items-center gap-2">

@@ -5,6 +5,7 @@ import {
   HiOutlineUserGroup,
 } from "react-icons/hi";
 import {
+  Badge,
   Table,
   TableBody,
   TableCell,
@@ -28,6 +29,34 @@ export default function AgentList({
   isAgentError,
 }: AgentListProps) {
   const { setNotificationActive, setNotificationState } = useMain();
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case "Active":
+        return (
+          <Badge color="success" className="w-fit font-medium">
+            <span className="mr-1 inline-block h-1.5 w-1.5 rounded-full bg-emerald-500" />
+            Active
+          </Badge>
+        );
+      case "On Call":
+        return (
+          <Badge color="warning" className="w-fit font-medium">
+            <span className="mr-1 inline-block h-1.5 w-1.5 rounded-full bg-amber-500" />
+            On Call
+          </Badge>
+        );
+      case "Offline":
+        return (
+          <Badge color="gray" className="w-fit font-medium">
+            <span className="mr-1 inline-block h-1.5 w-1.5 rounded-full bg-gray-400" />
+            Offline
+          </Badge>
+        );
+      default:
+        return <Badge color="indigo">{status}</Badge>;
+    }
+  };
 
   return (
     <div className="overflow-x-auto">
@@ -84,7 +113,7 @@ export default function AgentList({
                   </div>
                 </TableCell>
 
-                {/* <TableCell>{getStatusBadge(agent.status)}</TableCell> */}
+                <TableCell>{getStatusBadge("Active")}</TableCell>
 
                 <TableCell>
                   <div className="flex items-center gap-2">
