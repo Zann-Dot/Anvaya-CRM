@@ -14,7 +14,7 @@ const SalesAgentSchema = new Schema({
         type: String,
         required: [true, "Status of agent is required"],
         enum: ["ACTIVE", "ONCALL", "OFFLINE"],
-        default: "Offline"
+        default: "OFFLINE"
     },
     createdAt: {
         type: Date,
