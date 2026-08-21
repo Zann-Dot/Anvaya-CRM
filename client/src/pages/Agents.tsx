@@ -16,9 +16,15 @@ import { useSearchParams } from "react-router-dom";
 import useNotification from "../hooks/useNotification";
 
 export default function Agents() {
-  const [selectedFilter, setSelectedFilter] = useState("all");
   const [searchParams, setSearchParams] = useSearchParams();
-  const { setNotificationState, params, search, setSearch } = useMain();
+  const {
+    setNotificationState,
+    params,
+    search,
+    setSearch,
+    selectedFilter,
+    setSelectedFilter,
+  } = useMain();
 
   useEffect(() => {
     if (searchParams.toString() !== params.toString()) {
@@ -35,7 +41,6 @@ export default function Agents() {
   } = useAgents(params.toString());
 
   const isAgentLoading = isLoading || isFetching;
-
 
   const {
     mutate: deleteAgent,
@@ -126,7 +131,7 @@ export default function Agents() {
                         Active Agents
                       </span>
                       <span className="rounded-full bg-gray-200 px-2 py-0.5 text-[10px] text-gray-700 dark:bg-gray-700 dark:text-gray-300">
-                        {agentRes?.agents?.length}
+
                       </span>
                     </button>
                     <button
@@ -142,7 +147,23 @@ export default function Agents() {
                         On Call
                       </span>
                       <span className="rounded-full bg-gray-200 px-2 py-0.5 text-[10px] text-gray-700 dark:bg-gray-700 dark:text-gray-300">
-                        1
+
+                      </span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedFilter("offline")}
+                      className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-xs font-medium transition-colors ${selectedFilter === "offline"
+                        ? "bg-violet-600 text-white"
+                        : "text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
+                        }`}
+                    >
+                      <span className="flex items-center gap-2">
+                        <span className="h-2 w-2 rounded-full bg-gray-400" />{" "}
+                        Offline
+                      </span>
+                      <span className="rounded-full bg-gray-200 px-2 py-0.5 text-[10px] text-gray-700 dark:bg-gray-700 dark:text-gray-300">
+
                       </span>
                     </button>
                   </>
@@ -191,7 +212,11 @@ export default function Agents() {
                 </div>
               </div>
 
-              <AgentList deleteAgent={deleteAgent} agentRes={agentRes} isAgentError={isAgentError} />
+              <AgentList
+                deleteAgent={deleteAgent}
+                agentRes={agentRes}
+                isAgentError={isAgentError}
+              />
               <Footer
                 agentRes={agentRes}
                 isPlaceholderData={isPlaceholderData}

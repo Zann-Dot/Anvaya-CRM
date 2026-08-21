@@ -113,7 +113,7 @@ export default function AgentList({
                   </div>
                 </TableCell>
 
-                <TableCell>{getStatusBadge("Active")}</TableCell>
+                <TableCell>{getStatusBadge(agent.status)}</TableCell>
 
                 <TableCell>
                   <div className="flex items-center gap-2">

@@ -3,6 +3,7 @@ import { addAgent, deleteAgent, fetchAgents } from "../api/agents";
 
 export interface Agent {
     _id: string,
+    status: string,
     email: string,
     name: string,
     createdAt: string

@@ -18,6 +18,8 @@ export type ToastNotificationDetails = {
     errorMessage?: string;
 };
 
+type SelectStatus = "active" | "oncall" | "offline" | "all";
+
 interface MainContextType {
     dashboardReport: any;
     loading: boolean;
@@ -46,7 +48,9 @@ interface MainContextType {
     isEdit: boolean;
     agentId?: string;
     setShowAddModal: Dispatch<SetStateAction<boolean>>;
-    params: URLSearchParams
+    params: URLSearchParams;
+    selectedFilter: SelectStatus,
+    setSelectedFilter: Dispatch<SetStateAction<SelectStatus>>
 }
 
 const MainContext = createContext<MainContextType | null>(null);
@@ -70,6 +74,7 @@ export function MainProvider({ children }: React.PropsWithChildren) {
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState("");
     const debouncedSearch = useDebounce(search, 400);
+    const [selectedFilter, setSelectedFilter] = useState<SelectStatus>("all");
 
     const [isPending, setIsPending] = useState(false);
     const [isNotificationActive, setNotificationActive] = useState(false);
@@ -87,9 +92,10 @@ export function MainProvider({ children }: React.PropsWithChildren) {
         const p = new URLSearchParams();
         p.set("limit", "5");
         if (page) p.set("page", String(page));
+        if (selectedFilter && selectedFilter !== "all") p.set("status", selectedFilter)
         if (debouncedSearch.trim()) p.set("search", debouncedSearch.trim());
         return p;
-    }, [page, debouncedSearch]);
+    }, [page, debouncedSearch, selectedFilter]);
 
 
     async function fetchDashboardReport() {
@@ -158,7 +164,9 @@ export function MainProvider({ children }: React.PropsWithChildren) {
                 setShowAddModal,
                 isEdit,
                 agentId,
-                params
+                params,
+                selectedFilter,
+                setSelectedFilter
             }}
         >
             {children}
