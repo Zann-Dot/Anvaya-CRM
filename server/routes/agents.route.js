@@ -44,7 +44,7 @@ agentRouter.get("/agents", async (req, res) => {
             ]
         }
 
-        if (status) query.status = status.trim();
+        if (status) query.status = status.trim().toUpperCase();
 
         const [totalAgents, agents] = await Promise.all([
             SalesAgent.countDocuments(query),
