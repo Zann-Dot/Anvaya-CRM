@@ -1,6 +1,10 @@
 import { HiOutlineDocumentReport } from "react-icons/hi";
+import { usePiplineLeads } from "../hooks/useReports";
 
 export default function Reports() {
+  const { data: pipelineLeads } = usePiplineLeads();
+  console.log(pipelineLeads);
+
   return (
     <div className="flex h-[calc(100vh-4rem)] flex-col items-center justify-center gap-4 p-6 text-center">
       <div className="rounded-2xl bg-amber-100 p-6 dark:bg-amber-900/20">
@@ -10,6 +14,7 @@ export default function Reports() {
       <p className="text-sm text-gray-500 dark:text-gray-400">
         Analytics & reports overview — coming soon.
       </p>
+
     </div>
   );
 }
