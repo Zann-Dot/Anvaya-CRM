@@ -1,37 +1,27 @@
 import express from "express";
 import { Leads } from "../models/leads.model.js";
-import { endOfMonth, startOfMonth, subMonths } from "date-fns";
+import { startOfMonth, subMonths } from "date-fns";
+import dateFilter from "../utilis/dateFilterMiddleware.js";
 const reportRouter = express.Router();
-
-reportRouter.get("/report/last-week", async (req, res) => {
-    try {
-        const lastSeventhDay = new Date();
-        lastSeventhDay.setDate(lastSeventhDay.getDate() - 7);
-
-        const closedLeadsInLastSevenDays = await Leads.find({
-            status: { $eq: "Closed" },
-            closedAt: { $gte: lastSeventhDay },
-        });
-
-        if (!closedLeadsInLastSevenDays || closedLeadsInLastSevenDays.length === 0)
-            return res.status(404).json({ error: "No leads found" });
-
-        res.json(closedLeadsInLastSevenDays);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
+reportRouter.use(dateFilter);
 
 reportRouter.get("/report/pipeline", async (req, res) => {
     try {
-        const totalLeadsInPipeline = await Leads.countDocuments({
-            status: { $ne: "Closed" },
-        });
+        const [totalLeadsInPipeline, totalLeadsClosed] = await Promise.all([
+            Leads.countDocuments({
+                ...req.dateFilter,
+                status: { $ne: "Closed" },
+            }),
+            Leads.countDocuments({
+                ...req.dateFilter,
+                status: { $eq: "Closed" },
+            }),
+        ]);
 
-        if (!totalLeadsInPipeline)
+        if (!totalLeadsInPipeline || !totalLeadsClosed)
             return res.status(404).json({ error: "No leads found" });
 
-        res.json({ totalLeadsInPipeline });
+        res.json({ totalLeadsInPipeline, totalLeadsClosed });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -61,7 +51,7 @@ reportRouter.post("/report/last-month-comparison", async (req, res) => {
             activeLeadsInPrevMonth,
             totalLeadsOfTheMonth,
             totalLeadsClosedThisMonth,
-            activeLeads
+            activeLeads,
         ] = await Promise.all([
             Leads.countDocuments({
                 createdAt: { $gte: startOfPrevMonth, $lte: sameDayPrevMonth },
@@ -99,8 +89,8 @@ reportRouter.post("/report/last-month-comparison", async (req, res) => {
 
         const changeInActiveLeads = safePercentageChange(
             activeLeads,
-            activeLeadsInPrevMonth
-        )
+            activeLeadsInPrevMonth,
+        );
 
         const conversionRateInPrevMon = safeRate(
             totalLeadsCLosedInPrevMonth,
@@ -114,7 +104,6 @@ reportRouter.post("/report/last-month-comparison", async (req, res) => {
 
         const changeInConversionRate =
             conversionRateThisMonth - conversionRateInPrevMon;
-
 
         res.json({
             totalLeadsClosedThisMonth,
