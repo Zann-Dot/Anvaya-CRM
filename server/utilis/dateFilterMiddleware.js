@@ -3,7 +3,7 @@ const calculateDateBounds = (range, startDate, endDate) => {
     let start = new Date();
 
     switch (range) {
-        case "last-7-days":
+        case "last-week":
             start.setDate(end.getDate() - 7);
             break;
         case "last-3-months":

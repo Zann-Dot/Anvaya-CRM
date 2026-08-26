@@ -1,5 +1,6 @@
 import express from "express";
 import { Leads } from "../models/leads.model.js";
+import { SalesAgent } from "../models/salesAgent.model.js";
 import { startOfMonth, subMonths } from "date-fns";
 import dateFilter from "../utilis/dateFilterMiddleware.js";
 const reportRouter = express.Router();
@@ -18,10 +19,53 @@ reportRouter.get("/report/pipeline", async (req, res) => {
             }),
         ]);
 
-        if (!totalLeadsInPipeline || !totalLeadsClosed)
+        if (!totalLeadsInPipeline && !totalLeadsClosed)
             return res.status(404).json({ error: "No leads found" });
 
         res.json({ totalLeadsInPipeline, totalLeadsClosed });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+reportRouter.get("/report/leads-closed-by-agents", async (req, res) => {
+    try {
+        const report = await SalesAgent.aggregate([
+            {
+                $lookup: {
+                    from: "leads",
+                    localField: "_id",
+                    foreignField: "salesAgent",
+                    as: "assignedLeads",
+                },
+            },
+            {
+                $match: {
+                    $expr: {
+                        $gt: [{ $size: "$assignedLeads" }, 0],
+                    },
+                },
+            },
+            {
+                $project: {
+                    _id: 0,
+                    name: 1,
+                    leadsClosed: {
+                        $size: {
+                            $filter: {
+                                input: "$assignedLeads",
+                                as: "lead",
+                                cond: { $eq: ["$$lead.status", "Closed"] },
+                            },
+                        },
+                    },
+                },
+            },
+        ]);
+        if (!report && !Array.isArray(report))
+            return res.status(404).json({ error: "Something went wrong" });
+
+        res.json(report);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
