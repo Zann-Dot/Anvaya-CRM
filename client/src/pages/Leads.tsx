@@ -10,9 +10,9 @@ import useMain from "../context/MainProvider";
 import DeleteBar from "../components/lead/DeleteBar";
 import { useDebounce } from "../hooks/useDebounce";
 import useFilterReducer, { Filter } from "../hooks/useFilterReducer";
+import useNotification from "../hooks/useNotification";
 
 export default function Leads() {
-   const [openModal, setOpenModal] = useState(false);
    const [leadIds, setLeadIds] = useState<string[]>([]);
    const [page, setPage] = useState(1);
    const [searchParams, setSearchParams] = useState("");
@@ -22,13 +22,13 @@ export default function Leads() {
       agent: "",
       sort: {
          sortType: "",
-         value: ""
-      }
+         value: "",
+      },
    };
 
    const params = new URLSearchParams();
    const search = useDebounce(searchParams, 300);
-   const { filter, dispatch } = useFilterReducer(filters)
+   const { filter, dispatch } = useFilterReducer(filters);
 
    if (filter.status && filter.status !== "all")
       params.set("status", filter.status);
@@ -45,35 +45,23 @@ export default function Leads() {
       search,
       params.toString(),
    );
-   const { mutate: deleteLeads, isPending } = useDeleteLead();
-   const { setToastNotification, setIsPending, setNotificationActive } =
-      useMain();
+
+   const {
+      mutate: deleteLeads,
+      isPending,
+      isSuccess,
+      isError: isDeleteError,
+      error,
+      data: deleteRes,
+   } = useDeleteLead();
+   const { setNotificationState, setNotificationActive } = useMain();
 
    const isTableLoading = isLoading || isPending || isFetching;
 
+   useNotification(isPending, isSuccess, isDeleteError, error, deleteRes);
    function handleDeleteLead() {
-      setIsPending(isTableLoading);
-      deleteLeads(leadIds, {
-         onSuccess: () => {
-            setToastNotification({
-               isError: false,
-               isSuccess: true,
-               successMessage: "Lead deleted successfully",
-            });
-            setLeadIds([]);
-         },
-         onError: () => {
-            setToastNotification({
-               isError: true,
-               isSuccess: false,
-               successMessage: "Lead deleted successfully",
-            });
-         },
-      });
+      deleteLeads(leadIds);
       setNotificationActive(true);
-      setTimeout(() => {
-         setNotificationActive(false);
-      }, 2500);
    }
 
    return (
@@ -99,7 +87,7 @@ export default function Leads() {
             </div>
 
             <Button
-               onClick={() => setOpenModal(true)}
+               onClick={() => setNotificationState(true, false)}
                className="cursor-pointer self-start border-0 bg-linear-to-r from-violet-600 to-indigo-600 text-white shadow-md sm:self-auto"
             >
                <HiOutlinePlus className="mr-1.5 h-4 w-4" />
@@ -108,10 +96,7 @@ export default function Leads() {
          </div>
 
          <div className="rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
-            <FilterLead
-               setSearchParams={setSearchParams}
-               dispatch={dispatch}
-            />
+            <FilterLead setSearchParams={setSearchParams} dispatch={dispatch} />
 
             <DeleteBar
                leadIds={leadIds}
@@ -124,10 +109,10 @@ export default function Leads() {
                   <div className="grid grid-cols-6 border-b border-gray-200 pb-3 dark:border-gray-700">
                      <div className="h-4 w-4 rounded bg-gray-200 dark:bg-gray-700"></div>
                      <div className="h-4 w-40 rounded bg-gray-200 dark:bg-gray-700"></div>
-                     <div className="justify-self-end  h-4 w-24 rounded bg-gray-200 dark:bg-gray-700"></div>
-                     <div className="justify-self-end h-4 w-20 rounded bg-gray-200 dark:bg-gray-700"></div>
-                     <div className="justify-self-end h-4 w-16 rounded bg-gray-200 dark:bg-gray-700"></div>
-                     <div className="justify-self-end h-4 w-12 rounded bg-gray-200 dark:bg-gray-700"></div>
+                     <div className="h-4 w-24 justify-self-end rounded bg-gray-200 dark:bg-gray-700"></div>
+                     <div className="h-4 w-20 justify-self-end rounded bg-gray-200 dark:bg-gray-700"></div>
+                     <div className="h-4 w-16 justify-self-end rounded bg-gray-200 dark:bg-gray-700"></div>
+                     <div className="h-4 w-12 justify-self-end rounded bg-gray-200 dark:bg-gray-700"></div>
                   </div>
 
                   {[...Array(5)].map((_, i) => (
@@ -143,10 +128,10 @@ export default function Leads() {
                               <div className="h-3 w-32 rounded bg-gray-100 dark:bg-gray-700/50"></div>
                            </div>
                         </div>
-                        <div className="justify-self-end h-3.5 w-24 rounded bg-gray-200 dark:bg-gray-700"></div>
-                        <div className="justify-self-end h-5 w-20 rounded-full bg-gray-200 dark:bg-gray-700"></div>
-                        <div className="justify-self-end h-5 w-14 rounded-full bg-gray-200 dark:bg-gray-700"></div>
-                        <div className="justify-self-end h-4 w-12 rounded bg-gray-200 dark:bg-gray-700"></div>
+                        <div className="h-3.5 w-24 justify-self-end rounded bg-gray-200 dark:bg-gray-700"></div>
+                        <div className="h-5 w-20 justify-self-end rounded-full bg-gray-200 dark:bg-gray-700"></div>
+                        <div className="h-5 w-14 justify-self-end rounded-full bg-gray-200 dark:bg-gray-700"></div>
+                        <div className="h-4 w-12 justify-self-end rounded bg-gray-200 dark:bg-gray-700"></div>
                      </div>
                   ))}
                   <span className="sr-only">Loading...</span>
@@ -181,11 +166,7 @@ export default function Leads() {
             )}
          </div>
 
-         <AddLeadModal
-            isEdit={false}
-            show={openModal}
-            onClose={() => setOpenModal(false)}
-         />
+         <AddLeadModal />
       </div>
    );
 }

@@ -16,15 +16,12 @@ import { format } from "date-fns";
 import { useComments } from "../hooks/useComments";
 import useMain from "../context/MainProvider";
 import AddLeadModal from "../components/AddLeadModal";
-import { useState } from "react";
 
 export default function LeadManagement() {
    const { id } = useParams();
    const { data: lead } = useLead(id);
    const { data: comments } = useComments(id);
-   const { handleComments, postComment } = useMain();
-   const [openModal, setOpenModal] = useState(false);
-   const [isEdit, setIsEdit] = useState(false);
+   const { handleComments, postComment, setNotificationState } = useMain();
 
    return (
       <div className="mx-auto max-w-7xl space-y-6 p-6">
@@ -176,7 +173,7 @@ export default function LeadManagement() {
 
                   <div className="mt-6 flex justify-end border-t border-gray-100 pt-4 dark:border-gray-700">
                      <Button
-                        onClick={() => { setOpenModal(true); setIsEdit(true); }}
+                        onClick={() => setNotificationState(true, true, lead?._id)}
                         color="purple"
                         className="cursor-pointer"
                      >
@@ -249,12 +246,7 @@ export default function LeadManagement() {
             </form>
          </div>
 
-         <AddLeadModal
-            show={openModal}
-            isEdit={isEdit}
-            lead={lead}
-            onClose={() => setOpenModal(false)}
-         />
+         <AddLeadModal lead={lead} />
       </div>
    );
 }

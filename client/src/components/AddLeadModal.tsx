@@ -12,14 +12,12 @@ import {
 } from "flowbite-react";
 import { NewLead, useMutateLead } from "../hooks/useLeads";
 import { useAgents } from "../hooks/useAgents";
-import { ToastNotification } from "./ToastNotification";
 import { Lead } from "./dashboard/LeadCard";
+import useNotification from "../hooks/useNotification";
+import useMain from "../context/MainProvider";
 
 interface AddLeadModalProps {
-   show: boolean;
-   isEdit: boolean;
    lead?: Lead;
-   onClose: () => void;
 }
 
 const AVAILABLE_TAGS = [
@@ -31,28 +29,27 @@ const AVAILABLE_TAGS = [
    "Hot Lead",
 ];
 
-export default function AddLeadModal({
-   show,
-   onClose,
-   isEdit,
-   lead,
-}: AddLeadModalProps) {
+export default function AddLeadModal({ lead }: AddLeadModalProps) {
    const { data: agentRes } = useAgents();
-   const { mutate, isPending, isError, isSuccess, reset } =
+   const {
+      isEdit,
+      showAddModal,
+      setShowAddModal,
+      setNotificationActive,
+   } = useMain();
+   const { mutate, isPending, isError, isSuccess, error, data } =
       useMutateLead(isEdit);
 
-   const [successMessage, setSuccessMessage] = useState("");
-   const [errorMessage, setErrorMessage] = useState("");
    const [selectedTags, setSelectedTags] = useState<string[]>(
       isEdit && lead?.tags ? lead?.tags : ["High Value"],
    );
 
    useEffect(() => {
-      if (show) {
+      if (showAddModal) {
          if (isEdit && lead?.tags) setSelectedTags(lead?.tags);
          else setSelectedTags(["High Value"]);
       }
-   }, [show, isEdit, lead?.tags]);
+   }, [showAddModal, isEdit, lead?.tags]);
 
    const toggleTag = (tag: string) => {
       setSelectedTags((prev) =>
@@ -60,15 +57,17 @@ export default function AddLeadModal({
       );
    };
 
+   useNotification(isPending, isSuccess, isError, error, data);
+
    function handleUpdateLead(formData: FormData) {
-      const name = formData.get("leadName");
-      const company = formData.get("leadCompany");
-      const email = formData.get("leadEmail");
-      const source = formData.get("leadSource");
-      const salesAgent = formData.get("assignedAgent");
-      const status = formData.get("leadStatus");
-      const priority = formData.get("priority");
-      const timeToClose = formData.get("timeToClose");
+      const name = formData.get("leadName") as string;
+      const company = formData.get("leadCompany") as string;
+      const email = formData.get("leadEmail") as string;
+      const source = formData.get("leadSource") as string;
+      const salesAgent = formData.get("assignedAgent") as string;
+      const status = formData.get("leadStatus") as string;
+      const priority = formData.get("priority") as string;
+      const timeToClose = formData.get("timeToClose") as string;
       const tags = selectedTags;
 
       const newLead: NewLead = {
@@ -83,39 +82,13 @@ export default function AddLeadModal({
          priority,
       };
 
-      mutate(
-         { lead: newLead, leadId: lead?._id },
-         {
-            onSuccess: () => {
-               setSuccessMessage(`Lead ${isEdit ? "updated" : "added"} successfully.`);
-               setErrorMessage("");
-            },
-            onError: () => {
-               setErrorMessage("Something went wrong.");
-               setSuccessMessage("");
-            },
-         },
-      );
-   }
-
-   function handleClose() {
-      setErrorMessage("");
-      setSuccessMessage("");
-      reset();
-      onClose();
+      mutate({ lead: newLead, leadId: lead?._id });
+      setNotificationActive(true);
    }
 
    return (
       <>
-         <Modal show={show} onClose={onClose} size="lg">
-            <ToastNotification
-               isError={isError}
-               isPending={isPending}
-               isSuccess={isSuccess}
-               successMessage={successMessage}
-               errorMessage={errorMessage}
-            />
-
+         <Modal show={showAddModal} onClose={() => setShowAddModal(false)} size="lg">
             <ModalHeader className="border-primary-100 border-b">
                {isEdit ? "Update" : "Add New"} Lead
             </ModalHeader>
@@ -307,7 +280,7 @@ export default function AddLeadModal({
                      <Button
                         color="gray"
                         className="cursor-pointer"
-                        onClick={handleClose}
+                        onClick={() => setShowAddModal(false)}
                      >
                         Cancel
                      </Button>

@@ -11,6 +11,7 @@ import LeadCard from "./LeadCard";
 import AddLeadModal from "../AddLeadModal";
 import { useLeads } from "../../hooks/useLeads";
 import { Link } from "react-router-dom";
+import useMain from "../../context/MainProvider";
 // import LEADS from "../utilis/Leads";
 
 interface LeadsSectionProp {
@@ -25,15 +26,13 @@ interface LeadsSectionProp {
 }
 
 export default function LeadsSection({ STATUS_FILTERS }: LeadsSectionProp) {
+    const { setNotificationState } = useMain()
     type FilterType = (typeof STATUS_FILTERS)[number];
     const [viewMode, setViewMode] = useState<"grid" | "list">("list");
     const [activeFilter, setActiveFilter] = useState<FilterType>();
-    const [openModal, setOpenModal] = useState(false);
 
-
-    const params = activeFilter && activeFilter !== "All"
-        ? `status=${activeFilter}`
-        : ""
+    const params =
+        activeFilter && activeFilter !== "All" ? `status=${activeFilter}` : "";
 
     const { data, isLoading, isError, isFetching } = useLeads(3, 1, "", params);
     const filterBadgeColor: Record<FilterType, string> = {
@@ -92,7 +91,7 @@ export default function LeadsSection({ STATUS_FILTERS }: LeadsSectionProp) {
 
                     <Button
                         size="sm"
-                        onClick={() => setOpenModal(true)}
+                        onClick={() => setNotificationState(true, false)}
                         className="cursor-pointer border-0 bg-linear-to-r from-violet-600 to-indigo-600 text-white shadow-md hover:from-violet-700 hover:to-indigo-700 focus:ring-violet-300"
                     >
                         <HiOutlinePlus className="mr-1.5 h-4 w-4" />
@@ -149,16 +148,15 @@ export default function LeadsSection({ STATUS_FILTERS }: LeadsSectionProp) {
                 <p className="text-xs text-gray-400">
                     Showing {data?.leads?.length} of {data?.totalLeads} leads
                 </p>
-                <Link to={`/leads`} className="text-xs font-medium text-violet-600 hover:text-violet-700 hover:underline dark:text-violet-400 dark:hover:text-violet-300">
+                <Link
+                    to={`/leads`}
+                    className="text-xs font-medium text-violet-600 hover:text-violet-700 hover:underline dark:text-violet-400 dark:hover:text-violet-300"
+                >
                     View all leads →
                 </Link>
             </div>
 
-            <AddLeadModal
-                isEdit={false}
-                show={openModal}
-                onClose={() => setOpenModal(false)}
-            />
+            <AddLeadModal />
         </div>
     );
 }
