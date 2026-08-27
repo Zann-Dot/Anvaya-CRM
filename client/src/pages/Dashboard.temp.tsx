@@ -10,8 +10,8 @@ import {
   HiOutlineViewGrid,
   HiOutlineViewList,
 } from "react-icons/hi";
-import StatsCard from "../components/StatsCard";
-import LeadCard, { type Lead } from "../components/LeadCard";
+import StatsCard from "../components/dashboard/StatsCard";
+import LeadCard, { type Lead } from "../components/dashboard/LeadCard";
 
 const LEADS: Lead[] = [
   {
@@ -250,21 +250,19 @@ export default function Dashboard() {
             <div className="flex rounded-xl border border-gray-200 p-1 dark:border-gray-700">
               <button
                 onClick={() => setViewMode("list")}
-                className={`rounded-lg p-1.5 transition-colors ${
-                  viewMode === "list"
-                    ? "bg-violet-600 text-white"
-                    : "text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                }`}
+                className={`rounded-lg p-1.5 transition-colors ${viewMode === "list"
+                  ? "bg-violet-600 text-white"
+                  : "text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                  }`}
               >
                 <HiOutlineViewList className="h-4 w-4" />
               </button>
               <button
                 onClick={() => setViewMode("grid")}
-                className={`rounded-lg p-1.5 transition-colors ${
-                  viewMode === "grid"
-                    ? "bg-violet-600 text-white"
-                    : "text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                }`}
+                className={`rounded-lg p-1.5 transition-colors ${viewMode === "grid"
+                  ? "bg-violet-600 text-white"
+                  : "text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                  }`}
               >
                 <HiOutlineViewGrid className="h-4 w-4" />
               </button>
@@ -292,19 +290,17 @@ export default function Dashboard() {
               <button
                 key={filter}
                 onClick={() => setActiveFilter(filter)}
-                className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition-all duration-200 ${
-                  isActive
-                    ? activeFilterStyle[filter]
-                    : filterBadgeColor[filter]
-                }`}
+                className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition-all duration-200 ${isActive
+                  ? activeFilterStyle[filter]
+                  : filterBadgeColor[filter]
+                  }`}
               >
                 {filter}
                 <span
-                  className={`rounded-full px-1.5 py-0.5 text-[10px] font-bold ${
-                    isActive
-                      ? "bg-white/25 text-white"
-                      : "bg-black/10 text-inherit dark:bg-white/10"
-                  }`}
+                  className={`rounded-full px-1.5 py-0.5 text-[10px] font-bold ${isActive
+                    ? "bg-white/25 text-white"
+                    : "bg-black/10 text-inherit dark:bg-white/10"
+                    }`}
                 >
                   {count}
                 </span>
@@ -409,13 +405,12 @@ export default function Dashboard() {
                 className="flex items-center gap-3 rounded-xl p-3 transition hover:bg-gray-50 dark:hover:bg-gray-700/50"
               >
                 <span
-                  className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[11px] font-bold ${
-                    rank === 1
-                      ? "bg-amber-100 text-amber-600"
-                      : rank === 2
-                        ? "bg-gray-100 text-gray-600"
-                        : "bg-orange-50 text-orange-600"
-                  }`}
+                  className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[11px] font-bold ${rank === 1
+                    ? "bg-amber-100 text-amber-600"
+                    : rank === 2
+                      ? "bg-gray-100 text-gray-600"
+                      : "bg-orange-50 text-orange-600"
+                    }`}
                 >
                   {rank}
                 </span>

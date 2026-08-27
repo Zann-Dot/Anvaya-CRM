@@ -1,4 +1,4 @@
-import { Lead } from "../components/LeadCard";
+import { Lead } from "../components/dashboard/LeadCard";
 
 
 const LEADS: Lead[] = [
@@ -162,7 +162,7 @@ const LEADS: Lead[] = [
       'Follow-up'
     ],
     timeToClose: 30,
-    salesAgent: { 
+    salesAgent: {
       name: "Arjun Singh",
       email: "arunsingh@gmail.com"
     },

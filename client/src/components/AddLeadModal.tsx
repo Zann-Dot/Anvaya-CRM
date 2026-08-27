@@ -13,7 +13,7 @@ import {
 import { NewLead, useMutateLead } from "../hooks/useLeads";
 import { useAgents } from "../hooks/useAgents";
 import { ToastNotification } from "./ToastNotification";
-import { Lead } from "./LeadCard";
+import { Lead } from "./dashboard/LeadCard";
 
 interface AddLeadModalProps {
    show: boolean;

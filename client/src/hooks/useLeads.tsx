@@ -6,7 +6,7 @@ import {
     fetchLeads,
     updateLead,
 } from "../api/leads";
-import { Lead } from "../components/LeadCard";
+import { Lead } from "../components/dashboard/LeadCard";
 
 export interface NewLead {
     name: FormDataEntryValue | null | string;

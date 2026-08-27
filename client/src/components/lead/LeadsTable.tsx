@@ -8,7 +8,7 @@ import {
    TableRow,
    TableCell,
 } from "flowbite-react";
-import { Lead } from "../LeadCard";
+import { Lead } from "../dashboard/LeadCard";
 import { format } from "date-fns";
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
 import { Link } from "react-router-dom";

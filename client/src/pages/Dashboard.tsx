@@ -4,9 +4,9 @@ import {
    HiOutlineTrendingUp,
    HiOutlineCheckCircle,
 } from "react-icons/hi";
-import StatsCard from "../components/StatsCard";
+import StatsCard from "../components/dashboard/StatsCard";
 import useMain from "../context/MainProvider";
-import LeadsSection from "../components/LeadsSection";
+import LeadsSection from "../components/dashboard/LeadsSection";
 import { format } from "date-fns";
 
 const STATUS_FILTERS = [

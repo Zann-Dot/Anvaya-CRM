@@ -8,8 +8,8 @@ import {
 import { useState } from "react";
 import { Button, Spinner } from "flowbite-react";
 import LeadCard from "./LeadCard";
-import AddLeadModal from "./AddLeadModal";
-import { useLeads } from "../hooks/useLeads";
+import AddLeadModal from "../AddLeadModal";
+import { useLeads } from "../../hooks/useLeads";
 import { Link } from "react-router-dom";
 // import LEADS from "../utilis/Leads";
 
