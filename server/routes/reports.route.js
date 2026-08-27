@@ -61,12 +61,49 @@ reportRouter.get("/report/leads-closed-by-agents", async (req, res) => {
                            $and: [
                               { $eq: ["$$lead.status", "Closed"] },
                               { $gte: ["$$lead.createdAt", startDate] },
-                              { $lte: ["$$lead.createdAt", endDate] }
-                           ]
+                              { $lte: ["$$lead.createdAt", endDate] },
+                           ],
                         },
                      },
                   },
                },
+            },
+         },
+      ]);
+
+      if (!report && !Array.isArray(report))
+         return res.status(404).json({ error: "Something went wrong" });
+
+      res.json(report);
+   } catch (error) {
+      res.status(500).json({ error: error.message });
+   }
+});
+
+reportRouter.get("/report/status-distribution", async (req, res) => {
+   try {
+      const startDate = req.dateFilter.createdAt.$gte;
+      const endDate = req.dateFilter.createdAt.$lte;
+      const report = await Leads.aggregate([
+         {
+            $match: {
+               $and: [
+                  { createdAt: { $gte: startDate } },
+                  { createdAt: { $lte: endDate } },
+               ]
+            },
+         },
+         {
+            $group: {
+               _id: "$status",
+               leadCount: { $sum: 1 },
+            },
+         },
+         {
+            $project: {
+               _id: 0,
+               status: "$_id",
+               leadCount: 1,
             },
          },
       ]);
