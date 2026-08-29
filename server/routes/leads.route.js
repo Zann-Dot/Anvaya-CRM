@@ -87,7 +87,10 @@ leadsRouter.get("/leads", async (req, res) => {
         if (tags) query.tags = { $in: tags };
         if (source) query.source = source;
         if (priority) sort = { priorityWeight: priority };
-        if (timeToClose) sort = { timeToClose };
+        if (timeToClose) {
+            sort = { timeToClose };
+            query.status = { $ne: "Closed" };
+        };
 
 
         const [totalLeads, leads] = await Promise.all([
