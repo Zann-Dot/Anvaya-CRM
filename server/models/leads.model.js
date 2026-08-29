@@ -70,10 +70,9 @@ const LeadSchema = new Schema({
     },
 }, { timestamps: true });
 
-LeadSchema.pre("save", function (next) {
+LeadSchema.pre("save", async function () {
     const weight = { HIGH: 1, MEDIUM: 2, LOW: 3 };
     this.priorityWeight = weight[this.priority] || 2;
-    next();
 });
 
 LeadSchema.pre("findOneAndUpdate", async function () {
