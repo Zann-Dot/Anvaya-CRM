@@ -23,6 +23,8 @@ export default function LeadManagement() {
    const { data: comments } = useComments(id);
    const { handleComments, postComment, setNotificationState } = useMain();
 
+   console.log(lead);
+
    return (
       <div className="mx-auto max-w-7xl space-y-6 p-6">
          <div className="flex flex-col gap-4 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between dark:border-gray-700 dark:bg-gray-800">
@@ -163,10 +165,12 @@ export default function LeadManagement() {
                      <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-4 dark:border-gray-700/60 dark:bg-gray-900/40">
                         <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
                            <HiOutlineClock className="h-4 w-4 text-violet-500" />
-                           <span>Time to Close</span>
+                           <span>
+                              {lead?.status === "Closed" ? "Closed At" : "Time to Close"}
+                           </span>
                         </div>
                         <p className="mt-1 text-base font-semibold text-gray-900 dark:text-white">
-                           {lead?.timeToClose} Days
+                           {lead?.closedAt ?? lead?.timeToClose} Days
                         </p>
                      </div>
                   </div>
