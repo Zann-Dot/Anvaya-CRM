@@ -12,7 +12,6 @@ import AddLeadModal from "../AddLeadModal";
 import { useLeads } from "../../hooks/useLeads";
 import { Link } from "react-router-dom";
 import useMain from "../../context/MainProvider";
-// import LEADS from "../utilis/Leads";
 
 interface LeadsSectionProp {
     STATUS_FILTERS: readonly [

@@ -54,11 +54,12 @@ export default function Leads() {
       error,
       data: deleteRes,
    } = useDeleteLead();
+
    const { setNotificationState, setNotificationActive } = useMain();
+   useNotification(isPending, isSuccess, isDeleteError, error, deleteRes);
 
    const isTableLoading = isLoading || isPending || isFetching;
 
-   useNotification(isPending, isSuccess, isDeleteError, error, deleteRes);
    function handleDeleteLead() {
       deleteLeads(leadIds);
       setNotificationActive(true);
