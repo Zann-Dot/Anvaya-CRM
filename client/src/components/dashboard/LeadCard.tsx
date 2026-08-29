@@ -20,6 +20,7 @@ export interface Lead {
    createdAt: string;
    updatedAt: string;
    avatar: string;
+   closedAt: string;
 }
 
 const statusConfig: Record<

@@ -1,4 +1,4 @@
-import { HiOutlineClock } from "react-icons/hi";
+import { HiMinus, HiOutlineClock } from "react-icons/hi";
 import {
    Avatar,
    Table,
@@ -169,8 +169,15 @@ export default function LeadsTable({
 
                         <TableCell className="py-3">
                            <div className="flex items-center gap-1 text-xs text-gray-600 dark:text-gray-300">
-                              <HiOutlineClock className="h-3.5 w-3.5 text-violet-400" />
-                              {lead.timeToClose} days
+
+                              {lead.closedAt ? (
+                                 <HiMinus />
+                              ) : (
+                                 <>
+                                    <HiOutlineClock className="h-3.5 w-3.5 text-violet-400" />
+                                    {lead.timeToClose} days
+                                 </>
+                              )}
                            </div>
                         </TableCell>
 
