@@ -136,9 +136,9 @@ leadsRouter.put("/leads/:id", async (req, res) => {
             status,
             tags,
             timeToClose,
-            priority,
-            closedAt = null,
+            priority
         } = req.body;
+        const closedAt = status === "Closed" ? new Date() : null;
 
         if (
             !name ||
