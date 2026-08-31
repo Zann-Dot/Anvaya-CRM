@@ -19,9 +19,13 @@ const pageTitles: Record<string, { title: string; subtitle: string }> = {
 export default function MainLayout() {
   const location = useLocation();
   const { title, subtitle } = pageTitles[location.pathname] ?? pageTitles["/"];
-  const { isPending, toastNotification, isNotificationActive, setPage } = useMain();
+  const { isPending, toastNotification, isNotificationActive, setPage, dispatch } = useMain();
+
   useEffect(() => {
-    setPage(1)
+    setPage(1);
+    dispatch({ type: "AGENT", value: "" });
+    dispatch({ type: "STATUS", value: "" });
+    dispatch({ type: "SORT", value: "" });
   }, [location.pathname])
 
   return (
