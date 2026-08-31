@@ -5,19 +5,13 @@ import {
     HiOutlineSortAscending,
     HiOutlineUser,
 } from "react-icons/hi";
-import { ActionDispatch, Dispatch, SetStateAction } from "react";
-import { FilterAction } from "../../hooks/useFilterReducer";
 import { useAgents } from "../../hooks/useAgents";
+import useMain from "../../context/MainProvider";
 
-type FilterLeadProps = {
-    setSearchParams: Dispatch<SetStateAction<string>>;
-    dispatch: ActionDispatch<[action: FilterAction]>;
-};
-export default function FilterLead({
-    setSearchParams,
-    dispatch,
-}: FilterLeadProps) {
+type FilterLeadProps = {};
+export default function FilterLead({ }: FilterLeadProps) {
     const { data: agentRes } = useAgents();
+    const { setSearch, dispatch } = useMain();
 
     return (
         <div className="flex flex-col gap-3 border-b border-gray-100 p-4 lg:flex-row lg:items-center lg:justify-between dark:border-gray-700">
@@ -27,7 +21,7 @@ export default function FilterLead({
                 icon={HiOutlineSearch}
                 placeholder="Search leads by name, company or email…"
                 className="w-full lg:max-w-xs"
-                onChange={(e) => setSearchParams(e.target.value)}
+                onChange={(e) => setSearch(e.target.value)}
             />
 
             <div className="flex flex-wrap items-center gap-2.5">
@@ -74,15 +68,23 @@ export default function FilterLead({
                             dispatch({
                                 type: "SORT",
                                 value: e.target.value,
-                                sort: e.target.options[e.target.selectedIndex].dataset.sort
+                                sort: e.target.options[e.target.selectedIndex].dataset.sort,
                             })
                         }
                     >
                         <option value="all">Sort: Default</option>
-                        <option data-sort="priority" value="asc">Priority: High → Low</option>
-                        <option data-sort="priority" value="desc">Priority: Low → High</option>
-                        <option data-sort="timeToClose" value="desc">Time to Close: Longest</option>
-                        <option data-sort="timeToClose" value="asc">Time to Close: Shortest</option>
+                        <option data-sort="priority" value="asc">
+                            Priority: High → Low
+                        </option>
+                        <option data-sort="priority" value="desc">
+                            Priority: Low → High
+                        </option>
+                        <option data-sort="timeToClose" value="desc">
+                            Time to Close: Longest
+                        </option>
+                        <option data-sort="timeToClose" value="asc">
+                            Time to Close: Shortest
+                        </option>
                     </Select>
                 </div>
             </div>

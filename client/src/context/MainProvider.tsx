@@ -10,6 +10,10 @@ import React, {
 } from "react";
 import { useCreateComment, NewComment } from "../hooks/useComments";
 import { useDebounce } from "../hooks/useDebounce";
+import useFilterReducer, {
+    Filter,
+    FilterAction,
+} from "../hooks/useFilterReducer";
 
 export type ToastNotificationDetails = {
     isError: boolean | null;
@@ -49,8 +53,9 @@ interface MainContextType {
     agentId?: string;
     setShowAddModal: Dispatch<SetStateAction<boolean>>;
     params: URLSearchParams;
-    selectedFilter: SelectStatus,
-    setSelectedFilter: Dispatch<SetStateAction<SelectStatus>>
+    selectedFilter: SelectStatus;
+    setSelectedFilter: Dispatch<SetStateAction<SelectStatus>>;
+    dispatch: React.ActionDispatch<[action: FilterAction]>;
 }
 
 const MainContext = createContext<MainContextType | null>(null);
@@ -73,8 +78,8 @@ export function MainProvider({ children }: React.PropsWithChildren) {
     const [agentId, setAgentId] = useState<string | undefined>(undefined);
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState("");
-    const debouncedSearch = useDebounce(search, 400);
     const [selectedFilter, setSelectedFilter] = useState<SelectStatus>("all");
+    const debouncedSearch = useDebounce(search, 400);
 
     const [isPending, setIsPending] = useState(false);
     const [isNotificationActive, setNotificationActive] = useState(false);
@@ -87,16 +92,41 @@ export function MainProvider({ children }: React.PropsWithChildren) {
         });
     const [comment, setComment] = useState("");
     const { mutate: addComment } = useCreateComment();
+    const filters: Filter = {
+        status: "",
+        agent: "",
+        sort: {
+            sortType: "",
+            value: "",
+        },
+    };
+    const { filter, dispatch } = useFilterReducer(filters);
 
     const params = useMemo(() => {
         const p = new URLSearchParams();
-        p.set("limit", "5");
-        if (page) p.set("page", String(page));
-        if (selectedFilter && selectedFilter !== "all") p.set("status", selectedFilter)
-        if (debouncedSearch.trim()) p.set("search", debouncedSearch.trim());
-        return p;
-    }, [page, debouncedSearch, selectedFilter]);
 
+        const appendIfValid = (key: string, value: any) => {
+            if (value && value !== "all") p.set(key, String(value).trim());
+        };
+
+        if (page) p.set("page", String(page));
+
+        if (debouncedSearch.trim()) p.set("search", debouncedSearch.trim());
+
+        const activeFilter =
+            selectedFilter !== "all" ? selectedFilter : filter.status;
+        appendIfValid("status", activeFilter);
+        appendIfValid("salesAgent", filter.agent);
+
+        if (
+            filter.sort?.sortType &&
+            filter.sort?.value &&
+            filter.sort.value !== "all"
+        )
+            p.set(filter.sort.sortType, filter.sort.value);
+
+        return p;
+    }, [page, debouncedSearch, selectedFilter, filter]);
 
     async function fetchDashboardReport() {
         try {
@@ -166,7 +196,8 @@ export function MainProvider({ children }: React.PropsWithChildren) {
                 agentId,
                 params,
                 selectedFilter,
-                setSelectedFilter
+                setSelectedFilter,
+                dispatch,
             }}
         >
             {children}

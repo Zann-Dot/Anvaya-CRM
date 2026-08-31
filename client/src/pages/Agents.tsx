@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Badge, Button, Card, TextInput } from "flowbite-react";
+import { useEffect } from "react";
+import { Button, Card, TextInput } from "flowbite-react";
 import {
   HiOutlineUserAdd,
   HiOutlineSearch,
@@ -23,11 +23,12 @@ export default function Agents() {
     search,
     setSearch,
     selectedFilter,
-    setSelectedFilter,
+    setSelectedFilter
   } = useMain();
 
   useEffect(() => {
     if (searchParams.toString() !== params.toString()) {
+      params.set("limit", "5");
       setSearchParams(params, { replace: true });
     }
   }, [params, searchParams, setSearchParams]);

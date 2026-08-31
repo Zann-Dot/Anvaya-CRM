@@ -1,14 +1,7 @@
 import { NewLead } from "../hooks/useLeads";
 
-export async function fetchLeads(
-    limit: number,
-    page: number,
-    search?: string,
-    filter?: string,
-) {
-    const response = await fetch(
-        `/api/leads?limit=${limit}&page=${page}&${search && `search=${decodeURIComponent(search)}`}${filter}`,
-    );
+export async function fetchLeads(params: string) {
+    const response = await fetch(`/api/leads?${params}`);
     const data = await response.json();
     if (!response.ok) throw new Error(data.error);
     return data;

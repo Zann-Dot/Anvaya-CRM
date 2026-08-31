@@ -3,6 +3,7 @@ import AppSidebar from "../components/AppSidebar";
 import TopNavbar from "../components/TopNavbar";
 import { ToastNotification } from "../components/ToastNotification";
 import useMain from "../context/MainProvider";
+import { useEffect } from "react";
 
 const pageTitles: Record<string, { title: string; subtitle: string }> = {
   "/": { title: "Dashboard", subtitle: "Welcome back to your CRM overview" },
@@ -18,8 +19,10 @@ const pageTitles: Record<string, { title: string; subtitle: string }> = {
 export default function MainLayout() {
   const location = useLocation();
   const { title, subtitle } = pageTitles[location.pathname] ?? pageTitles["/"];
-  const { isPending, toastNotification, isNotificationActive } = useMain();
-
+  const { isPending, toastNotification, isNotificationActive, setPage } = useMain();
+  useEffect(() => {
+    setPage(1)
+  }, [location.pathname])
 
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-gray-950">

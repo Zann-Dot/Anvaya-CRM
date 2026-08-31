@@ -32,15 +32,10 @@ export interface LeadResponse {
     currentPage: number;
 }
 
-export function useLeads(
-    limit: number,
-    page: number,
-    debouncedValue?: string,
-    filter?: string,
-) {
+export function useLeads(params: string = "") {
     return useQuery<LeadResponse>({
-        queryKey: ["leads", { page, search: debouncedValue, filter }],
-        queryFn: () => fetchLeads(limit, page, debouncedValue, filter),
+        queryKey: ["leads", params],
+        queryFn: () => fetchLeads(params),
         placeholderData: (previousData) => previousData,
     });
 }

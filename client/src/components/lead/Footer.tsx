@@ -1,11 +1,9 @@
 import { HiOutlineChevronLeft, HiOutlineChevronRight } from "react-icons/hi";
-import { Dispatch, SetStateAction } from "react";
 import { LeadResponse } from "../../hooks/useLeads";
+import useMain from "../../context/MainProvider";
 
 interface FooterProps {
     data?: NoInfer<LeadResponse>;
-    page: number;
-    setPage: Dispatch<SetStateAction<number>>;
     isPlaceholderData: boolean;
 }
 
@@ -13,11 +11,9 @@ const DISABLED = "disabled:opacity-50 disabled:hover:text-gray-400 disabled:dark
 
 export default function Footer({
     data,
-    page,
-    setPage,
     isPlaceholderData,
 }: FooterProps) {
-
+    const { page, setPage } = useMain()
     return (
         <div className="flex flex-col gap-3 border-t border-gray-100 px-4 py-3 sm:flex-row sm:items-center sm:justify-between dark:border-gray-700">
             <p className="text-xs text-gray-500 dark:text-gray-400">
