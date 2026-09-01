@@ -11,3 +11,10 @@ export async function getLeadsClosedByAgents() {
     if (!response.ok) throw new Error(data.error);
     return data
 }
+
+export async function getStatusDistribution() {
+    const response = await fetch("/api/report/status-distribution");
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error);
+    return data
+}
