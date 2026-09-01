@@ -1,13 +1,14 @@
 import { useQuery } from "@tanstack/react-query"
-import { getPipelineLeads } from "../api/reports"
+import { getPipelineReport } from "../api/reports"
 
-interface PipelineLeads {
-    totalLeadsInPipeline: number
+interface Pipeline {
+    totalLeadsInPipeline: number;
+    totalLeadsClosed: number
 }
 
-export function usePiplineLeads() {
-    return useQuery<PipelineLeads>({
-        queryKey: ["pipelineLeads"],
-        queryFn: getPipelineLeads
+export function usePipeline() {
+    return useQuery<Pipeline>({
+        queryKey: ["pipeline"],
+        queryFn: getPipelineReport
     })
 }

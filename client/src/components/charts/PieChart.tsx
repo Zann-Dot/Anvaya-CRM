@@ -6,7 +6,6 @@ interface PieChartProps {
         datasets: {
             label: string;
             data: (number | undefined)[];
-            backgroundColor: string[];
         }[];
     }
 }
@@ -20,7 +19,11 @@ export default function PieChart({ chartData }: PieChartProps) {
                     plugins: {
                         title: {
                             display: true,
-                            text: "Users Gained between 2016-2020"
+                            text: "Users Gained between 2016-2020",
+                            padding: {
+                                top: 10,
+                                bottom: 30
+                            }
                         }
                     },
                     maintainAspectRatio: false
