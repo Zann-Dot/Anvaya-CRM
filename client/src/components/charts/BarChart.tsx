@@ -1,26 +1,27 @@
-import { Pie } from "react-chartjs-2"
+import { Bar } from "react-chartjs-2"
 
-interface PieChartProps {
+interface BarChartProps {
     chartData: {
-        labels: string[];
+        labels: string[] | undefined;
         datasets: {
             label: string;
-            data: (number | undefined)[];
+            data: number[] | undefined;
+            backgroundColor: string[];
         }[];
     }
 }
 
-export default function PieChart({ chartData }: PieChartProps) {
+export default function BarChart({ chartData }: BarChartProps) {
     return (
         <div className="size-100">
-            <Pie
-                key="pie_chart"
+            <Bar
+                key="bar_chart"
                 data={chartData}
                 options={{
                     plugins: {
                         title: {
                             display: true,
-                            text: "Total leads in the pipeline",
+                            text: "Users Gained between 2016-2020",
                             padding: {
                                 top: 10,
                                 bottom: 30

@@ -4,3 +4,10 @@ export async function getPipelineReport() {
     if (!response.ok) throw new Error(data.error);
     return data
 }
+
+export async function getLeadsClosedByAgents() {
+    const response = await fetch("/api/report/leads-closed-by-agents");
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error);
+    return data
+}

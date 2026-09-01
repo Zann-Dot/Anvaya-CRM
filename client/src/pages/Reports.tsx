@@ -1,12 +1,27 @@
-import { usePipeline } from "../hooks/useReports";
+import { useClosedLeadsReport, usePipeline } from "../hooks/useReports";
 import PieChart from "../components/charts/PieChart";
-import { ArcElement, Chart, Legend, Tooltip } from "chart.js";
+import { ArcElement, BarElement, CategoryScale, Chart, Legend, LinearScale, Tooltip } from "chart.js";
 import { useEffect, useState } from "react";
+import BarChart from "../components/charts/BarChart";
 
-Chart.register(ArcElement, Tooltip, Legend)
+Chart.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement)
 
 export default function Reports() {
    const { data: pipeline } = usePipeline();
+   const { data: closedLeads } = useClosedLeadsReport();
+
+   const barData = {
+      labels: closedLeads?.map(r => r.name),
+      datasets: [
+         {
+            label: "Closed leads report",
+            data: closedLeads?.map(r => r.leadsClosed),
+            backgroundColor: [
+               '#4D55CC',
+            ]
+         }
+      ]
+   }
 
    const dataConfig = {
       labels: ["Leads in Pipeline", "Leads Closed"],
@@ -33,14 +48,15 @@ export default function Reports() {
    }, [pipeline])
 
    return (
-      <div className="h-[calc(100vh-4rem)] grid grid-cols-2 gap-4 p-6">
-         <div className="flex flex-col">
+      <div className=" grid grid-cols-2 gap-4 p-6">
+         <div className="flex flex-col items-center">
             <h1 className="text-xl py-3 text-black dark:text-white">Pie Chart</h1>
             {pipeline && (<PieChart chartData={chartData} />)}
          </div>
 
-         <div className="flex flex-col">
+         <div className="flex flex-col items-center">
             <h1 className="text-xl py-3 text-black dark:text-white">Bar Chart</h1>
+            {closedLeads && (<BarChart chartData={barData} />)}
          </div>
       </div>
    );
