@@ -17,18 +17,15 @@ import {
    Title,
    Tooltip,
 } from "chart.js";
-import { Badge, Button, Spinner } from "flowbite-react";
+import { Badge, Spinner } from "flowbite-react";
 import {
    HiOutlineChartBar,
    HiOutlineChartPie,
-   HiOutlineDownload,
    HiOutlineFilter,
-   HiOutlineLightBulb,
    HiOutlineTag,
    HiOutlineTrendingUp,
    HiOutlineUserGroup,
 } from "react-icons/hi";
-
 import {
    useClosedLeadsReport,
    usePipeline,
@@ -44,7 +41,6 @@ import PolarAreaChart from "../components/charts/PolarAreaChart";
 import DateRangeFilter from "../components/reports/DateRangeFilter";
 import ReportSummaryCards from "../components/reports/ReportSummaryCards";
 
-// Register Chart.js components globally
 Chart.register(
    ArcElement,
    Tooltip,
@@ -99,7 +95,6 @@ export default function Reports() {
       refetchPriority();
    };
 
-   // 1. Pipeline Overview Data (Pie Chart)
    const pipelineDataConfig = {
       labels: ["Leads in Pipeline", "Leads Closed"],
       datasets: [
@@ -117,7 +112,6 @@ export default function Reports() {
       ],
    };
 
-   // 2. Sales Agent Performance Data (Bar Chart)
    const agentBarData = {
       labels: closedLeads?.map((r) => r.name) || ["Agent A", "Agent B", "Agent C"],
       datasets: [
@@ -145,7 +139,6 @@ export default function Reports() {
       ],
    };
 
-   // 3. Status Distribution Data (Doughnut Chart)
    const statusDoughnutData = {
       labels: statusDistribution?.map((d) => d.status) || ["New", "Contacted", "Qualified", "Proposal", "Closed"],
       datasets: [
@@ -153,11 +146,11 @@ export default function Reports() {
             label: "Lead Count",
             data: statusDistribution?.map((d) => d.leadCount) || [0, 0, 0, 0, 0],
             backgroundColor: [
-               "#3B82F6", // New - Blue
-               "#8B5CF6", // Contacted - Purple
-               "#F59E0B", // Qualified - Amber
-               "#EC4899", // Proposal - Pink
-               "#10B981", // Closed - Emerald
+               "#3B82F6",
+               "#8B5CF6",
+               "#F59E0B",
+               "#EC4899",
+               "#10B981",
             ],
             borderColor: "transparent",
             borderWidth: 0,
@@ -166,7 +159,6 @@ export default function Reports() {
       ],
    };
 
-   // 4. Source Distribution Data (Bar / Doughnut Chart)
    const sourceBarData = {
       labels: sourceDistribution?.map((s) => s.source) || ["Website", "Referral", "Cold Call", "Advertisement", "Email", "Other"],
       datasets: [
@@ -189,7 +181,6 @@ export default function Reports() {
       ],
    };
 
-   // 5. Priority Distribution Data (Polar Area Chart)
    const priorityPolarData = {
       labels: priorityDistribution?.map((p) => `${p.priority} Priority`) || ["High Priority", "Medium Priority", "Low Priority"],
       datasets: [
@@ -197,9 +188,9 @@ export default function Reports() {
             label: "Lead Count",
             data: priorityDistribution?.map((p) => p.leadCount) || [0, 0, 0],
             backgroundColor: [
-               "rgba(239, 68, 68, 0.75)",  // High - Red
-               "rgba(245, 158, 11, 0.75)", // Medium - Amber
-               "rgba(59, 130, 246, 0.75)",  // Low - Blue
+               "rgba(239, 68, 68, 0.75)",
+               "rgba(245, 158, 11, 0.75)",
+               "rgba(59, 130, 246, 0.75)",
             ],
             borderColor: [
                "#EF4444",
@@ -211,7 +202,6 @@ export default function Reports() {
       ],
    };
 
-   // 6. Trend Analytics Data (Line Chart)
    const trendLineData = {
       labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"],
       datasets: [
@@ -247,16 +237,12 @@ export default function Reports() {
 
    return (
       <div className="space-y-6 p-6 pb-12">
-         {/* 1. Page Header */}
          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
                <div className="flex items-center gap-2">
                   <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
                      Reports & Analytics
                   </h1>
-                  <Badge color="purple" size="sm" className="font-semibold">
-                     Live Insights
-                  </Badge>
                </div>
                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                   Real-time visual breakdown of pipeline progress, agent closure performance, lead sources, and priority allocation.
@@ -264,210 +250,8 @@ export default function Reports() {
             </div>
          </div>
 
-         {/* 2. Non-Functional Date Range Filter UI */}
          <DateRangeFilter onRefreshClick={handleRefreshAll} />
 
-         {/* 3. Top Metric Cards */}
-         <ReportSummaryCards
-            pipeline={pipeline}
-            agentsCount={closedLeads?.length || 4}
-         />
-
-         {/* Loading Skeletons */}
-         {isInitialLoading && (
-            <div className="flex h-48 w-full items-center justify-center rounded-2xl border border-gray-200 bg-white shadow-xs dark:border-gray-700 dark:bg-gray-800">
-               <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
-                  <Spinner size="md" color="purple" />
-                  <span>Fetching interactive analytics...</span>
-               </div>
-            </div>
-         )}
-
-         {/* 4. Chart Grid Layout */}
-         {!isInitialLoading && (
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-               {/* CHART 1: Pipeline Overview (Pie Chart) */}
-               <div className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-xs transition-all duration-300 hover:shadow-md dark:border-gray-700/60 dark:bg-gray-800/80">
-                  <div className="mb-4 flex items-center justify-between border-b border-gray-100 pb-3.5 dark:border-gray-700/60">
-                     <div className="flex items-center gap-2.5">
-                        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-100 text-violet-600 dark:bg-violet-900/40 dark:text-violet-400">
-                           <HiOutlineChartPie className="h-5 w-5" />
-                        </div>
-                        <div>
-                           <h3 className="text-base font-bold text-gray-900 dark:text-white">
-                              Pipeline vs Closed Leads
-                           </h3>
-                           <p className="text-xs text-gray-500 dark:text-gray-400">
-                              Proportion of active leads vs closed deals
-                           </p>
-                        </div>
-                     </div>
-                     <Badge color="purple" size="xs">
-                        Pie Chart
-                     </Badge>
-                  </div>
-                  {pipeline ? (
-                     <PieChart chartData={pipelineDataConfig} height={300} />
-                  ) : (
-                     <div className="flex h-[300px] items-center justify-center text-xs text-gray-400">
-                        No pipeline data available
-                     </div>
-                  )}
-               </div>
-
-               {/* CHART 2: Leads Closed by Sales Agent (Bar Chart) */}
-               <div className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-xs transition-all duration-300 hover:shadow-md dark:border-gray-700/60 dark:bg-gray-800/80">
-                  <div className="mb-4 flex items-center justify-between border-b border-gray-100 pb-3.5 dark:border-gray-700/60">
-                     <div className="flex items-center gap-2.5">
-                        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-100 text-blue-600 dark:bg-blue-900/40 dark:text-blue-400">
-                           <HiOutlineUserGroup className="h-5 w-5" />
-                        </div>
-                        <div>
-                           <h3 className="text-base font-bold text-gray-900 dark:text-white">
-                              Leads Closed by Sales Agent
-                           </h3>
-                           <p className="text-xs text-gray-500 dark:text-gray-400">
-                              Individual sales performance & agent comparison
-                           </p>
-                        </div>
-                     </div>
-                     <Badge color="indigo" size="xs">
-                        Bar Chart
-                     </Badge>
-                  </div>
-                  {closedLeads ? (
-                     <BarChart chartData={agentBarData} height={300} />
-                  ) : (
-                     <div className="flex h-[300px] items-center justify-center text-xs text-gray-400">
-                        No agent closed leads data available
-                     </div>
-                  )}
-               </div>
-
-               {/* CHART 3: Lead Status Distribution (Doughnut Chart) */}
-               <div className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-xs transition-all duration-300 hover:shadow-md dark:border-gray-700/60 dark:bg-gray-800/80">
-                  <div className="mb-4 flex items-center justify-between border-b border-gray-100 pb-3.5 dark:border-gray-700/60">
-                     <div className="flex items-center gap-2.5">
-                        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-pink-100 text-pink-600 dark:bg-pink-900/40 dark:text-pink-400">
-                           <HiOutlineFilter className="h-5 w-5" />
-                        </div>
-                        <div>
-                           <h3 className="text-base font-bold text-gray-900 dark:text-white">
-                              Lead Status Distribution
-                           </h3>
-                           <p className="text-xs text-gray-500 dark:text-gray-400">
-                              Breakdown across New, Contacted, Qualified & Proposal
-                           </p>
-                        </div>
-                     </div>
-                     <Badge color="pink" size="xs">
-                        Doughnut Chart
-                     </Badge>
-                  </div>
-                  {statusDistribution ? (
-                     <DoughnutChart chartData={statusDoughnutData} height={300} cutout="68%" />
-                  ) : (
-                     <div className="flex h-[300px] items-center justify-center text-xs text-gray-400">
-                        No status distribution data available
-                     </div>
-                  )}
-               </div>
-
-               {/* CHART 4 (Special Request Analytics): Lead Acquisition Source (Grouped Bar Chart) */}
-               <div className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-xs transition-all duration-300 hover:shadow-md dark:border-gray-700/60 dark:bg-gray-800/80">
-                  <div className="mb-4 flex items-center justify-between border-b border-gray-100 pb-3.5 dark:border-gray-700/60">
-                     <div className="flex items-center gap-2.5">
-                        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-400">
-                           <HiOutlineChartBar className="h-5 w-5" />
-                        </div>
-                        <div>
-                           <h3 className="text-base font-bold text-gray-900 dark:text-white">
-                              Lead Acquisition & Conversion by Source
-                           </h3>
-                           <p className="text-xs text-gray-500 dark:text-gray-400">
-                              Source efficiency (Website, Referral, Cold Call, Ads, Email)
-                           </p>
-                        </div>
-                     </div>
-                     <Badge color="success" size="xs">
-                        Source Analytics
-                     </Badge>
-                  </div>
-                  <BarChart chartData={sourceBarData} height={300} />
-               </div>
-
-               {/* CHART 5 (Special Request Analytics): Priority Allocation (Polar Area Chart) */}
-               <div className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-xs transition-all duration-300 hover:shadow-md dark:border-gray-700/60 dark:bg-gray-800/80">
-                  <div className="mb-4 flex items-center justify-between border-b border-gray-100 pb-3.5 dark:border-gray-700/60">
-                     <div className="flex items-center gap-2.5">
-                        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-100 text-amber-600 dark:bg-amber-900/40 dark:text-amber-400">
-                           <HiOutlineTag className="h-5 w-5" />
-                        </div>
-                        <div>
-                           <h3 className="text-base font-bold text-gray-900 dark:text-white">
-                              Pipeline Priority Breakdown
-                           </h3>
-                           <p className="text-xs text-gray-500 dark:text-gray-400">
-                              Lead allocation by High, Medium, and Low urgency
-                           </p>
-                        </div>
-                     </div>
-                     <Badge color="warning" size="xs">
-                        Polar Area
-                     </Badge>
-                  </div>
-                  <PolarAreaChart chartData={priorityPolarData} height={300} />
-               </div>
-
-               {/* CHART 6 (Special Request Analytics): Acquisition & Closure Trend (Line Area Chart) */}
-               <div className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-xs transition-all duration-300 hover:shadow-md dark:border-gray-700/60 dark:bg-gray-800/80">
-                  <div className="mb-4 flex items-center justify-between border-b border-gray-100 pb-3.5 dark:border-gray-700/60">
-                     <div className="flex items-center gap-2.5">
-                        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-100 text-indigo-600 dark:bg-indigo-900/40 dark:text-indigo-400">
-                           <HiOutlineTrendingUp className="h-5 w-5" />
-                        </div>
-                        <div>
-                           <h3 className="text-base font-bold text-gray-900 dark:text-white">
-                              Monthly Lead & Conversion Trends
-                           </h3>
-                           <p className="text-xs text-gray-500 dark:text-gray-400">
-                              Growth trajectory over recent months
-                           </p>
-                        </div>
-                     </div>
-                     <Badge color="purple" size="xs">
-                        Trend Analysis
-                     </Badge>
-                  </div>
-                  <LineChart chartData={trendLineData} height={300} />
-               </div>
-            </div>
-         )}
-
-         {/* 5. Key Insights & Analytics Recommendation Box */}
-         <div className="relative overflow-hidden rounded-2xl bg-linear-to-r from-violet-600 via-indigo-600 to-blue-600 p-6 text-white shadow-lg">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-               <div className="flex items-start gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-md">
-                     <HiOutlineLightBulb className="h-7 w-7 text-amber-300" />
-                  </div>
-                  <div>
-                     <h4 className="text-lg font-bold">Analytics Recommendation</h4>
-                     <p className="mt-1 text-xs text-violet-100 sm:max-w-xl">
-                        Referral and Website leads have a 38% higher closure rate compared to Cold Calls. Consider prioritizing high-priority Website leads for Sales Agents to maximize pipeline velocity.
-                     </p>
-                  </div>
-               </div>
-               <Button
-                  size="xs"
-                  color="light"
-                  className="self-start sm:self-center rounded-xl text-xs font-semibold"
-                  onClick={() => alert("Generating full strategic report...")}
-               >
-                  Generate Full Report
-               </Button>
-            </div>
-         </div>
       </div>
    );
 }
