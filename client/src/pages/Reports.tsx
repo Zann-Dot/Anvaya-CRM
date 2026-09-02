@@ -29,8 +29,6 @@ import {
 import {
    useClosedLeadsReport,
    usePipeline,
-   usePriorityDistribution,
-   useSourceDistribution,
    useStatusDistribution,
 } from "../hooks/useReports";
 import BarChart from "../components/charts/BarChart";
@@ -76,23 +74,11 @@ export default function Reports() {
       isLoading: loadingStatus,
       refetch: refetchStatus,
    } = useStatusDistribution();
-   const {
-      data: sourceDistribution,
-      isLoading: loadingSource,
-      refetch: refetchSource,
-   } = useSourceDistribution();
-   const {
-      data: priorityDistribution,
-      isLoading: loadingPriority,
-      refetch: refetchPriority,
-   } = usePriorityDistribution();
 
    const handleRefreshAll = () => {
       refetchPipeline();
       refetchClosed();
       refetchStatus();
-      refetchSource();
-      refetchPriority();
    };
 
    const pipelineDataConfig = {
@@ -159,48 +145,48 @@ export default function Reports() {
       ],
    };
 
-   const sourceBarData = {
-      labels: sourceDistribution?.map((s) => s.source) || ["Website", "Referral", "Cold Call", "Advertisement", "Email", "Other"],
-      datasets: [
-         {
-            label: "Total Leads Acquired",
-            data: sourceDistribution?.map((s) => s.leadCount) || [0, 0, 0, 0, 0, 0],
-            backgroundColor: "rgba(99, 102, 241, 0.75)",
-            borderColor: "#6366F1",
-            borderWidth: 1,
-            borderRadius: 6,
-         },
-         {
-            label: "Leads Closed",
-            data: sourceDistribution?.map((s) => s.closedCount) || [0, 0, 0, 0, 0, 0],
-            backgroundColor: "rgba(16, 185, 129, 0.85)",
-            borderColor: "#10B981",
-            borderWidth: 1,
-            borderRadius: 6,
-         },
-      ],
-   };
+   // const sourceBarData = {
+   //    labels: sourceDistribution?.map((s) => s.source) || ["Website", "Referral", "Cold Call", "Advertisement", "Email", "Other"],
+   //    datasets: [
+   //       {
+   //          label: "Total Leads Acquired",
+   //          data: sourceDistribution?.map((s) => s.leadCount) || [0, 0, 0, 0, 0, 0],
+   //          backgroundColor: "rgba(99, 102, 241, 0.75)",
+   //          borderColor: "#6366F1",
+   //          borderWidth: 1,
+   //          borderRadius: 6,
+   //       },
+   //       {
+   //          label: "Leads Closed",
+   //          data: sourceDistribution?.map((s) => s.closedCount) || [0, 0, 0, 0, 0, 0],
+   //          backgroundColor: "rgba(16, 185, 129, 0.85)",
+   //          borderColor: "#10B981",
+   //          borderWidth: 1,
+   //          borderRadius: 6,
+   //       },
+   //    ],
+   // };
 
-   const priorityPolarData = {
-      labels: priorityDistribution?.map((p) => `${p.priority} Priority`) || ["High Priority", "Medium Priority", "Low Priority"],
-      datasets: [
-         {
-            label: "Lead Count",
-            data: priorityDistribution?.map((p) => p.leadCount) || [0, 0, 0],
-            backgroundColor: [
-               "rgba(239, 68, 68, 0.75)",
-               "rgba(245, 158, 11, 0.75)",
-               "rgba(59, 130, 246, 0.75)",
-            ],
-            borderColor: [
-               "#EF4444",
-               "#F59E0B",
-               "#3B82F6",
-            ],
-            borderWidth: 1.5,
-         },
-      ],
-   };
+   // const priorityPolarData = {
+   //    labels: priorityDistribution?.map((p) => `${p.priority} Priority`) || ["High Priority", "Medium Priority", "Low Priority"],
+   //    datasets: [
+   //       {
+   //          label: "Lead Count",
+   //          data: priorityDistribution?.map((p) => p.leadCount) || [0, 0, 0],
+   //          backgroundColor: [
+   //             "rgba(239, 68, 68, 0.75)",
+   //             "rgba(245, 158, 11, 0.75)",
+   //             "rgba(59, 130, 246, 0.75)",
+   //          ],
+   //          borderColor: [
+   //             "#EF4444",
+   //             "#F59E0B",
+   //             "#3B82F6",
+   //          ],
+   //          borderWidth: 1.5,
+   //       },
+   //    ],
+   // };
 
    const trendLineData = {
       labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"],
@@ -233,7 +219,7 @@ export default function Reports() {
    };
 
    const isInitialLoading =
-      loadingPipeline || loadingClosed || loadingStatus || loadingSource || loadingPriority;
+      loadingPipeline || loadingClosed || loadingStatus
 
    return (
       <div className="space-y-6 p-6 pb-12">

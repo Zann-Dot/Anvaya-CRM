@@ -2,8 +2,6 @@ import { useQuery } from "@tanstack/react-query"
 import {
     getLeadsClosedByAgents,
     getPipelineReport,
-    getPriorityDistribution,
-    getSourceDistribution,
     getStatusDistribution,
 } from "../api/reports"
 
@@ -19,17 +17,6 @@ interface ClosedLeads {
 
 interface StatusDistribution {
     status: string;
-    leadCount: number;
-}
-
-interface SourceDistribution {
-    source: string;
-    leadCount: number;
-    closedCount: number;
-}
-
-interface PriorityDistribution {
-    priority: string;
     leadCount: number;
 }
 
@@ -53,17 +40,3 @@ export function useStatusDistribution() {
         queryFn: getStatusDistribution,
     })
 }
-
-export function useSourceDistribution() {
-    return useQuery<SourceDistribution[]>({
-        queryKey: ["sourceDistribution"],
-        queryFn: getSourceDistribution,
-    })
-}
-
-export function usePriorityDistribution() {
-    return useQuery<PriorityDistribution[]>({
-        queryKey: ["priorityDistribution"],
-        queryFn: getPriorityDistribution,
-    })
-}

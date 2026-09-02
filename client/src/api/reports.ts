@@ -1,34 +1,11 @@
-export async function getPipelineReport() {
-    const response = await fetch("/api/report/pipeline");
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.error);
-    return data
-}
-
-export async function getLeadsClosedByAgents() {
-    const response = await fetch("/api/report/leads-closed-by-agents");
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.error);
-    return data
-}
-
-export async function getStatusDistribution() {
-    const response = await fetch("/api/report/status-distribution");
+const fetchApi = async (endpoint: string, params?: string) => {
+    const response = await fetch(`/api/report/${endpoint}?${params}`);
     const data = await response.json();
     if (!response.ok) throw new Error(data.error);
     return data;
-}
+};
 
-export async function getSourceDistribution() {
-    const response = await fetch("/api/report/source-distribution");
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.error);
-    return data;
-}
+export const getPipelineReport = () => fetchApi("pipeline");
+export const getLeadsClosedByAgents = () => fetchApi("leads-closed-by-agents");
+export const getStatusDistribution = () => fetchApi("status-distribution");
 
-export async function getPriorityDistribution() {
-    const response = await fetch("/api/report/priority-distribution");
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.error);
-    return data;
-}
