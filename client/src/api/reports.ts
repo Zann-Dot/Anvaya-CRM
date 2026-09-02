@@ -16,5 +16,19 @@ export async function getStatusDistribution() {
     const response = await fetch("/api/report/status-distribution");
     const data = await response.json();
     if (!response.ok) throw new Error(data.error);
-    return data
+    return data;
 }
+
+export async function getSourceDistribution() {
+    const response = await fetch("/api/report/source-distribution");
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error);
+    return data;
+}
+
+export async function getPriorityDistribution() {
+    const response = await fetch("/api/report/priority-distribution");
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error);
+    return data;
+}

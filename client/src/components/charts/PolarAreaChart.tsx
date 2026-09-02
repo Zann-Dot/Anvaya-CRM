@@ -1,37 +1,34 @@
-import { Bar } from "react-chartjs-2";
+import { PolarArea } from "react-chartjs-2";
 import { ChartOptions } from "chart.js";
 
-interface BarChartProps {
+interface PolarAreaChartProps {
     chartData: {
         labels?: string[];
         datasets: {
             label?: string;
             data: (number | undefined)[];
-            backgroundColor?: string | string[];
-            borderColor?: string | string[];
+            backgroundColor?: string[];
+            borderColor?: string[];
             borderWidth?: number;
-            borderRadius?: number | { topLeft: number; topRight: number; bottomLeft: number; bottomRight: number };
-            barThickness?: number | "flex";
         }[];
     };
     title?: string;
     height?: number | string;
-    indexAxis?: "x" | "y";
-    customOptions?: ChartOptions<"bar">;
+    customOptions?: ChartOptions<"polarArea">;
 }
 
-export default function BarChart({
+export default function PolarAreaChart({
     chartData,
     title,
     height = 300,
-    indexAxis = "x",
     customOptions,
-}: BarChartProps) {
-    const defaultOptions: ChartOptions<"bar"> = {
+}: PolarAreaChartProps) {
+    const defaultOptions: ChartOptions<"polarArea"> = {
         responsive: true,
         maintainAspectRatio: false,
-        indexAxis,
         animation: {
+            animateRotate: true,
+            animateScale: true,
             duration: 1000,
             easing: "easeOutQuart",
         },
@@ -70,25 +67,18 @@ export default function BarChart({
             },
         },
         scales: {
-            x: {
-                grid: {
-                    display: false,
-                },
-                ticks: {
-                    font: {
-                        size: 12,
-                    },
-                },
-            },
-            y: {
+            r: {
                 grid: {
                     color: "rgba(156, 163, 175, 0.15)",
                 },
+                angleLines: {
+                    color: "rgba(156, 163, 175, 0.15)",
+                },
                 ticks: {
+                    backdropColor: "transparent",
                     font: {
-                        size: 12,
+                        size: 10,
                     },
-                    stepSize: 1,
                 },
                 beginAtZero: true,
             },
@@ -98,8 +88,7 @@ export default function BarChart({
 
     return (
         <div className="relative w-full" style={{ height: typeof height === "number" ? `${height}px` : height }}>
-            <Bar key="bar_chart" data={chartData} options={defaultOptions} />
+            <PolarArea key="polar_area_chart" data={chartData} options={defaultOptions} />
         </div>
     );
 }
-

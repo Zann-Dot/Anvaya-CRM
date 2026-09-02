@@ -1,39 +1,43 @@
-import { Bar } from "react-chartjs-2";
+import { Line } from "react-chartjs-2";
 import { ChartOptions } from "chart.js";
 
-interface BarChartProps {
+interface LineChartProps {
     chartData: {
         labels?: string[];
         datasets: {
             label?: string;
             data: (number | undefined)[];
-            backgroundColor?: string | string[];
-            borderColor?: string | string[];
+            borderColor?: string;
+            backgroundColor?: string;
             borderWidth?: number;
-            borderRadius?: number | { topLeft: number; topRight: number; bottomLeft: number; bottomRight: number };
-            barThickness?: number | "flex";
+            fill?: boolean;
+            tension?: number;
+            pointBackgroundColor?: string;
+            pointBorderColor?: string;
+            pointHoverRadius?: number;
         }[];
     };
     title?: string;
     height?: number | string;
-    indexAxis?: "x" | "y";
-    customOptions?: ChartOptions<"bar">;
+    customOptions?: ChartOptions<"line">;
 }
 
-export default function BarChart({
+export default function LineChart({
     chartData,
     title,
     height = 300,
-    indexAxis = "x",
     customOptions,
-}: BarChartProps) {
-    const defaultOptions: ChartOptions<"bar"> = {
+}: LineChartProps) {
+    const defaultOptions: ChartOptions<"line"> = {
         responsive: true,
         maintainAspectRatio: false,
-        indexAxis,
         animation: {
-            duration: 1000,
-            easing: "easeOutQuart",
+            duration: 1200,
+            easing: "easeInOutQuart",
+        },
+        interaction: {
+            mode: "index",
+            intersect: false,
         },
         plugins: {
             title: {
@@ -72,7 +76,7 @@ export default function BarChart({
         scales: {
             x: {
                 grid: {
-                    display: false,
+                    color: "rgba(156, 163, 175, 0.1)",
                 },
                 ticks: {
                     font: {
@@ -98,8 +102,7 @@ export default function BarChart({
 
     return (
         <div className="relative w-full" style={{ height: typeof height === "number" ? `${height}px` : height }}>
-            <Bar key="bar_chart" data={chartData} options={defaultOptions} />
+            <Line key="line_chart" data={chartData} options={defaultOptions} />
         </div>
     );
 }
-
