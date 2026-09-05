@@ -94,10 +94,10 @@ export default function Reports() {
                pipeline?.totalLeadsInPipeline || 0,
                pipeline?.totalLeadsClosed || 0,
             ],
-            backgroundColor: ["#6366F1", "#10B981"],
-            borderColor: ["#4F46E5", "#059669"],
-            borderWidth: 2,
-            hoverOffset: 15,
+            backgroundColor: ["#6366F1", "#2F39A9"],
+            borderWidth: 0,
+            offset: [20, 0],
+            hoverOffset: [25, 15],
          },
       ],
    };
@@ -225,6 +225,7 @@ export default function Reports() {
    const isInitialLoading =
       loadingPipeline || loadingClosed || loadingStatus
 
+
    return (
       <div className="space-y-6 p-6 pb-12">
          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -245,6 +246,47 @@ export default function Reports() {
             pipeline={pipeline}
             agentsCount={assignedAgents?.length}
          />
+         {isInitialLoading && (
+            <div className="flex h-48 w-full items-center justify-center rounded-2xl border border-gray-200 bg-white shadow-xs dark:border-gray-700 dark:bg-gray-800">
+               <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
+                  <Spinner size="md" color="purple" />
+                  <span>Fetching interactive analytics...</span>
+               </div>
+            </div>
+         )}
+
+         {!isInitialLoading && (
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+               <div className="group relative overflow-clip rounded-2xl border border-gray-200 bg-white p-6 shadow-xs transition-all duration-300 hover:shadow-md dark:border-gray-700/60 dark:bg-gray-800/80">
+                  <div className="mb-4 flex items-center justify-between border-b border-gray-100 pb-3.5 dark:border-gray-700/60">
+                     <div className="flex items-center gap-2.5">
+                        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-100 text-violet-600 dark:bg-violet-900/40 dark:text-violet-400">
+                           <HiOutlineChartPie className="h-5 w-5" />
+                        </div>
+                        <div>
+                           <h3 className="text-base font-bold text-gray-900 dark:text-white">
+                              Pipeline vs Closed Leads
+                           </h3>
+                           <p className="text-xs text-gray-500 dark:text-gray-400">
+                              Proportion of active leads vs closed deals
+                           </p>
+                        </div>
+                     </div>
+                     <Badge color="purple" size="xs">
+                        Pie Chart
+                     </Badge>
+                  </div>
+                  {pipeline ? (
+                     <PieChart chartData={pipelineDataConfig} height={300} />
+                  ) : (
+                     <div className="flex h-75 items-center justify-center text-xs text-gray-400">
+                        No pipeline data available
+                     </div>
+                  )}
+               </div>
+            </div>
+
+         )}
       </div>
    );
 }

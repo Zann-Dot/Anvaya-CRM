@@ -1,5 +1,7 @@
 import { Pie } from "react-chartjs-2";
 import { ChartOptions } from "chart.js";
+import { useEffect, useRef, useState } from "react";
+import { useThemeMode } from "flowbite-react";
 
 interface PieChartProps {
     chartData: {
@@ -10,7 +12,8 @@ interface PieChartProps {
             backgroundColor?: string[];
             borderColor?: string | string[];
             borderWidth?: number;
-            hoverOffset?: number;
+            offset?: number[];
+            hoverOffset?: number[];
         }[];
     };
     title?: string;
@@ -20,41 +23,44 @@ interface PieChartProps {
 
 export default function PieChart({
     chartData,
-    title,
     height = 300,
     customOptions,
 }: PieChartProps) {
+    const chartRef = useRef(null);
+    const dpr = Math.max(window.devicePixelRatio || 1, 2);
+    const { mode } = useThemeMode();
+
+
+
     const defaultOptions: ChartOptions<"pie"> = {
         responsive: true,
         maintainAspectRatio: false,
+        devicePixelRatio: dpr,
         animation: {
             animateScale: true,
             animateRotate: true,
             duration: 1000,
             easing: "easeInOutQuart",
         },
-        plugins: {
-            title: {
-                display: !!title,
-                text: title || "",
-                font: {
-                    size: 15,
-                    weight: "bold",
-                },
-                padding: {
-                    top: 8,
-                    bottom: 16,
-                },
+        layout: {
+            padding: {
+                top: 10,
+                right: 20,
+                bottom: 10,
+                left: 10,
             },
+        },
+        plugins: {
             legend: {
                 display: true,
                 position: "bottom",
                 labels: {
                     usePointStyle: true,
                     padding: 18,
+                    color: mode === "dark" ? "#eee" : "#0B0909",
                     font: {
                         size: 12,
-                        weight: 500,
+                        weight: 400,
                     },
                 },
             },
@@ -70,9 +76,23 @@ export default function PieChart({
         ...customOptions,
     };
 
+    const resolvedHeight =
+        typeof height === "number" ? `${height}px` : height;
+
     return (
-        <div className="relative w-full" style={{ height: typeof height === "number" ? `${height}px` : height }}>
-            <Pie key="pie_chart" data={chartData} options={defaultOptions} />
+        <div
+            className="relative w-full"
+            style={{
+                height: resolvedHeight,
+                minHeight: resolvedHeight,
+            }}
+        >
+            <Pie
+                ref={chartRef}
+                key="pie_chart"
+                data={chartData}
+                options={defaultOptions}
+            />
         </div>
     );
 }

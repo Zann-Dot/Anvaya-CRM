@@ -23,8 +23,7 @@ export default function ReportSummaryCards({
   const totalClosed = pipeline?.totalLeadsClosed || 0;
   const totalLeads = totalInPipeline + totalClosed;
   const conversionRate = totalLeads > 0 ? ((totalClosed / totalLeads) * 100).toFixed(1) : "0";
-  const { dashboardReport } = useMain()
-  console.log(dashboardReport);
+  const { dashboardReport } = useMain();
 
   const cards = [
     {
@@ -49,7 +48,7 @@ export default function ReportSummaryCards({
       title: "Conversion Rate",
       value: `${conversionRate}%`,
       subtitle: "Pipeline to close ratio",
-      badge: `${dashboardReport?.changeInConversionRate}%` || 0,
+      badge: `${dashboardReport?.changeInConversionRate || 0}%`,
       badgeColor: "info" as const,
       icon: HiOutlineTrendingUp,
       accentColor: "from-blue-500 to-cyan-600",
