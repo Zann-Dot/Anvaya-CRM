@@ -38,6 +38,7 @@ import PieChart from "../components/charts/PieChart";
 import PolarAreaChart from "../components/charts/PolarAreaChart";
 import DateRangeFilter from "../components/reports/DateRangeFilter";
 import ReportSummaryCards from "../components/reports/ReportSummaryCards";
+import { useSearchParams } from "react-router-dom";
 
 Chart.register(
    ArcElement,
@@ -59,21 +60,24 @@ Chart.register(
 );
 
 export default function Reports() {
+   const [searchParams] = useSearchParams();
+   const params = searchParams.toString() || "";
+
    const {
       data: pipeline,
       isLoading: loadingPipeline,
       refetch: refetchPipeline,
-   } = usePipeline();
+   } = usePipeline(params);
    const {
-      data: closedLeads,
+      data: assignedAgents,
       isLoading: loadingClosed,
       refetch: refetchClosed,
-   } = useClosedLeadsReport();
+   } = useClosedLeadsReport(params);
    const {
       data: statusDistribution,
       isLoading: loadingStatus,
       refetch: refetchStatus,
-   } = useStatusDistribution();
+   } = useStatusDistribution(params);
 
    const handleRefreshAll = () => {
       refetchPipeline();
@@ -99,11 +103,11 @@ export default function Reports() {
    };
 
    const agentBarData = {
-      labels: closedLeads?.map((r) => r.name) || ["Agent A", "Agent B", "Agent C"],
+      labels: assignedAgents?.map((r) => r.name) || ["Agent A", "Agent B", "Agent C"],
       datasets: [
          {
             label: "Leads Closed",
-            data: closedLeads?.map((r) => r.leadsClosed) || [0, 0, 0],
+            data: assignedAgents?.map((r) => r.leadsClosed) || [0, 0, 0],
             backgroundColor: [
                "rgba(99, 102, 241, 0.85)",
                "rgba(168, 85, 247, 0.85)",
@@ -237,7 +241,10 @@ export default function Reports() {
          </div>
 
          <DateRangeFilter onRefreshClick={handleRefreshAll} />
-
+         <ReportSummaryCards
+            pipeline={pipeline}
+            agentsCount={assignedAgents?.length}
+         />
       </div>
    );
 }

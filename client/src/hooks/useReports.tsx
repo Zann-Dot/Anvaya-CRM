@@ -1,9 +1,5 @@
-import { useQuery } from "@tanstack/react-query"
-import {
-    getLeadsClosedByAgents,
-    getPipelineReport,
-    getStatusDistribution,
-} from "../api/reports"
+import { useQuery } from "@tanstack/react-query";
+import { fetchApi } from "../api/reports";
 
 interface Pipeline {
     totalLeadsInPipeline: number;
@@ -20,23 +16,23 @@ interface StatusDistribution {
     leadCount: number;
 }
 
-export function usePipeline() {
+export function usePipeline(params: string) {
     return useQuery<Pipeline>({
-        queryKey: ["pipeline"],
-        queryFn: getPipelineReport,
-    })
+        queryKey: ["pipeline", params],
+        queryFn: () => fetchApi("pipeline", params),
+    });
 }
 
-export function useClosedLeadsReport() {
+export function useClosedLeadsReport(params: string) {
     return useQuery<ClosedLeads[]>({
         queryKey: ["leadsClosedByAgents"],
-        queryFn: getLeadsClosedByAgents,
+        queryFn: () => fetchApi("leads-closed-by-agents", params)
     })
 }
 
-export function useStatusDistribution() {
+export function useStatusDistribution(params: string) {
     return useQuery<StatusDistribution[]>({
         queryKey: ["statusDistribution"],
-        queryFn: getStatusDistribution,
-    })
+        queryFn: () => fetchApi("status-distribution", params)
+    });
 }

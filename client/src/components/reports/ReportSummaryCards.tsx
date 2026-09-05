@@ -5,6 +5,7 @@ import {
   HiOutlineViewGrid,
 } from "react-icons/hi";
 import { Badge } from "flowbite-react";
+import useMain from "../../context/MainProvider";
 
 interface ReportSummaryCardsProps {
   pipeline?: {
@@ -16,12 +17,14 @@ interface ReportSummaryCardsProps {
 
 export default function ReportSummaryCards({
   pipeline,
-  agentsCount = 4,
+  agentsCount = 0,
 }: ReportSummaryCardsProps) {
   const totalInPipeline = pipeline?.totalLeadsInPipeline || 0;
   const totalClosed = pipeline?.totalLeadsClosed || 0;
   const totalLeads = totalInPipeline + totalClosed;
   const conversionRate = totalLeads > 0 ? ((totalClosed / totalLeads) * 100).toFixed(1) : "0";
+  const { dashboardReport } = useMain()
+  console.log(dashboardReport);
 
   const cards = [
     {
@@ -46,7 +49,7 @@ export default function ReportSummaryCards({
       title: "Conversion Rate",
       value: `${conversionRate}%`,
       subtitle: "Pipeline to close ratio",
-      badge: "+4.2%",
+      badge: `${dashboardReport?.changeInConversionRate}%` || 0,
       badgeColor: "info" as const,
       icon: HiOutlineTrendingUp,
       accentColor: "from-blue-500 to-cyan-600",
