@@ -1,6 +1,6 @@
 import { Pie } from "react-chartjs-2";
 import { ChartOptions } from "chart.js";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { useThemeMode } from "flowbite-react";
 
 interface PieChartProps {
