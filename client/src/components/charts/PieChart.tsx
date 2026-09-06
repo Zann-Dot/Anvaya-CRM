@@ -57,9 +57,9 @@ export default function PieChart({
                 labels: {
                     usePointStyle: true,
                     padding: 18,
-                    color: mode === "dark" ? "#eee" : "#0B0909",
+                    color: mode === "dark" ? "#a3a3a3" : "#0B0909",
                     font: {
-                        size: 12,
+                        size: 14,
                         weight: 400,
                     },
                 },

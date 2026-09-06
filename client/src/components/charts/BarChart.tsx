@@ -1,5 +1,6 @@
 import { Bar } from "react-chartjs-2";
 import { ChartOptions } from "chart.js";
+import { useThemeMode } from "flowbite-react";
 
 interface BarChartProps {
     chartData: {
@@ -22,40 +23,33 @@ interface BarChartProps {
 
 export default function BarChart({
     chartData,
-    title,
     height = 300,
     indexAxis = "x",
     customOptions,
 }: BarChartProps) {
+    const dpr = Math.max(window.devicePixelRatio || 1, 2);
+    const { mode } = useThemeMode();
+    const colorMode = mode === "dark" ? "#a3a3a3" : "#0B0909"
+
     const defaultOptions: ChartOptions<"bar"> = {
         responsive: true,
         maintainAspectRatio: false,
+        devicePixelRatio: dpr,
         indexAxis,
         animation: {
             duration: 1000,
             easing: "easeOutQuart",
         },
         plugins: {
-            title: {
-                display: !!title,
-                text: title || "",
-                font: {
-                    size: 15,
-                    weight: "bold",
-                },
-                padding: {
-                    top: 8,
-                    bottom: 16,
-                },
-            },
             legend: {
                 display: true,
                 position: "bottom",
                 labels: {
                     usePointStyle: true,
                     padding: 16,
+                    color: colorMode,
                     font: {
-                        size: 12,
+                        size: 14,
                         weight: 500,
                     },
                 },
@@ -78,20 +72,31 @@ export default function BarChart({
                     font: {
                         size: 12,
                     },
+                    color: colorMode
                 },
             },
             y: {
                 grid: {
-                    color: "rgba(156, 163, 175, 0.15)",
+                    color: "rgba(156, 163, 175, 0.20)",
                 },
                 ticks: {
+                    color: colorMode,
                     font: {
                         size: 12,
                     },
                     stepSize: 1,
                 },
                 beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Leads',
+                    font: {
+                        size: 14
+                    },
+                    color: colorMode,
+                },
             },
+
         },
         ...customOptions,
     };

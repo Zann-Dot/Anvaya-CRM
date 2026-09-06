@@ -69,7 +69,7 @@ export default function Reports() {
       refetch: refetchPipeline,
    } = usePipeline(params);
    const {
-      data: assignedAgents,
+      data: closedLeadsByAgents,
       isLoading: loadingClosed,
       refetch: refetchClosed,
    } = useClosedLeadsReport(params);
@@ -102,29 +102,21 @@ export default function Reports() {
       ],
    };
 
+   console.log(closedLeadsByAgents);
+
+
    const agentBarData = {
-      labels: assignedAgents?.map((r) => r.name) || ["Agent A", "Agent B", "Agent C"],
+      labels: closedLeadsByAgents?.map((r) => r.name) || ["Agent A", "Agent B", "Agent C"],
       datasets: [
          {
             label: "Leads Closed",
-            data: assignedAgents?.map((r) => r.leadsClosed) || [0, 0, 0],
+            data: closedLeadsByAgents?.map((r) => r.leadsClosed) || [0, 0, 0],
             backgroundColor: [
-               "rgba(99, 102, 241, 0.85)",
-               "rgba(168, 85, 247, 0.85)",
-               "rgba(236, 72, 153, 0.85)",
-               "rgba(59, 130, 246, 0.85)",
-               "rgba(16, 185, 129, 0.85)",
+               "#00B7B5"
             ],
-            borderColor: [
-               "#6366F1",
-               "#A855F7",
-               "#EC4899",
-               "#3B82F6",
-               "#10B981",
-            ],
-            borderWidth: 1.5,
+            borderWidth: 0,
             borderRadius: 8,
-            barThickness: 28,
+            barThickness: 58,
          },
       ],
    };
@@ -244,7 +236,7 @@ export default function Reports() {
          <DateRangeFilter onRefreshClick={handleRefreshAll} />
          <ReportSummaryCards
             pipeline={pipeline}
-            agentsCount={assignedAgents?.length}
+            agentsCount={closedLeadsByAgents?.length}
          />
          {isInitialLoading && (
             <div className="flex h-48 w-full items-center justify-center rounded-2xl border border-gray-200 bg-white shadow-xs dark:border-gray-700 dark:bg-gray-800">
@@ -284,8 +276,35 @@ export default function Reports() {
                      </div>
                   )}
                </div>
-            </div>
 
+               <div className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-xs transition-all duration-300 hover:shadow-md dark:border-gray-700/60 dark:bg-gray-800/80">
+                  <div className="mb-4 flex items-center justify-between border-b border-gray-100 pb-3.5 dark:border-gray-700/60">
+                     <div className="flex items-center gap-2.5">
+                        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-100 text-blue-600 dark:bg-blue-900/40 dark:text-blue-400">
+                           <HiOutlineUserGroup className="h-5 w-5" />
+                        </div>
+                        <div>
+                           <h3 className="text-base font-bold text-gray-900 dark:text-white">
+                              Leads Closed by Sales Agent
+                           </h3>
+                           <p className="text-xs text-gray-500 dark:text-gray-400">
+                              Individual sales performance & agent comparison
+                           </p>
+                        </div>
+                     </div>
+                     <Badge color="indigo" size="xs">
+                        Bar Chart
+                     </Badge>
+                  </div>
+                  {closedLeadsByAgents ? (
+                     <BarChart chartData={agentBarData} height={300} />
+                  ) : (
+                     <div className="flex h-75 items-center justify-center text-xs text-gray-400">
+                        No agent closed leads data available
+                     </div>
+                  )}
+               </div>
+            </div>
          )}
       </div>
    );
