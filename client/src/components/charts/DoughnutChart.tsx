@@ -1,5 +1,6 @@
 import { Doughnut } from "react-chartjs-2";
 import { ChartOptions } from "chart.js";
+import { useThemeMode } from "flowbite-react";
 
 interface DoughnutChartProps {
     chartData: {
@@ -26,15 +27,28 @@ export default function DoughnutChart({
     cutout = "70%",
     customOptions,
 }: DoughnutChartProps) {
+    const dpr = Math.max(window.devicePixelRatio || 1, 2);
+    const { mode } = useThemeMode();
+    const colorMode = mode === "dark" ? "#a3a3a3" : "#0B0909"
+
     const defaultOptions: ChartOptions<"doughnut"> = {
         responsive: true,
         maintainAspectRatio: false,
+        devicePixelRatio: dpr,
         cutout,
         animation: {
             animateScale: true,
             animateRotate: true,
             duration: 1000,
             easing: "easeInOutQuart",
+        },
+        layout: {
+            padding: {
+                top: 10,
+                right: 20,
+                bottom: 10,
+                left: 10,
+            },
         },
         plugins: {
             title: {
@@ -53,10 +67,11 @@ export default function DoughnutChart({
                 display: true,
                 position: "bottom",
                 labels: {
+                    color: colorMode,
                     usePointStyle: true,
                     padding: 18,
                     font: {
-                        size: 12,
+                        size: 14,
                         weight: 500,
                     },
                 },

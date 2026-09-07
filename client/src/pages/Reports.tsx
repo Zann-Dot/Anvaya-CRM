@@ -102,9 +102,6 @@ export default function Reports() {
       ],
    };
 
-   console.log(closedLeadsByAgents);
-
-
    const agentBarData = {
       labels: closedLeadsByAgents?.map((r) => r.name) || ["Agent A", "Agent B", "Agent C"],
       datasets: [
@@ -129,14 +126,16 @@ export default function Reports() {
             data: statusDistribution?.map((d) => d.leadCount) || [0, 0, 0, 0, 0],
             backgroundColor: [
                "#3B82F6",
-               "#8B5CF6",
+               "#6366F1",
                "#F59E0B",
                "#EC4899",
-               "#10B981",
+               "#00B7B5",
             ],
-            borderColor: "transparent",
             borderWidth: 0,
-            hoverOffset: 16,
+            hoverOffset: 13,
+            weight: 1,
+            spacing: 6,
+            borderRadius: 6,
          },
       ],
    };
@@ -277,7 +276,7 @@ export default function Reports() {
                   )}
                </div>
 
-               <div className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-xs transition-all duration-300 hover:shadow-md dark:border-gray-700/60 dark:bg-gray-800/80">
+               <div className="group relative overflow-clip rounded-2xl border border-gray-200 bg-white p-6 shadow-xs transition-all duration-300 hover:shadow-md dark:border-gray-700/60 dark:bg-gray-800/80">
                   <div className="mb-4 flex items-center justify-between border-b border-gray-100 pb-3.5 dark:border-gray-700/60">
                      <div className="flex items-center gap-2.5">
                         <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-100 text-blue-600 dark:bg-blue-900/40 dark:text-blue-400">
@@ -301,6 +300,35 @@ export default function Reports() {
                   ) : (
                      <div className="flex h-75 items-center justify-center text-xs text-gray-400">
                         No agent closed leads data available
+                     </div>
+                  )}
+               </div>
+
+
+               <div className="group relative overflow-clip rounded-2xl border border-gray-200 bg-white p-6 shadow-xs transition-all duration-300 hover:shadow-md dark:border-gray-700/60 dark:bg-gray-800/80">
+                  <div className="mb-4 flex items-center justify-between border-b border-gray-100 pb-3.5 dark:border-gray-700/60">
+                     <div className="flex items-center gap-2.5">
+                        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-pink-100 text-pink-600 dark:bg-pink-900/40 dark:text-pink-400">
+                           <HiOutlineFilter className="h-5 w-5" />
+                        </div>
+                        <div>
+                           <h3 className="text-base font-bold text-gray-900 dark:text-white">
+                              Lead Status Distribution
+                           </h3>
+                           <p className="text-xs text-gray-500 dark:text-gray-400">
+                              Breakdown across New, Contacted, Qualified & Proposal
+                           </p>
+                        </div>
+                     </div>
+                     <Badge color="pink" size="xs">
+                        Doughnut Chart
+                     </Badge>
+                  </div>
+                  {statusDistribution ? (
+                     <DoughnutChart chartData={statusDoughnutData} height={350} cutout="68%" />
+                  ) : (
+                     <div className="flex h-75 items-center justify-center text-xs text-gray-400">
+                        No status distribution data available
                      </div>
                   )}
                </div>
