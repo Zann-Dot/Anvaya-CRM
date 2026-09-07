@@ -10,6 +10,7 @@ import useMain from "../context/MainProvider";
 import DeleteBar from "../components/lead/DeleteBar";
 import useNotification from "../hooks/useNotification";
 import { useSearchParams } from "react-router-dom";
+import LeadsViewTabs from "../components/lead/LeadsViewTabs";
 
 export default function Leads() {
   const [leadIds, setLeadIds] = useState<string[]>([]);
@@ -67,13 +68,16 @@ export default function Leads() {
           </p>
         </div>
 
-        <Button
-          onClick={() => setNotificationState(true, false)}
-          className="cursor-pointer self-start border-0 bg-linear-to-r from-violet-600 to-indigo-600 text-white shadow-md sm:self-auto"
-        >
-          <HiOutlinePlus className="mr-1.5 h-4 w-4" />
-          Add Lead
-        </Button>
+        <div className="flex flex-wrap items-center gap-3">
+          <LeadsViewTabs />
+          <Button
+            onClick={() => setNotificationState(true, false)}
+            className="cursor-pointer self-start border-0 bg-linear-to-r from-violet-600 to-indigo-600 text-white shadow-md sm:self-auto"
+          >
+            <HiOutlinePlus className="mr-1.5 h-4 w-4" />
+            Add Lead
+          </Button>
+        </div>
       </div>
 
       <div className="rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">

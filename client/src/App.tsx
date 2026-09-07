@@ -8,6 +8,7 @@ import Reports from "./pages/Reports";
 import Settings from "./pages/Settings";
 import Profile from "./pages/Profile";
 import LeadManagement from "./pages/LeadManagement";
+import LeadsByStatus from "./pages/LeadsByStatus";
 
 export default function App() {
 
@@ -16,6 +17,7 @@ export default function App() {
       <Route element={<MainLayout />}>
         <Route index element={<Dashboard />} />
         <Route path="/leads" element={<Leads />} />
+        <Route path="/leads/status" element={<LeadsByStatus />} />
         <Route path="/sales" element={<Sales />} />
         <Route path="/agents" element={<Agents />} />
         <Route path="/reports" element={<Reports />} />

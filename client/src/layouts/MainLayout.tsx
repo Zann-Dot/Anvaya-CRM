@@ -8,6 +8,7 @@ import { useEffect } from "react";
 const pageTitles: Record<string, { title: string; subtitle: string }> = {
   "/": { title: "Dashboard", subtitle: "Welcome back to your CRM overview" },
   "/leads": { title: "Leads", subtitle: "Manage and track all your leads" },
+  "/leads/status": { title: "Leads by Status", subtitle: "Categorized view of leads across pipeline stages" },
   "/sales": { title: "Sales", subtitle: "Monitor your sales pipeline" },
   "/agents": { title: "Agents", subtitle: "Manage your team of agents" },
   "/reports": { title: "Reports", subtitle: "View analytics and reports" },
