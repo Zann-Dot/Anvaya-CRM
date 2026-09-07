@@ -25,15 +25,18 @@ interface LeadsSectionProp {
 }
 
 export default function LeadsSection({ STATUS_FILTERS }: LeadsSectionProp) {
-    const { setNotificationState } = useMain()
+    const { setNotificationState } = useMain();
     type FilterType = (typeof STATUS_FILTERS)[number];
     const [viewMode, setViewMode] = useState<"grid" | "list">("list");
     const [activeFilter, setActiveFilter] = useState<FilterType>();
 
     const params =
-        activeFilter && activeFilter !== "All" ? `status=${activeFilter}` : "";
+        activeFilter && activeFilter !== "All"
+            ? `limit=3&status=${activeFilter}`
+            : "limit=3";
 
-    const { data, isLoading, isError, isFetching } = useLeads(3, 1, "", params);
+    const { data, isLoading, isError, isFetching } = useLeads(params);
+
     const filterBadgeColor: Record<FilterType, string> = {
         All: "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300",
         New: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",

@@ -11,10 +11,10 @@ import {
 const navItems = [
    { label: "Dashboard", icon: HiOutlineHome, path: "/" },
    { label: "Leads", icon: HiOutlineCollection, path: "/leads" },
-   { label: "Sales", icon: HiOutlineChartBar, path: "/sales" },
+   // { label: "Sales", icon: HiOutlineChartBar, path: "/sales" },
    { label: "Agents", icon: HiOutlineUserGroup, path: "/agents" },
    { label: "Reports", icon: HiOutlineDocumentReport, path: "/reports" },
-   { label: "Settings", icon: HiOutlineCog, path: "/settings" },
+   // { label: "Settings", icon: HiOutlineCog, path: "/settings" },
 ];
 
 export default function AppSidebar() {
