@@ -83,7 +83,7 @@ leadsRouter.get("/leads", async (req, res) => {
         }
 
         if (salesAgent) query.salesAgent = salesAgent;
-        if (status) query.status = status;
+        if (status) query.status = status.toLowerCase();
         if (tags) query.tags = { $in: tags };
         if (source) query.source = source;
         if (priority) {
@@ -91,12 +91,10 @@ leadsRouter.get("/leads", async (req, res) => {
                 sort = { priorityWeight: priority };
             query.priority = priority;
         }
-        if (timeToClose) {
+        if (timeToClose && (query.status !== "closed" || !query.status)) {
+            if (!query.status) query.status = { $ne: "Closed" };
             sort = { timeToClose };
-            if (!query.status)
-                query.status = { $ne: "Closed" };
-        };
-
+        }
 
         const [totalLeads, leads] = await Promise.all([
             Leads.countDocuments(query),
@@ -144,7 +142,7 @@ leadsRouter.put("/leads/:id", async (req, res) => {
             status,
             tags,
             timeToClose,
-            priority
+            priority,
         } = req.body;
         const closedAt = status === "Closed" ? new Date() : null;
 
