@@ -52,7 +52,6 @@ const STATUS_CONFIGS: StatusColumnConfig[] = [
   },
 ];
 
-// Rich dummy leads categorized by status
 const DUMMY_LEADS_BY_STATUS: Record<string, DummyStatusLead[]> = {
   New: [
     {
@@ -206,19 +205,9 @@ export default function LeadsByStatus() {
 
   return (
     <div className="mx-auto max-w-7xl space-y-6 p-4 sm:p-6">
-      {/* Top Bar matching reference: Leads by Status title & Back to Dashboard */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <div className="flex items-center gap-2.5">
-            <Link
-              to="/"
-              className="inline-flex items-center gap-1.5 rounded-xl border border-gray-200 bg-white px-3 py-2 text-xs font-semibold text-gray-700 shadow-xs transition-colors hover:bg-gray-50 hover:text-violet-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white"
-              title="Back to Dashboard"
-            >
-              <HiOutlineArrowLeft className="h-3.5 w-3.5" />
-              <span>Back to Dashboard</span>
-            </Link>
-
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-100 text-violet-600 dark:bg-violet-900/30 dark:text-violet-400">
               <HiOutlineViewBoards className="h-5 w-5" />
             </span>
@@ -234,16 +223,13 @@ export default function LeadsByStatus() {
           </p>
         </div>
 
-        {/* View Switcher: Table View vs By Status */}
         <div className="flex items-center gap-3">
           <LeadsViewTabs />
         </div>
       </div>
 
-      {/* Filter and Sort Toolbar (Flowbite UI components matching reference wireframe) */}
       <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-xs dark:border-gray-700 dark:bg-gray-800">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-          {/* Search bar UI */}
           <div className="w-full lg:max-w-xs">
             <TextInput
               id="status-lead-search"
@@ -254,9 +240,7 @@ export default function LeadsByStatus() {
             />
           </div>
 
-          {/* Filters & Sorting controls matching reference image */}
           <div className="flex flex-wrap items-center gap-3">
-            {/* Filter by Sales Agent */}
             <div className="flex items-center gap-1.5">
               <HiOutlineUser className="h-4 w-4 shrink-0 text-gray-400" />
               <Select id="filter-sales-agent" className="w-44" defaultValue="all">
@@ -268,7 +252,6 @@ export default function LeadsByStatus() {
               </Select>
             </div>
 
-            {/* Filter by Priority */}
             <div className="flex items-center gap-1.5">
               <HiOutlineFire className="h-4 w-4 shrink-0 text-gray-400" />
               <Select id="filter-priority" className="w-36" defaultValue="all">
@@ -279,7 +262,6 @@ export default function LeadsByStatus() {
               </Select>
             </div>
 
-            {/* Sort by Time to Close */}
             <div className="flex items-center gap-1.5">
               <HiOutlineClock className="h-4 w-4 shrink-0 text-gray-400" />
               <Select id="sort-time-to-close" className="w-48" defaultValue="all">
@@ -292,20 +274,15 @@ export default function LeadsByStatus() {
         </div>
       </div>
 
-      {/* Kanban Board of Leads Categorized by Status */}
-      <div className="overflow-x-auto pb-4">
-        <div className="flex items-start gap-4 min-w-max">
-          {STATUS_CONFIGS.map((colConfig) => (
-            <StatusColumn
-              key={colConfig.status}
-              config={colConfig}
-              leads={DUMMY_LEADS_BY_STATUS[colConfig.status] || []}
-            />
-          ))}
+      <div className="pb-4">
+        <div className="flex flex-col w-full gap-4">
+          <StatusColumn
+            STATUS_CONFIGS={STATUS_CONFIGS}
+            leads={DUMMY_LEADS_BY_STATUS["New"]}
+          />
         </div>
       </div>
 
-      {/* Summary Footer */}
       <div className="flex flex-wrap items-center justify-between rounded-xl border border-gray-200 bg-white px-5 py-3 text-xs text-gray-500 shadow-xs dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
         <div className="flex items-center gap-4">
           <span>Status breakdown:</span>
