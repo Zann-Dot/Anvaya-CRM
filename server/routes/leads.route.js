@@ -93,7 +93,8 @@ leadsRouter.get("/leads", async (req, res) => {
         }
         if (timeToClose) {
             sort = { timeToClose };
-            query.status = { ...status, $ne: "Closed" };
+            if (!query.status)
+                query.status = { $ne: "Closed" };
         };
 
 
