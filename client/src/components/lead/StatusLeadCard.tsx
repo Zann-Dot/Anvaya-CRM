@@ -1,6 +1,7 @@
 import { Badge } from "flowbite-react";
 import { HiOutlineClock, HiOutlineUserCircle, HiOutlineOfficeBuilding } from "react-icons/hi";
 import { Link } from "react-router-dom";
+import { Lead } from "../dashboard/LeadCard";
 
 export interface DummyStatusLead {
   id: string;
@@ -20,7 +21,7 @@ export interface DummyStatusLead {
 }
 
 interface StatusLeadCardProps {
-  lead: DummyStatusLead;
+  lead: Lead;
   status: string;
 }
 
@@ -74,7 +75,7 @@ export default function StatusLeadCard({ lead }: StatusLeadCardProps) {
         </div>
 
         <Link
-          to={`/leads/${lead.id}`}
+          to={`/leads/${lead._id}`}
           className="inline-flex items-center gap-1 font-medium text-violet-600 hover:text-violet-700 dark:text-violet-400 dark:hover:text-violet-300"
         >
           View

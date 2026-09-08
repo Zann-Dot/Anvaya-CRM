@@ -9,10 +9,15 @@ import {
   HiOutlineClock,
   HiOutlineFire,
 } from "react-icons/hi";
-import { Link } from "react-router-dom";
 import LeadsViewTabs from "../components/lead/LeadsViewTabs";
-import StatusColumn, { StatusColumnConfig } from "../components/lead/StatusColumn";
-import { DummyStatusLead } from "../components/lead/StatusLeadCard";
+import StatusColumn, {
+  StatusColumnConfig,
+} from "../components/lead/StatusColumn";
+import { useLeads } from "../hooks/useLeads";
+import useMain from "../context/MainProvider";
+import { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+import { useAgents } from "../hooks/useAgents";
 
 const STATUS_CONFIGS: StatusColumnConfig[] = [
   {
@@ -52,156 +57,18 @@ const STATUS_CONFIGS: StatusColumnConfig[] = [
   },
 ];
 
-const DUMMY_LEADS_BY_STATUS: Record<string, DummyStatusLead[]> = {
-  New: [
-    {
-      id: "dummy-1",
-      name: "Acme Cloud Infrastructure",
-      company: "Acme Corp",
-      email: "contact@acmeweb.io",
-      salesAgent: { name: "John Doe", email: "john@anvaya.crm" },
-      priority: "High",
-      timeToClose: 14,
-      dealValue: "$24,500",
-      tags: ["Enterprise", "Cloud"],
-      createdDate: "2026-03-01",
-    },
-    {
-      id: "dummy-2",
-      name: "Nexora Health AI Platform",
-      company: "Nexora Health Inc.",
-      email: "billing@nexorahealth.com",
-      salesAgent: { name: "Jane Smith", email: "jane@anvaya.crm" },
-      priority: "Medium",
-      timeToClose: 21,
-      dealValue: "$18,000",
-      tags: ["Healthcare", "AI"],
-      createdDate: "2026-03-02",
-    },
-    {
-      id: "dummy-3",
-      name: "Starlight Media Outreach",
-      company: "Starlight Media Group",
-      email: "partnerships@starlight.co",
-      salesAgent: { name: "Alex Rivera", email: "alex@anvaya.crm" },
-      priority: "Low",
-      timeToClose: 35,
-      dealValue: "$8,500",
-      tags: ["Media"],
-      createdDate: "2026-03-04",
-    },
-  ],
-  Contacted: [
-    {
-      id: "dummy-4",
-      name: "HyperScale Logistics Hub",
-      company: "HyperScale Global",
-      email: "supply@hyperscale.net",
-      salesAgent: { name: "John Doe", email: "john@anvaya.crm" },
-      priority: "High",
-      timeToClose: 10,
-      dealValue: "$42,000",
-      tags: ["Logistics", "SaaS"],
-      createdDate: "2026-02-24",
-    },
-    {
-      id: "dummy-5",
-      name: "Veritas Cyber Defense",
-      company: "Veritas Security",
-      email: "secops@veritassecurity.io",
-      salesAgent: { name: "Sarah Connor", email: "sarah@anvaya.crm" },
-      priority: "Medium",
-      timeToClose: 18,
-      dealValue: "$15,200",
-      tags: ["Security"],
-      createdDate: "2026-02-26",
-    },
-  ],
-  Qualified: [
-    {
-      id: "dummy-6",
-      name: "Quantum Retail Analytics",
-      company: "Quantum Commerce",
-      email: "lead@quantumretail.com",
-      salesAgent: { name: "Jane Smith", email: "jane@anvaya.crm" },
-      priority: "High",
-      timeToClose: 7,
-      dealValue: "$55,000",
-      tags: ["Retail", "Analytics"],
-      createdDate: "2026-02-18",
-    },
-    {
-      id: "dummy-7",
-      name: "BluePeak Financial Suite",
-      company: "BluePeak Capital",
-      email: "fintech@bluepeak.org",
-      salesAgent: { name: "Alex Rivera", email: "alex@anvaya.crm" },
-      priority: "Medium",
-      timeToClose: 12,
-      dealValue: "$32,000",
-      tags: ["Fintech"],
-      createdDate: "2026-02-20",
-    },
-  ],
-  Proposal: [
-    {
-      id: "dummy-8",
-      name: "Solaris Green Energy ERP",
-      company: "Solaris Energy Ltd.",
-      email: "projects@solarisgreen.eu",
-      salesAgent: { name: "Sarah Connor", email: "sarah@anvaya.crm" },
-      priority: "High",
-      timeToClose: 5,
-      dealValue: "$78,000",
-      tags: ["CleanTech", "ERP"],
-      createdDate: "2026-02-10",
-    },
-    {
-      id: "dummy-9",
-      name: "OmniChannel Retail Sync",
-      company: "OmniChannel Brands",
-      email: "omni@channelbrands.com",
-      salesAgent: { name: "John Doe", email: "john@anvaya.crm" },
-      priority: "Low",
-      timeToClose: 15,
-      dealValue: "$12,400",
-      tags: ["E-Commerce"],
-      createdDate: "2026-02-12",
-    },
-  ],
-  Closed: [
-    {
-      id: "dummy-10",
-      name: "AeroDynamics Enterprise Fleet",
-      company: "AeroDynamics Global",
-      email: "fleet@aerodynamics.com",
-      salesAgent: { name: "Jane Smith", email: "jane@anvaya.crm" },
-      priority: "High",
-      timeToClose: 0,
-      dealValue: "$95,000",
-      tags: ["Aerospace", "Won"],
-      createdDate: "2026-01-28",
-    },
-    {
-      id: "dummy-11",
-      name: "Zenith Workspace Pro",
-      company: "Zenith Software",
-      email: "exec@zenithsoftware.co",
-      salesAgent: { name: "Alex Rivera", email: "alex@anvaya.crm" },
-      priority: "Medium",
-      timeToClose: 0,
-      dealValue: "$28,000",
-      tags: ["SaaS", "Won"],
-      createdDate: "2026-02-01",
-    },
-  ],
-};
-
 export default function LeadsByStatus() {
-  const totalLeadsCount = Object.values(DUMMY_LEADS_BY_STATUS).reduce(
-    (acc, list) => acc + list.length,
-    0,
-  );
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { params, setSearch, dispatch } = useMain();
+  const { data } = useLeads(params.toString());
+  const { data: agentRes } = useAgents();
+  const totalLeadsCount = data?.totalLeads;
+
+  useEffect(() => {
+    if (searchParams.toString() !== params.toString()) {
+      setSearchParams(params, { replace: true });
+    }
+  }, [params, searchParams, setSearchParams]);
 
   return (
     <div className="mx-auto max-w-7xl space-y-6 p-4 sm:p-6">
@@ -219,7 +86,8 @@ export default function LeadsByStatus() {
             </span>
           </div>
           <p className="mt-1 pl-1 text-sm text-gray-500 dark:text-gray-400">
-            Categorized lead board with per-status filtering and closing time sorting.
+            Categorized lead board with per-status filtering and closing time
+            sorting.
           </p>
         </div>
 
@@ -232,29 +100,44 @@ export default function LeadsByStatus() {
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div className="w-full lg:max-w-xs">
             <TextInput
-              id="status-lead-search"
+              id="lead-search"
               type="search"
               icon={HiOutlineSearch}
-              placeholder="Search leads by name, company..."
-              className="w-full"
+              placeholder="Search leads by name, company or email…"
+              className="w-full lg:max-w-xs"
+              onChange={(e) => setSearch(e.target.value)}
             />
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
             <div className="flex items-center gap-1.5">
               <HiOutlineUser className="h-4 w-4 shrink-0 text-gray-400" />
-              <Select id="filter-sales-agent" className="w-44" defaultValue="all">
-                <option value="all">Filters: All Agents</option>
-                <option value="john">Sales Agent: John Doe</option>
-                <option value="jane">Sales Agent: Jane Smith</option>
-                <option value="alex">Sales Agent: Alex Rivera</option>
-                <option value="sarah">Sales Agent: Sarah Connor</option>
+              <Select
+                id="filter-agent"
+                className="w-40"
+                onChange={(e) =>
+                  dispatch({ type: "AGENT", value: e.target.value })
+                }
+              >
+                <option value="all">All Agents</option>
+                {agentRes?.agents?.map((a) => (
+                  <option key={a._id} value={a._id}>
+                    {a.name}
+                  </option>
+                ))}
               </Select>
             </div>
 
             <div className="flex items-center gap-1.5">
               <HiOutlineFire className="h-4 w-4 shrink-0 text-gray-400" />
-              <Select id="filter-priority" className="w-36" defaultValue="all">
+              <Select
+                id="filter-priority"
+                className="w-36"
+                defaultValue="all"
+                onChange={(e) =>
+                  dispatch({ type: "PRIORITY", value: e.target.value })
+                }
+              >
                 <option value="all">Filters: Priority</option>
                 <option value="high">High Priority</option>
                 <option value="medium">Medium Priority</option>
@@ -264,10 +147,24 @@ export default function LeadsByStatus() {
 
             <div className="flex items-center gap-1.5">
               <HiOutlineClock className="h-4 w-4 shrink-0 text-gray-400" />
-              <Select id="sort-time-to-close" className="w-48" defaultValue="all">
-                <option value="all">Sort by: Time to Close</option>
-                <option value="asc">Time to Close: Shortest</option>
-                <option value="desc">Time to Close: Longest</option>
+              <Select
+                id="sort-by"
+                className="w-48"
+                onChange={(e) =>
+                  dispatch({
+                    type: "SORT",
+                    value: e.target.value,
+                    sort: e.target.options[e.target.selectedIndex].dataset.sort,
+                  })
+                }
+              >
+                <option value="all">Sort: Default</option>
+                <option data-sort="timeToClose" value="desc">
+                  Time to Close: Longest
+                </option>
+                <option data-sort="timeToClose" value="asc">
+                  Time to Close: Shortest
+                </option>
               </Select>
             </div>
           </div>
@@ -275,11 +172,8 @@ export default function LeadsByStatus() {
       </div>
 
       <div className="pb-4">
-        <div className="flex flex-col w-full gap-4">
-          <StatusColumn
-            STATUS_CONFIGS={STATUS_CONFIGS}
-            leads={DUMMY_LEADS_BY_STATUS["New"]}
-          />
+        <div className="flex w-full flex-col gap-4">
+          <StatusColumn STATUS_CONFIGS={STATUS_CONFIGS} leads={data?.leads} />
         </div>
       </div>
 
@@ -287,11 +181,14 @@ export default function LeadsByStatus() {
         <div className="flex items-center gap-4">
           <span>Status breakdown:</span>
           {STATUS_CONFIGS.map((cfg) => (
-            <span key={cfg.status} className="inline-flex items-center gap-1 font-medium">
+            <span
+              key={cfg.status}
+              className="inline-flex items-center gap-1 font-medium"
+            >
               <span className={`h-2 w-2 rounded-full ${cfg.dotColor}`} />
               {cfg.status}:{" "}
               <strong className="text-gray-900 dark:text-white">
-                {DUMMY_LEADS_BY_STATUS[cfg.status]?.length || 0}
+                {data?.leads?.filter((l) => l.status === cfg.status).length}
               </strong>
             </span>
           ))}

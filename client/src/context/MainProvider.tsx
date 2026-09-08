@@ -95,6 +95,7 @@ export function MainProvider({ children }: React.PropsWithChildren) {
     const filters: Filter = {
         status: "",
         agent: "",
+        priority: "",
         sort: {
             sortType: "",
             value: "",
@@ -117,6 +118,7 @@ export function MainProvider({ children }: React.PropsWithChildren) {
             selectedFilter !== "all" ? selectedFilter : filter.status;
         appendIfValid("status", activeFilter);
         appendIfValid("salesAgent", filter.agent);
+        appendIfValid("priority", filter.priority);
 
         if (
             filter.sort?.sortType &&

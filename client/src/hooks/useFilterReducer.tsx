@@ -3,13 +3,14 @@ import { useReducer } from "react";
 export interface Filter {
     status: string;
     agent: string;
+    priority: string;
     sort: {
         sortType: string;
         value: string
     }
 }
 
-type FilterActionType = "STATUS" | "AGENT" | "SORT";
+type FilterActionType = "STATUS" | "AGENT" | "SORT" | "PRIORITY";
 
 export interface FilterAction {
     type: FilterActionType;
