@@ -89,7 +89,7 @@ leadsRouter.get("/leads", async (req, res) => {
         if (priority) {
             if (priority === "asc" || priority === "desc")
                 sort = { priorityWeight: priority };
-            query.priority = priority
+            query.priority = priority;
         }
         if (timeToClose) {
             sort = { timeToClose };
@@ -104,7 +104,7 @@ leadsRouter.get("/leads", async (req, res) => {
                 .populate("salesAgent")
                 .skip((page - 1) * limit)
                 .limit(limit)
-                .lean(),
+                .collation({ locale: "en", strength: 2 }),
         ]);
 
         if (!Array.isArray(leads) || !leads)
