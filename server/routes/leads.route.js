@@ -86,10 +86,14 @@ leadsRouter.get("/leads", async (req, res) => {
         if (status) query.status = status;
         if (tags) query.tags = { $in: tags };
         if (source) query.source = source;
-        if (priority) sort = { priorityWeight: priority };
+        if (priority) {
+            if (priority === "asc" || priority === "desc")
+                sort = { priorityWeight: priority };
+            query.priority = priority
+        }
         if (timeToClose) {
             sort = { timeToClose };
-            query.status = { $ne: "Closed" };
+            query.status = { ...status, $ne: "Closed" };
         };
 
 
