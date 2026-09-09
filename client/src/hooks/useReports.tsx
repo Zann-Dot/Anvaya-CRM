@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getLeadsClosedByAgents, getPipelineReport, getStatusDistribution } from "../api/reports";
+import { getDashboardReport, getLeadsClosedByAgents, getPipelineReport, getStatusDistribution } from "../api/reports";
 
 interface Pipeline {
     totalLeadsInPipeline: number;
@@ -34,5 +34,12 @@ export function useStatusDistribution(params: string) {
     return useQuery<StatusDistribution[]>({
         queryKey: ["statusDistribution", params],
         queryFn: () => getStatusDistribution(params)
+    });
+}
+
+export function useDashboardReport() {
+    return useQuery({
+        queryKey: ["statusDistribution"],
+        queryFn: getDashboardReport
     });
 }

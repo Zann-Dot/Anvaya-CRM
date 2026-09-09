@@ -2,7 +2,6 @@ import React, {
     createContext,
     useContext,
     useState,
-    useEffect,
     useMemo,
     ChangeEvent,
     Dispatch,
@@ -25,10 +24,6 @@ export type ToastNotificationDetails = {
 type SelectStatus = "active" | "oncall" | "offline" | "all";
 
 interface MainContextType {
-    dashboardReport: any;
-    loading: boolean;
-    error: string | null;
-    fetchDashboardReport: () => Promise<void>;
     handleComments: (
         e: ChangeEvent<HTMLTextAreaElement, HTMLTextAreaElement>,
     ) => void;
@@ -69,10 +64,6 @@ const useMain = () => {
 export default useMain;
 
 export function MainProvider({ children }: React.PropsWithChildren) {
-    const [dashboardReport, setDashboardReport] = useState<any>(null);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
-
     const [showAddModal, setShowAddModal] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
     const [agentId, setAgentId] = useState<string | undefined>(undefined);
@@ -130,22 +121,6 @@ export function MainProvider({ children }: React.PropsWithChildren) {
         return p;
     }, [page, debouncedSearch, selectedFilter, filter]);
 
-    async function fetchDashboardReport() {
-        try {
-            setLoading(true);
-            const response = await fetch("/api/report/last-month-comparison", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-            });
-            const data = await response.json();
-            setDashboardReport(data);
-        } catch (err: any) {
-            setError(err.message || "Failed to fetch report");
-        } finally {
-            setLoading(false);
-        }
-    }
-
     const handleComments = (e: React.ChangeEvent<HTMLTextAreaElement>) =>
         setComment(e.target.value);
 
@@ -168,17 +143,9 @@ export function MainProvider({ children }: React.PropsWithChildren) {
         setAgentId(id);
     }
 
-    useEffect(() => {
-        fetchDashboardReport();
-    }, []);
-
     return (
         <MainContext.Provider
             value={{
-                dashboardReport,
-                loading,
-                error,
-                fetchDashboardReport,
                 handleComments,
                 postComment,
                 setToastNotification,

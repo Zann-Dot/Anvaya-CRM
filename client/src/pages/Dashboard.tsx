@@ -5,9 +5,9 @@ import {
    HiOutlineCheckCircle,
 } from "react-icons/hi";
 import StatsCard from "../components/dashboard/StatsCard";
-import useMain from "../context/MainProvider";
 import LeadsSection from "../components/dashboard/LeadsSection";
 import { format } from "date-fns";
+import { useDashboardReport } from "../hooks/useReports";
 
 const STATUS_FILTERS = [
    "All",
@@ -19,7 +19,8 @@ const STATUS_FILTERS = [
 ] as const;
 
 export default function Dashboard() {
-   const { dashboardReport } = useMain();
+   const { data: dashboardReport } = useDashboardReport();
+   console.log(dashboardReport);
 
    const stats = [
       {
