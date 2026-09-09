@@ -9,6 +9,7 @@ import Settings from "./pages/Settings";
 import Profile from "./pages/Profile";
 import LeadManagement from "./pages/LeadManagement";
 import LeadsByStatus from "./pages/LeadsByStatus";
+import LeadsByAgents from "./pages/LeadsByAgents";
 
 export default function App() {
 
@@ -18,6 +19,7 @@ export default function App() {
         <Route index element={<Dashboard />} />
         <Route path="/leads" element={<Leads />} />
         <Route path="/leads/status" element={<LeadsByStatus />} />
+        <Route path="/leads/agents" element={<LeadsByAgents />} />
         <Route path="/sales" element={<Sales />} />
         <Route path="/agents" element={<Agents />} />
         <Route path="/reports" element={<Reports />} />
