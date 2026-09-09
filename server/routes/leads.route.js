@@ -82,14 +82,14 @@ leadsRouter.get("/leads", async (req, res) => {
             ];
         }
 
-        if (salesAgent) query.salesAgent = agent;
+        if (agent) query.salesAgent = agent;
         if (status) query.status = status.toLowerCase();
         if (tags) query.tags = { $in: tags };
         if (source) query.source = source;
         if (priority) {
             if (priority === "asc" || priority === "desc")
                 sort = { priorityWeight: priority };
-            query.priority = priority;
+            else query.priority = priority;
         }
         if (timeToClose && (query.status !== "closed" || !query.status)) {
             if (!query.status) query.status = { $ne: "Closed" };
