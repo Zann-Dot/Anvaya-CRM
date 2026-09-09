@@ -1,4 +1,4 @@
-import { Badge, Select } from "flowbite-react";
+import { Select } from "flowbite-react";
 import StatusLeadCard from "./StatusLeadCard";
 import { Lead } from "../dashboard/LeadCard";
 import useMain from "../../context/MainProvider";
