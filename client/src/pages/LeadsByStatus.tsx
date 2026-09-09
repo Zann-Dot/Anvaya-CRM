@@ -83,9 +83,11 @@ export default function LeadsByStatus() {
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
               Leads by Status
             </h1>
-            <span className="rounded-full bg-violet-100 px-2.5 py-0.5 text-xs font-semibold text-violet-700 dark:bg-violet-900/30 dark:text-violet-300">
-              {totalLeadsCount} categorized
-            </span>
+            {!isLeadsLoading && (
+              <span className="rounded-full bg-violet-100 px-2.5 py-0.5 text-xs font-semibold text-violet-700 dark:bg-violet-900/30 dark:text-violet-300">
+                {totalLeadsCount} categorized
+              </span>
+            )}
           </div>
           <p className="mt-1 pl-1 text-sm text-gray-500 dark:text-gray-400">
             Categorized lead board with per-status filtering and closing time
