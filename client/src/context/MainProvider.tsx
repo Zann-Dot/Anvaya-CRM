@@ -116,8 +116,8 @@ export function MainProvider({ children }: React.PropsWithChildren) {
 
         const activeFilter =
             selectedFilter !== "all" ? selectedFilter : filter.status;
-        appendIfValid("status", activeFilter);
-        appendIfValid("salesAgent", filter.agent);
+        appendIfValid("status", activeFilter.toLowerCase());
+        appendIfValid("agent", filter.agent);
         appendIfValid("priority", filter.priority);
 
         if (

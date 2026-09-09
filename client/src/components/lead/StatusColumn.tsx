@@ -1,5 +1,5 @@
 import { Badge, Select } from "flowbite-react";
-import StatusLeadCard, { DummyStatusLead } from "./StatusLeadCard";
+import StatusLeadCard from "./StatusLeadCard";
 import { Lead } from "../dashboard/LeadCard";
 import useMain from "../../context/MainProvider";
 
@@ -14,13 +14,18 @@ export interface StatusColumnConfig {
 interface StatusColumnProps {
   STATUS_CONFIGS: StatusColumnConfig[];
   leads?: Lead[];
+  isLeadsLoading: boolean;
+  isError: boolean;
 }
 
 export default function StatusColumn({
   leads,
   STATUS_CONFIGS,
+  isLeadsLoading,
+  isError,
 }: StatusColumnProps) {
   const { dispatch } = useMain();
+  const isLeadsLoaded = isError || leads?.length === 0;
 
   return (
     <div className="flex flex-col rounded-2xl border border-gray-200 bg-gray-50/70 p-3.5 shadow-xs dark:border-gray-700/80 dark:bg-gray-800/50">
@@ -56,7 +61,15 @@ export default function StatusColumn({
       </div>
 
       <div className="custom-scrollbar flex max-h-[calc(100vh-320px)] flex-col gap-3 overflow-y-auto pt-1 pr-0.5">
-        {leads?.length === 0 ? (
+        {isLeadsLoading ? (
+          <div className="group relative rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700/70 dark:bg-gray-800">
+            <div className="mb-2 w-1/4 animate-pulse rounded-2xl bg-gray-200 p-2 text-xs dark:bg-gray-700/40" />
+            <h4 className="text-sm font-bold text-gray-900" />
+            <p className="mb-3 truncate text-xs text-gray-400 dark:text-gray-500" />
+            <div className="mb-3 flex animate-pulse items-center justify-between rounded-lg bg-gray-200 p-2 text-xs dark:bg-gray-700/40" />
+            <div className="mb-3 flex animate-pulse items-center justify-between rounded-lg bg-gray-200 p-2 text-xs dark:bg-gray-700/40" />
+          </div>
+        ) : isLeadsLoaded ? (
           <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-gray-200 py-8 text-center text-xs text-gray-400 dark:border-gray-700 dark:text-gray-500">
             No leads in
           </div>

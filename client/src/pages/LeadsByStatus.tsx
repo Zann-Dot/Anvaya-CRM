@@ -1,9 +1,6 @@
 import { Select, TextInput } from "flowbite-react";
 import {
-  HiOutlineArrowLeft,
-  HiOutlineFilter,
   HiOutlineSearch,
-  HiOutlineSortAscending,
   HiOutlineUser,
   HiOutlineViewBoards,
   HiOutlineClock,
@@ -60,14 +57,19 @@ const STATUS_CONFIGS: StatusColumnConfig[] = [
 export default function LeadsByStatus() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { params, setSearch, dispatch } = useMain();
-  const { data } = useLeads(params.toString());
+  const { data, isLoading, isFetching, isError } = useLeads(params.toString());
   const { data: agentRes } = useAgents();
-  const totalLeadsCount = data?.totalLeads;
+  const totalLeadsCount = data?.leads?.length;
+  const isLeadsLoading = isLoading || isFetching;
 
   useEffect(() => {
     if (searchParams.toString() !== params.toString()) {
+      params.set("limit", "8");
       setSearchParams(params, { replace: true });
     }
+    if (!searchParams.has("status") && !params.has("status"))
+      params.set("status", "new");
+
   }, [params, searchParams, setSearchParams]);
 
   return (
@@ -173,7 +175,12 @@ export default function LeadsByStatus() {
 
       <div className="pb-4">
         <div className="flex w-full flex-col gap-4">
-          <StatusColumn STATUS_CONFIGS={STATUS_CONFIGS} leads={data?.leads} />
+          <StatusColumn
+            STATUS_CONFIGS={STATUS_CONFIGS}
+            leads={data?.leads}
+            isLeadsLoading={isLeadsLoading}
+            isError={isError}
+          />
         </div>
       </div>
 
@@ -194,7 +201,7 @@ export default function LeadsByStatus() {
           ))}
         </div>
         <p className="italic">
-          Displaying categorized status view • Non-functional preview
+          Displaying categorized status view
         </p>
       </div>
     </div>
