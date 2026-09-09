@@ -65,7 +65,7 @@ leadsRouter.post("/leads", async (req, res) => {
 
 leadsRouter.get("/leads", async (req, res) => {
     try {
-        const { search, salesAgent, status, tags, source, priority, timeToClose } =
+        const { search, agent, status, tags, source, priority, timeToClose } =
             req.query;
         const page = parseInt(req.query.page, 10) || 1;
         const limit = parseInt(req.query.limit, 10) || 10;
@@ -82,7 +82,7 @@ leadsRouter.get("/leads", async (req, res) => {
             ];
         }
 
-        if (salesAgent) query.salesAgent = salesAgent;
+        if (salesAgent) query.salesAgent = agent;
         if (status) query.status = status.toLowerCase();
         if (tags) query.tags = { $in: tags };
         if (source) query.source = source;
