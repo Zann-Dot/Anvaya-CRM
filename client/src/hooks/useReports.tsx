@@ -16,6 +16,17 @@ interface StatusDistribution {
     leadCount: number;
 }
 
+interface DashboardReport {
+    totalLeadsClosedThisMonth: number;
+    totalLeadsOfTheMonth: number;
+    activeLeads: number;
+    changeInLeads: number;
+    changeInClosedLeads: number;
+    changeInActiveLeads: number;
+    conversionRateThisMonth: number;
+    changeInConversionRate: number;
+}
+
 export function usePipeline(params: string) {
     return useQuery<Pipeline>({
         queryKey: ["pipeline", params],
@@ -38,7 +49,7 @@ export function useStatusDistribution(params: string) {
 }
 
 export function useDashboardReport() {
-    return useQuery({
+    return useQuery<DashboardReport>({
         queryKey: ["statusDistribution"],
         queryFn: getDashboardReport
     });

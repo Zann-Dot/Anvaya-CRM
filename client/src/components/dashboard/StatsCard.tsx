@@ -1,11 +1,20 @@
-interface StatsCardProps {
-   label: string;
-   value: string | number;
-   change: string;
-   positive: boolean;
-   icon: React.ReactNode;
-   color: string;
-}
+type StatsCardProps =
+   | {
+      label: string;
+      value: number | undefined;
+      change: number | undefined;
+      positive: boolean | undefined;
+      icon: React.ReactNode;
+      color: string;
+   }
+   | {
+      label: string;
+      value: string;
+      change: number | undefined;
+      positive: boolean | undefined;
+      icon: React.ReactNode;
+      color: string;
+   };
 
 export default function StatsCard({
    label,
@@ -17,18 +26,17 @@ export default function StatsCard({
 }: StatsCardProps) {
    return (
       <div className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800">
-
          <div
-            className={`absolute -right-6 -top-6 h-24 w-24 rounded-full opacity-10 blur-2xl transition-opacity group-hover:opacity-20 ${color}`}
+            className={`absolute -top-6 -right-6 h-24 w-24 rounded-full opacity-10 blur-2xl transition-opacity group-hover:opacity-20 ${color}`}
          />
 
          <div className="flex items-start justify-between">
             <div>
-               <p className="mb-1 text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
+               <p className="mb-1 text-xs font-medium tracking-wide text-gray-500 uppercase dark:text-gray-400">
                   {label}
                </p>
                <p className="text-3xl font-bold text-gray-900 dark:text-white">
-                  {value}
+                  {value ?? 0}
                </p>
                <div className="mt-2 flex items-center gap-1">
                   <span
@@ -37,7 +45,7 @@ export default function StatsCard({
                         : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
                         }`}
                   >
-                     {positive ? "↑" : "↓"} {change}%
+                     {positive ? "↑" : "↓"} {change ?? 0}%
                   </span>
                   <span className="text-[11px] text-gray-400">vs last month</span>
                </div>
