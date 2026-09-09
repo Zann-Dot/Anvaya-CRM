@@ -127,7 +127,7 @@ const safeRate = (numerator, denominator) => {
    return Number(((numerator / denominator) * 100).toFixed(2));
 };
 
-reportRouter.post("/report/last-month-comparison", async (req, res) => {
+reportRouter.get("/report/last-month-comparison", async (req, res) => {
    try {
       const presentDate = new Date();
       const startOfTheMonth = startOfMonth(presentDate);
