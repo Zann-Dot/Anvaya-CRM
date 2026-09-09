@@ -6,6 +6,7 @@ import {
   HiOutlineGlobeAlt,
 } from "react-icons/hi";
 import { useLeads } from "../hooks/useLeads";
+import { useAgents } from "../hooks/useAgents";
 
 interface TopNavbarProps {
   title: string;
@@ -14,6 +15,7 @@ interface TopNavbarProps {
 
 export default function TopNavbar({ title, subtitle }: TopNavbarProps) {
   const { data: leads } = useLeads();
+  const { data: agents } = useAgents();
 
   const companyProfileContent = (
     <div className="w-80 p-4 text-sm text-gray-600 dark:text-gray-300">
@@ -49,13 +51,13 @@ export default function TopNavbar({ title, subtitle }: TopNavbarProps) {
           <p className="text-[10px] uppercase font-medium text-gray-400 dark:text-gray-500">
             Leads
           </p>
-          <p className="text-xs font-bold text-gray-900 dark:text-white">{leads?.length}</p>
+          <p className="text-xs font-bold text-gray-900 dark:text-white">{leads?.totalLeads}</p>
         </div>
         <div className="text-center border-x border-gray-200 dark:border-gray-700">
           <p className="text-[10px] uppercase font-medium text-gray-400 dark:text-gray-500">
             Team
           </p>
-          <p className="text-xs font-bold text-gray-900 dark:text-white">{ } Active</p>
+          <p className="text-xs font-bold text-gray-900 dark:text-white">{agents?.totalAgents} Active</p>
         </div>
         <div className="text-center">
           <p className="text-[10px] uppercase font-medium text-gray-400 dark:text-gray-500">
