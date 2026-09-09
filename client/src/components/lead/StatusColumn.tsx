@@ -2,6 +2,7 @@ import { Badge, Select } from "flowbite-react";
 import StatusLeadCard from "./StatusLeadCard";
 import { Lead } from "../dashboard/LeadCard";
 import useMain from "../../context/MainProvider";
+import { Agent } from "../../hooks/useAgents";
 
 export interface StatusColumnConfig {
   status: string;
@@ -12,7 +13,8 @@ export interface StatusColumnConfig {
 }
 
 interface StatusColumnProps {
-  STATUS_CONFIGS: StatusColumnConfig[];
+  STATUS_CONFIGS?: StatusColumnConfig[];
+  agents?: Agent[];
   leads?: Lead[];
   isLeadsLoading: boolean;
   isError: boolean;
@@ -23,6 +25,7 @@ export default function StatusColumn({
   STATUS_CONFIGS,
   isLeadsLoading,
   isError,
+  agents
 }: StatusColumnProps) {
   const { dispatch } = useMain();
   const isLeadsLoaded = isError || leads?.length === 0;
@@ -31,33 +34,48 @@ export default function StatusColumn({
     <div className="flex flex-col rounded-2xl border border-gray-200 bg-gray-50/70 p-3.5 shadow-xs dark:border-gray-700/80 dark:bg-gray-800/50">
       <div className="mb-3.5 flex items-center justify-between border-b border-gray-200/80 pb-3 dark:border-gray-700/70">
         <div className="flex items-center gap-2">
-          <Select
-            id="select-status"
-            className="w-80"
-            defaultValue="New"
-            onChange={(e) =>
-              dispatch({ type: "STATUS", value: e.target.value })
-            }
-          >
-            {STATUS_CONFIGS?.map((config) => (
-              <option
-                key={config.status}
-                value={config.status}
-                className="flex items-center gap-2"
-              >
-                {config.status}
-              </option>
-            ))}
-          </Select>
-        </div>
+          {STATUS_CONFIGS && (
+            <Select
+              id="select-status"
+              className="w-80"
+              defaultValue="New"
+              onChange={(e) =>
+                dispatch({ type: "STATUS", value: e.target.value })
+              }
+            >
+              {STATUS_CONFIGS?.map((config) => (
+                <option
+                  key={config.status}
+                  value={config.status}
+                  className="flex items-center gap-2"
+                >
+                  {config.status}
+                </option>
+              ))}
+            </Select>
+          )}
 
-        <Badge
-          color={STATUS_CONFIGS[0].badgeColor}
-          size="xs"
-          className="px-2 py-0.5 font-bold dark:bg-blue-800/20 dark:text-blue-600"
-        >
-          0
-        </Badge>
+          {agents && (
+            <Select
+              id="select-agents"
+              className="w-80"
+              defaultValue="New"
+              onChange={(e) =>
+                dispatch({ type: "AGENT", value: e.target.value })
+              }
+            >
+              {agents?.map((a) => (
+                <option
+                  key={a._id}
+                  value={a._id}
+                  className="flex items-center gap-2"
+                >
+                  {a.name}
+                </option>
+              ))}
+            </Select>
+          )}
+        </div>
       </div>
 
       <div className="custom-scrollbar flex max-h-[calc(100vh-320px)] flex-col gap-3 overflow-y-auto pt-1 pr-0.5">

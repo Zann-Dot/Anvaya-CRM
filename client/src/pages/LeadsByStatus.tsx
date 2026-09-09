@@ -63,13 +63,13 @@ export default function LeadsByStatus() {
   const isLeadsLoading = isLoading || isFetching;
 
   useEffect(() => {
+    if (!searchParams.has("status") && !params.has("status"))
+      params.set("status", "new");
+
     if (searchParams.toString() !== params.toString()) {
       params.set("limit", "8");
       setSearchParams(params, { replace: true });
     }
-    if (!searchParams.has("status") && !params.has("status"))
-      params.set("status", "new");
-
   }, [params, searchParams, setSearchParams]);
 
   return (

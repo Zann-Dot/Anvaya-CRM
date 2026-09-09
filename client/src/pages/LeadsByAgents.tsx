@@ -1,10 +1,10 @@
 import { Select, TextInput } from "flowbite-react";
 import {
     HiOutlineSearch,
-    HiOutlineUser,
     HiOutlineViewBoards,
     HiOutlineClock,
     HiOutlineFire,
+    HiOutlineFilter,
 } from "react-icons/hi";
 import LeadsViewTabs from "../components/lead/LeadsViewTabs";
 import StatusColumn, {
@@ -61,16 +61,17 @@ export default function LeadsByAgents() {
     const { data: agentRes } = useAgents();
     const totalLeadsCount = data?.leads?.length;
     const isLeadsLoading = isLoading || isFetching;
+    const firstAgentMount = agentRes?.agents[0]._id;
 
     useEffect(() => {
+        if (firstAgentMount && !searchParams.has("agent") && !params.has("agent"))
+            params.set("agent", firstAgentMount);
+
         if (searchParams.toString() !== params.toString()) {
             params.set("limit", "8");
             setSearchParams(params, { replace: true });
         }
-        if (!searchParams.has("status") && !params.has("status"))
-            params.set("status", "new");
-
-    }, [params, searchParams, setSearchParams]);
+    }, [params, searchParams, setSearchParams, firstAgentMount]);
 
     return (
         <div className="mx-auto max-w-7xl space-y-6 p-4 sm:p-6">
@@ -81,7 +82,7 @@ export default function LeadsByAgents() {
                             <HiOutlineViewBoards className="h-5 w-5" />
                         </span>
                         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                            Leads by Status
+                            Leads by Agents
                         </h1>
                         {!isLeadsLoading && (
                             <span className="rounded-full bg-violet-100 px-2.5 py-0.5 text-xs font-semibold text-violet-700 dark:bg-violet-900/30 dark:text-violet-300">
@@ -115,18 +116,18 @@ export default function LeadsByAgents() {
 
                     <div className="flex flex-wrap items-center gap-3">
                         <div className="flex items-center gap-1.5">
-                            <HiOutlineUser className="h-4 w-4 shrink-0 text-gray-400" />
+                            <HiOutlineFilter className="h-4 w-4 shrink-0 text-gray-400" />
                             <Select
-                                id="filter-agent"
+                                id="filter-status"
                                 className="w-40"
                                 onChange={(e) =>
-                                    dispatch({ type: "AGENT", value: e.target.value })
+                                    dispatch({ type: "STATUS", value: e.target.value })
                                 }
                             >
-                                <option value="all">All Agents</option>
-                                {agentRes?.agents?.map((a) => (
-                                    <option key={a._id} value={a._id}>
-                                        {a.name}
+                                <option value="all">Select all</option>
+                                {STATUS_CONFIGS.map((s) => (
+                                    <option key={s.status} value={s.status.toLowerCase()}>
+                                        {s.status}
                                     </option>
                                 ))}
                             </Select>
@@ -178,33 +179,12 @@ export default function LeadsByAgents() {
             <div className="pb-4">
                 <div className="flex w-full flex-col gap-4">
                     <StatusColumn
-                        STATUS_CONFIGS={STATUS_CONFIGS}
+                        agents={agentRes?.agents}
                         leads={data?.leads}
                         isLeadsLoading={isLeadsLoading}
                         isError={isError}
                     />
                 </div>
-            </div>
-
-            <div className="flex flex-wrap items-center justify-between rounded-xl border border-gray-200 bg-white px-5 py-3 text-xs text-gray-500 shadow-xs dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
-                <div className="flex items-center gap-4">
-                    <span>Status breakdown:</span>
-                    {STATUS_CONFIGS.map((cfg) => (
-                        <span
-                            key={cfg.status}
-                            className="inline-flex items-center gap-1 font-medium"
-                        >
-                            <span className={`h-2 w-2 rounded-full ${cfg.dotColor}`} />
-                            {cfg.status}:{" "}
-                            <strong className="text-gray-900 dark:text-white">
-                                {data?.leads?.filter((l) => l.status === cfg.status).length}
-                            </strong>
-                        </span>
-                    ))}
-                </div>
-                <p className="italic">
-                    Displaying categorized status view
-                </p>
             </div>
         </div>
     );
