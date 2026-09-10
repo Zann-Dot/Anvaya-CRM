@@ -2,27 +2,12 @@ import { Badge } from "flowbite-react";
 import { HiOutlineClock, HiOutlineUserCircle, HiOutlineOfficeBuilding } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import { Lead } from "../dashboard/LeadCard";
-
-export interface DummyStatusLead {
-  id: string;
-  name: string;
-  company: string;
-  email: string;
-  salesAgent: {
-    name: string;
-    email: string;
-    avatar?: string;
-  };
-  priority: "High" | "Medium" | "Low";
-  timeToClose: number;
-  tags: string[];
-  dealValue?: string;
-  createdDate: string;
-}
+import { StatusColumnConfig } from "./StatusColumn";
 
 interface StatusLeadCardProps {
   lead: Lead;
   status: string;
+  STATUS_CONFIGS?: StatusColumnConfig[]
 }
 
 const PRIORITY_BADGE_CONFIG: Record<
@@ -34,9 +19,9 @@ const PRIORITY_BADGE_CONFIG: Record<
   Low: { color: "gray", label: "Low Priority" },
 };
 
-export default function StatusLeadCard({ lead }: StatusLeadCardProps) {
+export default function StatusLeadCard({ lead, STATUS_CONFIGS }: StatusLeadCardProps) {
   const priorityConfig = PRIORITY_BADGE_CONFIG[lead.priority] || PRIORITY_BADGE_CONFIG.Low;
-
+  const statusConfig = STATUS_CONFIGS?.find(s => s.status === lead.status)
   return (
     <div className="group relative rounded-xl border border-gray-200 bg-white p-4 shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-violet-300 hover:shadow-md dark:border-gray-700/70 dark:bg-gray-800 dark:hover:border-violet-600/60">
       <div className="mb-2 flex items-center justify-between gap-2">
@@ -46,6 +31,9 @@ export default function StatusLeadCard({ lead }: StatusLeadCardProps) {
         </div>
         <Badge color={priorityConfig.color} size="xs" className="shrink-0 font-medium">
           {lead.priority}
+        </Badge>
+        <Badge color={statusConfig?.badgeColor} size="xs" className="shrink-0 font-medium">
+          {lead.status}
         </Badge>
       </div>
 

@@ -25,7 +25,7 @@ export default function StatusColumn({
   STATUS_CONFIGS,
   isLeadsLoading,
   isError,
-  agents
+  agents,
 }: StatusColumnProps) {
   const { dispatch } = useMain();
   const isLeadsLoaded = isError || leads?.length === 0;
@@ -93,7 +93,12 @@ export default function StatusColumn({
           </div>
         ) : (
           leads?.map((lead) => (
-            <StatusLeadCard key={lead._id} lead={lead} status={"New"} />
+            <StatusLeadCard
+              key={lead._id}
+              lead={lead}
+              status={"New"}
+              STATUS_CONFIGS={STATUS_CONFIGS}
+            />
           ))
         )}
       </div>

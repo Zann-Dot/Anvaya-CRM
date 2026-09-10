@@ -180,6 +180,7 @@ export default function LeadsByAgents() {
         <div className="flex w-full flex-col gap-4">
           <StatusColumn
             agents={agentRes?.agents}
+            STATUS_CONFIGS={STATUS_CONFIGS}
             leads={data?.leads}
             isLeadsLoading={isLeadsLoading}
             isError={isError}
