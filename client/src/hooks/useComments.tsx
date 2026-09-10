@@ -16,11 +16,11 @@ export interface Comments {
 
 export interface NewComment {
     commentText: string;
-    author: string | undefined;
-    leadId: string | undefined;
+    leadId?: string;
+    author?: string;
 }
 
-export function useComments(leadId: string | undefined) {
+export function useComments(leadId?: string) {
     return useQuery<Comments[]>({
         queryKey: ["comments"],
         queryFn: () => fetchComments(leadId),
@@ -28,10 +28,10 @@ export function useComments(leadId: string | undefined) {
 }
 
 export function useCreateComment() {
-    const queryCLient = useQueryClient();
+    const queryClient = useQueryClient();
     return useMutation({
         mutationFn: createComment,
-        onSuccess: () => queryCLient.invalidateQueries({ queryKey: ["comments"] }),
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ["comments"] }),
         onError: (error) => console.error(error.message),
     });
 }

@@ -13,22 +13,42 @@ import {
 import { useParams } from "react-router-dom";
 import { useLead } from "../hooks/useLeads";
 import { format } from "date-fns";
-import { useComments } from "../hooks/useComments";
+import {
+   NewComment,
+   useComments,
+   useCreateComment,
+} from "../hooks/useComments";
 import useMain from "../context/MainProvider";
 import AddLeadModal from "../components/AddLeadModal";
 import LeadManagementSkeleton from "../components/lead/LeadManagementSkeleton";
+import { useState } from "react";
 
 export default function LeadManagement() {
+   const [comment, setComment] = useState("");
    const { id } = useParams();
    const { data: lead, isFetching, isLoading } = useLead(id);
    const { data: comments } = useComments(id);
-   const { handleComments, postComment, setNotificationState } = useMain();
+   const { mutate: addComment } = useCreateComment();
+   const { setNotificationState } = useMain();
 
    const isLeadLoading = isFetching || isLoading;
 
+   const handleComments = (e: React.ChangeEvent<HTMLTextAreaElement>) =>
+      setComment(e.target.value);
+
+   function postComment(leadId?: string, author?: string) {
+      const newComment: NewComment = {
+         leadId,
+         author,
+         commentText: comment,
+      };
+      addComment(newComment);
+   }
    return (
       <div className="mx-auto max-w-7xl space-y-6 p-6">
-         {isLeadLoading ? (<LeadManagementSkeleton />) : (
+         {isLeadLoading ? (
+            <LeadManagementSkeleton />
+         ) : (
             <>
                <div className="flex flex-col gap-4 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between dark:border-gray-700 dark:bg-gray-800">
                   <div className="flex items-center gap-3">
@@ -49,7 +69,7 @@ export default function LeadManagement() {
                            {lead?.name}
                         </h1>
                      </div>
-                  </div >
+                  </div>
 
                   <div className="flex items-center gap-2">
                      <Badge
@@ -69,7 +89,7 @@ export default function LeadManagement() {
                         Priority: {lead?.priority}
                      </Badge>
                   </div>
-               </div >
+               </div>
 
                <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
                   <div className="space-y-6 lg:col-span-1">
@@ -169,7 +189,9 @@ export default function LeadManagement() {
                               <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
                                  <HiOutlineClock className="h-4 w-4 text-violet-500" />
                                  <span>
-                                    {lead?.status === "Closed" ? "Closed At" : "Time to Close"}
+                                    {lead?.status === "Closed"
+                                       ? "Closed At"
+                                       : "Time to Close"}
                                  </span>
                               </div>
                               <p className="mt-1 text-base font-semibold text-gray-900 dark:text-white">

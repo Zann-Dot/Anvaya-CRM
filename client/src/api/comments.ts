@@ -1,6 +1,6 @@
 import { NewComment } from "../hooks/useComments";
 
-export async function fetchComments(leadId: string | undefined) {
+export async function fetchComments(leadId?: string) {
   const response = await fetch(`/api/leads/${leadId}/comments`);
   const data = await response.json();
   if (!response.ok) throw new Error(data.error);

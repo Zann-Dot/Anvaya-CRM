@@ -3,11 +3,9 @@ import React, {
     useContext,
     useState,
     useMemo,
-    ChangeEvent,
     Dispatch,
     SetStateAction,
 } from "react";
-import { useCreateComment, NewComment } from "../hooks/useComments";
 import { useDebounce } from "../hooks/useDebounce";
 import useFilterReducer, {
     Filter,
@@ -24,10 +22,6 @@ export type ToastNotificationDetails = {
 type SelectStatus = "active" | "oncall" | "offline" | "all";
 
 interface MainContextType {
-    handleComments: (
-        e: ChangeEvent<HTMLTextAreaElement, HTMLTextAreaElement>,
-    ) => void;
-    postComment: (leadId: string | undefined, author: string | undefined) => void;
     setToastNotification: Dispatch<SetStateAction<ToastNotificationDetails>>;
     setIsPending: Dispatch<SetStateAction<boolean>>;
     isPending: boolean;
@@ -81,8 +75,7 @@ export function MainProvider({ children }: React.PropsWithChildren) {
             successMessage: "",
             errorMessage: "",
         });
-    const [comment, setComment] = useState("");
-    const { mutate: addComment } = useCreateComment();
+
     const filters: Filter = {
         status: "",
         agent: "",
@@ -121,17 +114,6 @@ export function MainProvider({ children }: React.PropsWithChildren) {
         return p;
     }, [page, debouncedSearch, selectedFilter, filter]);
 
-    const handleComments = (e: React.ChangeEvent<HTMLTextAreaElement>) =>
-        setComment(e.target.value);
-
-    function postComment(leadId: string | undefined, author: string | undefined) {
-        const newComment: NewComment = {
-            leadId,
-            author,
-            commentText: comment,
-        };
-        addComment(newComment);
-    }
 
     function setNotificationState(
         modal: boolean,
@@ -146,8 +128,6 @@ export function MainProvider({ children }: React.PropsWithChildren) {
     return (
         <MainContext.Provider
             value={{
-                handleComments,
-                postComment,
                 setToastNotification,
                 setIsPending,
                 isPending,
