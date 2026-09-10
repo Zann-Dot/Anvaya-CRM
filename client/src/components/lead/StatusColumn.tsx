@@ -97,7 +97,6 @@ export default function StatusColumn({
               key={lead._id}
               lead={lead}
               status={"New"}
-              STATUS_CONFIGS={STATUS_CONFIGS}
             />
           ))
         )}

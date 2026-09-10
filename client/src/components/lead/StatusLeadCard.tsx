@@ -2,12 +2,11 @@ import { Badge } from "flowbite-react";
 import { HiOutlineClock, HiOutlineUserCircle, HiOutlineOfficeBuilding } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import { Lead } from "../dashboard/LeadCard";
-import { StatusColumnConfig } from "./StatusColumn";
+import { STATUS_CONFIGS } from "../../pages/LeadsByStatus";
 
 interface StatusLeadCardProps {
   lead: Lead;
   status: string;
-  STATUS_CONFIGS?: StatusColumnConfig[]
 }
 
 const PRIORITY_BADGE_CONFIG: Record<
@@ -19,7 +18,7 @@ const PRIORITY_BADGE_CONFIG: Record<
   Low: { color: "gray", label: "Low Priority" },
 };
 
-export default function StatusLeadCard({ lead, STATUS_CONFIGS }: StatusLeadCardProps) {
+export default function StatusLeadCard({ lead }: StatusLeadCardProps) {
   const priorityConfig = PRIORITY_BADGE_CONFIG[lead.priority] || PRIORITY_BADGE_CONFIG.Low;
   const statusConfig = STATUS_CONFIGS?.find(s => s.status === lead.status)
   return (
@@ -29,12 +28,14 @@ export default function StatusLeadCard({ lead, STATUS_CONFIGS }: StatusLeadCardP
           <HiOutlineOfficeBuilding className="h-3.5 w-3.5 shrink-0 text-violet-500" />
           <span className="truncate font-medium">{lead.company}</span>
         </div>
-        <Badge color={priorityConfig.color} size="xs" className="shrink-0 font-medium">
-          {lead.priority}
-        </Badge>
-        <Badge color={statusConfig?.badgeColor} size="xs" className="shrink-0 font-medium">
-          {lead.status}
-        </Badge>
+        <div>
+          <Badge color={priorityConfig.color} size="xs" className="shrink-0 font-medium">
+            {lead.priority}
+          </Badge>
+          <Badge color={statusConfig?.badgeColor} size="xs" className="shrink-0 font-medium">
+            {lead.status}
+          </Badge>
+        </div>
       </div>
 
       <h4 className="text-sm font-bold text-gray-900 transition-colors group-hover:text-violet-600 dark:text-white dark:group-hover:text-violet-400">

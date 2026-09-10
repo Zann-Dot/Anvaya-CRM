@@ -16,7 +16,7 @@ import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useAgents } from "../hooks/useAgents";
 
-const STATUS_CONFIGS: StatusColumnConfig[] = [
+export const STATUS_CONFIGS: StatusColumnConfig[] = [
   {
     status: "New",
     badgeColor: "blue",
