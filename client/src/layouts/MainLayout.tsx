@@ -8,20 +8,39 @@ import { useEffect } from "react";
 const pageTitles: Record<string, { title: string; subtitle: string }> = {
   "/": { title: "Dashboard", subtitle: "Welcome back to your CRM overview" },
   "/leads": { title: "Leads", subtitle: "Manage and track all your leads" },
-  "/leads/:id": { title: "Lead Management", subtitle: "View and manage lead details" },
-  "/leads/status": { title: "Leads by Status", subtitle: "Categorized view of leads across pipeline stages" },
-  "/leads/agents": { title: "Leads by Agents", subtitle: "Categorized view of leads across pipeline stages" },
+  "/leads/:id": {
+    title: "Lead Management",
+    subtitle: "View and manage lead details",
+  },
+  "/leads/status": {
+    title: "Leads by Status",
+    subtitle: "Categorized view of leads across pipeline stages",
+  },
+  "/leads/agents": {
+    title: "Leads by Agents",
+    subtitle: "Categorized view of leads across pipeline stages",
+  },
   "/sales": { title: "Sales", subtitle: "Monitor your sales pipeline" },
   "/agents": { title: "Agents", subtitle: "Manage your team of agents" },
   "/reports": { title: "Reports", subtitle: "View analytics and reports" },
   "/settings": { title: "Settings", subtitle: "Configure your workspace" },
-  "/profile": { title: "User Profile", subtitle: "View and manage your account details" },
+  "/profile": {
+    title: "User Profile",
+    subtitle: "View and manage your account details",
+  },
 };
 
 export default function MainLayout() {
   const location = useLocation();
   const { title, subtitle } = pageTitles[location.pathname] ?? pageTitles["/"];
-  const { isPending, toastNotification, isNotificationActive, setPage, dispatch } = useMain();
+  const {
+    isPending,
+    toastNotification,
+    isNotificationActive,
+    setPage,
+    dispatch,
+    setSelectedFilter
+  } = useMain();
 
   useEffect(() => {
     setPage(1);
@@ -29,7 +48,8 @@ export default function MainLayout() {
     dispatch({ type: "STATUS", value: "" });
     dispatch({ type: "SORT", value: "" });
     dispatch({ type: "PRIORITY", value: "" });
-  }, [location.pathname])
+    setSelectedFilter("all");
+  }, [location.pathname]);
 
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-gray-950">
