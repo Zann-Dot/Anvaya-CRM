@@ -9,7 +9,7 @@ import reportRouter from "../routes/reports.route.js";
 const app = express();
 app.use(express.json());
 const corsConfig = {
-    origin: "*",
+    origin: "https://anvaya-app-crm.vercel.app/",
     method: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
     optionSuccessStatus: 200
