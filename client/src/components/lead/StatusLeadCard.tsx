@@ -28,7 +28,7 @@ export default function StatusLeadCard({ lead }: StatusLeadCardProps) {
           <HiOutlineOfficeBuilding className="h-3.5 w-3.5 shrink-0 text-violet-500" />
           <span className="truncate font-medium">{lead.company}</span>
         </div>
-        <div>
+        <div className="flex items-center gap-4">
           <Badge color={priorityConfig.color} size="xs" className="shrink-0 font-medium">
             {lead.priority}
           </Badge>
