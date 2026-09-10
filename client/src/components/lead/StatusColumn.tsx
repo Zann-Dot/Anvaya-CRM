@@ -89,7 +89,7 @@ export default function StatusColumn({
           </div>
         ) : isLeadsLoaded ? (
           <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-gray-200 py-8 text-center text-xs text-gray-400 dark:border-gray-700 dark:text-gray-500">
-            No leads in
+            No leads found
           </div>
         ) : (
           leads?.map((lead) => (
