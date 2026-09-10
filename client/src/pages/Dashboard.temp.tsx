@@ -11,106 +11,8 @@ import {
   HiOutlineViewList,
 } from "react-icons/hi";
 import StatsCard from "../components/dashboard/StatsCard";
-import LeadCard, { type Lead } from "../components/dashboard/LeadCard";
-
-const LEADS: Lead[] = [
-  {
-    id: "1",
-    name: "Priya Mehta",
-    company: "TechNova Pvt Ltd",
-    email: "priya.mehta@technova.in",
-    phone: "+91 98765 43210",
-    status: "New",
-    value: "₹4,20,000",
-    agent: "Arjun Singh",
-    date: "Jul 22, 2026",
-    avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Priya",
-  },
-  {
-    id: "2",
-    name: "Rahul Verma",
-    company: "BlueSky Solutions",
-    email: "rahul.v@bluesky.io",
-    phone: "+91 87654 32109",
-    status: "Contacted",
-    value: "₹7,80,000",
-    agent: "Neha Kapoor",
-    date: "Jul 21, 2026",
-    avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Rahul",
-  },
-  {
-    id: "3",
-    name: "Sneha Iyer",
-    company: "Horizon Fintech",
-    email: "sneha.iyer@horizonfin.com",
-    phone: "+91 76543 21098",
-    status: "Qualified",
-    value: "₹12,50,000",
-    agent: "Arjun Singh",
-    date: "Jul 20, 2026",
-    avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Sneha",
-  },
-  {
-    id: "4",
-    name: "Amit Desai",
-    company: "GreenLeaf Exports",
-    email: "amit.desai@greenleaf.co",
-    phone: "+91 65432 10987",
-    status: "Proposal",
-    value: "₹9,30,000",
-    agent: "Meera Joshi",
-    date: "Jul 19, 2026",
-    avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Amit",
-  },
-  {
-    id: "5",
-    name: "Kavya Nair",
-    company: "Sparkle Retail",
-    email: "kavya.n@sparkleretail.com",
-    phone: "+91 54321 09876",
-    status: "Closed",
-    value: "₹3,60,000",
-    agent: "Rohan Sharma",
-    date: "Jul 18, 2026",
-    avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Kavya",
-  },
-  {
-    id: "6",
-    name: "Vikram Patel",
-    company: "Nexgen Logistics",
-    email: "vikram.p@nexgenlog.in",
-    phone: "+91 43210 98765",
-    status: "New",
-    value: "₹5,10,000",
-    agent: "Neha Kapoor",
-    date: "Jul 17, 2026",
-    avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Vikram",
-  },
-  {
-    id: "7",
-    name: "Ananya Bose",
-    company: "CloudPeak Technologies",
-    email: "ananya.bose@cloudpeak.tech",
-    phone: "+91 32109 87654",
-    status: "Contacted",
-    value: "₹6,70,000",
-    agent: "Meera Joshi",
-    date: "Jul 16, 2026",
-    avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Ananya",
-  },
-  {
-    id: "8",
-    name: "Siddharth Rao",
-    company: "Meridian Healthcare",
-    email: "siddharth.rao@meridian.co",
-    phone: "+91 21098 76543",
-    status: "Qualified",
-    value: "₹15,00,000",
-    agent: "Arjun Singh",
-    date: "Jul 15, 2026",
-    avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Siddharth",
-  },
-];
+import LeadCard from "../components/dashboard/LeadCard";
+import LEADS from "../utilis/Leads";
 
 const STATUS_FILTERS = [
   "All",
@@ -141,6 +43,23 @@ const activeFilterStyle: Record<FilterType, string> = {
   Closed: "bg-green-600 text-white",
 };
 
+type StatsCard = | {
+  label: string;
+  value: number | undefined;
+  change: number | undefined;
+  positive: boolean | undefined;
+  icon: React.ReactNode;
+  color: string;
+}
+  | {
+    label: string;
+    value: string;
+    change: number | undefined;
+    positive: boolean | undefined;
+    icon: React.ReactNode;
+    color: string;
+  };
+
 export default function Dashboard() {
   const [activeFilter, setActiveFilter] = useState<FilterType>("All");
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
@@ -158,11 +77,11 @@ export default function Dashboard() {
     {} as Record<string, number>,
   );
 
-  const stats = [
+  const stats: StatsCard[] = [
     {
       label: "Total Leads",
       value: LEADS.length,
-      change: "12%",
+      change: 12,
       positive: true,
       icon: <HiOutlineCollection className="h-6 w-6" />,
       color: "bg-violet-500",
@@ -170,7 +89,7 @@ export default function Dashboard() {
     {
       label: "Active Agents",
       value: 4,
-      change: "5%",
+      change: 5,
       positive: true,
       icon: <HiOutlineUserGroup className="h-6 w-6" />,
       color: "bg-blue-500",
@@ -178,7 +97,7 @@ export default function Dashboard() {
     {
       label: "Conversion Rate",
       value: "23.5%",
-      change: "3.2%",
+      change: 3.2,
       positive: true,
       icon: <HiOutlineTrendingUp className="h-6 w-6" />,
       color: "bg-emerald-500",
@@ -186,7 +105,7 @@ export default function Dashboard() {
     {
       label: "Deals Closed",
       value: statusCounts["Closed"],
-      change: "8%",
+      change: 8,
       positive: false,
       icon: <HiOutlineCheckCircle className="h-6 w-6" />,
       color: "bg-amber-500",
@@ -326,7 +245,7 @@ export default function Dashboard() {
               </p>
             </div>
           ) : (
-            filteredLeads.map((lead) => <LeadCard key={lead.id} lead={lead} />)
+            filteredLeads.map((lead) => <LeadCard key={lead._id} lead={lead} />)
           )}
         </div>
 

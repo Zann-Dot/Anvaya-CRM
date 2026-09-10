@@ -5,7 +5,7 @@ import {
   HiOutlineViewGrid,
 } from "react-icons/hi";
 import { Badge } from "flowbite-react";
-import useMain from "../../context/MainProvider";
+import { useDashboardReport } from "../../hooks/useReports";
 
 interface ReportSummaryCardsProps {
   pipeline?: {
@@ -23,7 +23,7 @@ export default function ReportSummaryCards({
   const totalClosed = pipeline?.totalLeadsClosed || 0;
   const totalLeads = totalInPipeline + totalClosed;
   const conversionRate = totalLeads > 0 ? ((totalClosed / totalLeads) * 100).toFixed(1) : "0";
-  const { dashboardReport } = useMain();
+  const { data: dashboardReport } = useDashboardReport();
 
   const cards = [
     {

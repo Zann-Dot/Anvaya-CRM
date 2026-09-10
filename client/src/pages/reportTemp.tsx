@@ -29,8 +29,8 @@ import {
 import {
     useClosedLeadsReport,
     usePipeline,
-    usePriorityDistribution,
-    useSourceDistribution,
+    // usePriorityDistribution,
+    // useSourceDistribution,
     useStatusDistribution,
 } from "../hooks/useReports";
 import BarChart from "../components/charts/BarChart";
@@ -40,6 +40,7 @@ import PieChart from "../components/charts/PieChart";
 import PolarAreaChart from "../components/charts/PolarAreaChart";
 import DateRangeFilter from "../components/reports/DateRangeFilter";
 import ReportSummaryCards from "../components/reports/ReportSummaryCards";
+import useMain from "../context/MainProvider";
 
 Chart.register(
     ArcElement,
@@ -61,38 +62,39 @@ Chart.register(
 );
 
 export default function Reports() {
+    const { params } = useMain()
     const {
         data: pipeline,
         isLoading: loadingPipeline,
         refetch: refetchPipeline,
-    } = usePipeline();
+    } = usePipeline(params.toString());
     const {
         data: closedLeads,
         isLoading: loadingClosed,
         refetch: refetchClosed,
-    } = useClosedLeadsReport();
+    } = useClosedLeadsReport(params.toString());
     const {
         data: statusDistribution,
         isLoading: loadingStatus,
         refetch: refetchStatus,
-    } = useStatusDistribution();
-    const {
-        data: sourceDistribution,
-        isLoading: loadingSource,
-        refetch: refetchSource,
-    } = useSourceDistribution();
-    const {
-        data: priorityDistribution,
-        isLoading: loadingPriority,
-        refetch: refetchPriority,
-    } = usePriorityDistribution();
+    } = useStatusDistribution(params.toString());
+    // const {
+    //     data: sourceDistribution,
+    //     isLoading: loadingSource,
+    //     refetch: refetchSource,
+    // } = useSourceDistribution();
+    // const {
+    //     data: priorityDistribution,
+    //     isLoading: loadingPriority,
+    //     refetch: refetchPriority,
+    // } = usePriorityDistribution();
 
     const handleRefreshAll = () => {
         refetchPipeline();
         refetchClosed();
         refetchStatus();
-        refetchSource();
-        refetchPriority();
+        // refetchSource();
+        // refetchPriority();
     };
 
     const pipelineDataConfig = {
@@ -104,10 +106,10 @@ export default function Reports() {
                     pipeline?.totalLeadsInPipeline || 0,
                     pipeline?.totalLeadsClosed || 0,
                 ],
-                backgroundColor: ["#6366F1", "#10B981"],
-                borderColor: ["#4F46E5", "#059669"],
-                borderWidth: 2,
-                hoverOffset: 15,
+                backgroundColor: ["#6366F1", "#2F39A9"],
+                borderWidth: 0,
+                offset: [20, 0],
+                hoverOffset: [25, 15],
             },
         ],
     };
@@ -159,48 +161,48 @@ export default function Reports() {
         ],
     };
 
-    const sourceBarData = {
-        labels: sourceDistribution?.map((s) => s.source) || ["Website", "Referral", "Cold Call", "Advertisement", "Email", "Other"],
-        datasets: [
-            {
-                label: "Total Leads Acquired",
-                data: sourceDistribution?.map((s) => s.leadCount) || [0, 0, 0, 0, 0, 0],
-                backgroundColor: "rgba(99, 102, 241, 0.75)",
-                borderColor: "#6366F1",
-                borderWidth: 1,
-                borderRadius: 6,
-            },
-            {
-                label: "Leads Closed",
-                data: sourceDistribution?.map((s) => s.closedCount) || [0, 0, 0, 0, 0, 0],
-                backgroundColor: "rgba(16, 185, 129, 0.85)",
-                borderColor: "#10B981",
-                borderWidth: 1,
-                borderRadius: 6,
-            },
-        ],
-    };
+    // const sourceBarData = {
+    //     labels: sourceDistribution?.map((s) => s.source) || ["Website", "Referral", "Cold Call", "Advertisement", "Email", "Other"],
+    //     datasets: [
+    //         {
+    //             label: "Total Leads Acquired",
+    //             data: sourceDistribution?.map((s) => s.leadCount) || [0, 0, 0, 0, 0, 0],
+    //             backgroundColor: "rgba(99, 102, 241, 0.75)",
+    //             borderColor: "#6366F1",
+    //             borderWidth: 1,
+    //             borderRadius: 6,
+    //         },
+    //         {
+    //             label: "Leads Closed",
+    //             data: sourceDistribution?.map((s) => s.closedCount) || [0, 0, 0, 0, 0, 0],
+    //             backgroundColor: "rgba(16, 185, 129, 0.85)",
+    //             borderColor: "#10B981",
+    //             borderWidth: 1,
+    //             borderRadius: 6,
+    //         },
+    //     ],
+    // };
 
-    const priorityPolarData = {
-        labels: priorityDistribution?.map((p) => `${p.priority} Priority`) || ["High Priority", "Medium Priority", "Low Priority"],
-        datasets: [
-            {
-                label: "Lead Count",
-                data: priorityDistribution?.map((p) => p.leadCount) || [0, 0, 0],
-                backgroundColor: [
-                    "rgba(239, 68, 68, 0.75)",
-                    "rgba(245, 158, 11, 0.75)",
-                    "rgba(59, 130, 246, 0.75)",
-                ],
-                borderColor: [
-                    "#EF4444",
-                    "#F59E0B",
-                    "#3B82F6",
-                ],
-                borderWidth: 1.5,
-            },
-        ],
-    };
+    // const priorityPolarData = {
+    //     labels: priorityDistribution?.map((p) => `${p.priority} Priority`) || ["High Priority", "Medium Priority", "Low Priority"],
+    //     datasets: [
+    //         {
+    //             label: "Lead Count",
+    //             data: priorityDistribution?.map((p) => p.leadCount) || [0, 0, 0],
+    //             backgroundColor: [
+    //                 "rgba(239, 68, 68, 0.75)",
+    //                 "rgba(245, 158, 11, 0.75)",
+    //                 "rgba(59, 130, 246, 0.75)",
+    //             ],
+    //             borderColor: [
+    //                 "#EF4444",
+    //                 "#F59E0B",
+    //                 "#3B82F6",
+    //             ],
+    //             borderWidth: 1.5,
+    //         },
+    //     ],
+    // };
 
     const trendLineData = {
         labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"],
@@ -233,7 +235,7 @@ export default function Reports() {
     };
 
     const isInitialLoading =
-        loadingPipeline || loadingClosed || loadingStatus || loadingSource || loadingPriority;
+        loadingPipeline || loadingClosed || loadingStatus
 
     return (
         <div className="space-y-6 p-6 pb-12">
@@ -374,7 +376,7 @@ export default function Reports() {
                                 Source Analytics
                             </Badge>
                         </div>
-                        <BarChart chartData={sourceBarData} height={300} />
+                        {/* <BarChart chartData={sourceBarData} height={300} /> */}
                     </div>
 
                     <div className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-xs transition-all duration-300 hover:shadow-md dark:border-gray-700/60 dark:bg-gray-800/80">
@@ -396,7 +398,7 @@ export default function Reports() {
                                 Polar Area
                             </Badge>
                         </div>
-                        <PolarAreaChart chartData={priorityPolarData} height={300} />
+                        {/* <PolarAreaChart chartData={priorityPolarData} height={300} /> */}
                     </div>
 
                     <div className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-xs transition-all duration-300 hover:shadow-md dark:border-gray-700/60 dark:bg-gray-800/80">

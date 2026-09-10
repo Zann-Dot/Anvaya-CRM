@@ -33,9 +33,9 @@ import {
 } from "../hooks/useReports";
 import BarChart from "../components/charts/BarChart";
 import DoughnutChart from "../components/charts/DoughnutChart";
-import LineChart from "../components/charts/LineChart";
+import _LineChart from "../components/charts/LineChart";
 import PieChart from "../components/charts/PieChart";
-import PolarAreaChart from "../components/charts/PolarAreaChart";
+import _PolarAreaChart from "../components/charts/PolarAreaChart";
 import DateRangeFilter from "../components/reports/DateRangeFilter";
 import ReportSummaryCards from "../components/reports/ReportSummaryCards";
 import { useSearchParams } from "react-router-dom";
@@ -183,35 +183,35 @@ export default function Reports() {
    //    ],
    // };
 
-   const trendLineData = {
-      labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"],
-      datasets: [
-         {
-            label: "New Leads Acquired",
-            data: [12, 19, 15, 22, 30, 28, 35, 42, pipeline?.totalLeadsInPipeline ? pipeline.totalLeadsInPipeline + 10 : 38],
-            borderColor: "#6366F1",
-            backgroundColor: "rgba(99, 102, 241, 0.12)",
-            fill: true,
-            tension: 0.35,
-            borderWidth: 3,
-            pointBackgroundColor: "#6366F1",
-            pointBorderColor: "#FFFFFF",
-            pointHoverRadius: 7,
-         },
-         {
-            label: "Deals Closed",
-            data: [4, 8, 7, 12, 18, 16, 22, 27, pipeline?.totalLeadsClosed || 24],
-            borderColor: "#10B981",
-            backgroundColor: "rgba(16, 185, 129, 0.12)",
-            fill: true,
-            tension: 0.35,
-            borderWidth: 3,
-            pointBackgroundColor: "#10B981",
-            pointBorderColor: "#FFFFFF",
-            pointHoverRadius: 7,
-         },
-      ],
-   };
+   // const trendLineData = {
+   //    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"],
+   //    datasets: [
+   //       {
+   //          label: "New Leads Acquired",
+   //          data: [12, 19, 15, 22, 30, 28, 35, 42, pipeline?.totalLeadsInPipeline ? pipeline.totalLeadsInPipeline + 10 : 38],
+   //          borderColor: "#6366F1",
+   //          backgroundColor: "rgba(99, 102, 241, 0.12)",
+   //          fill: true,
+   //          tension: 0.35,
+   //          borderWidth: 3,
+   //          pointBackgroundColor: "#6366F1",
+   //          pointBorderColor: "#FFFFFF",
+   //          pointHoverRadius: 7,
+   //       },
+   //       {
+   //          label: "Deals Closed",
+   //          data: [4, 8, 7, 12, 18, 16, 22, 27, pipeline?.totalLeadsClosed || 24],
+   //          borderColor: "#10B981",
+   //          backgroundColor: "rgba(16, 185, 129, 0.12)",
+   //          fill: true,
+   //          tension: 0.35,
+   //          borderWidth: 3,
+   //          pointBackgroundColor: "#10B981",
+   //          pointBorderColor: "#FFFFFF",
+   //          pointHoverRadius: 7,
+   //       },
+   //    ],
+   // };
 
    const isInitialLoading =
       loadingPipeline || loadingClosed || loadingStatus

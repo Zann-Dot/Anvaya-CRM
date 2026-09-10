@@ -17,11 +17,14 @@ const LEADS: Lead[] = [
     timeToClose: 15,
     salesAgent: {
       name: "Arjun Singh",
-      email: "arunsingh@gmail.com"
+      email: "arunsingh@gmail.com",
+      _id: "ausiahohoahod89y9",
+      createdAt: "24-05-2026"
     },
     createdAt: '2026-07-22T10:15:00.000Z',
     updatedAt: '2026-07-22T12:00:00.000Z',
     avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Priya",
+    closedAt: "0"
   },
   {
     _id: "2",
@@ -38,11 +41,14 @@ const LEADS: Lead[] = [
     timeToClose: 25,
     salesAgent: {
       name: "Neha Kapoor",
-      email: "nehakapoor@gmail.com"
+      email: "nehakapoor@gmail.com",
+      _id: "ausiaho313vdhoahod89y9",
+      createdAt: "24-05-2026"
     },
     createdAt: '2026-07-21T09:30:00.000Z',
     updatedAt: '2026-07-21T14:20:00.000Z',
     avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Rahul",
+    closedAt: "0"
   },
   {
     _id: "3",
@@ -59,11 +65,14 @@ const LEADS: Lead[] = [
     timeToClose: 40,
     salesAgent: {
       name: "Arjun Singh",
-      email: "arunsingh@gmail.com"
+      email: "arunsingh@gmail.com",
+      _id: "ausiaho13dadhoahod89y9",
+      createdAt: "24-05-2026"
     },
     createdAt: '2026-07-20T11:45:00.000Z',
     updatedAt: '2026-07-21T16:10:00.000Z',
     avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Sneha",
+    closedAt: "0"
   },
   {
     _id: "4",
@@ -80,11 +89,14 @@ const LEADS: Lead[] = [
     timeToClose: 20,
     salesAgent: {
       name: "Meera Joshi",
-      email: "meerajoshi@gmail.com"
+      email: "meerajoshi@gmail.com",
+      _id: "ausi1315fahohoahod89y9",
+      createdAt: "24-05-2026"
     },
     createdAt: '2026-07-19T08:00:00.000Z',
     updatedAt: '2026-07-20T10:30:00.000Z',
     avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Amit",
+    closedAt: "0"
   },
   {
     _id: "5",
@@ -101,11 +113,14 @@ const LEADS: Lead[] = [
     timeToClose: 10,
     salesAgent: {
       name: "Rohan Sharma",
-      email: "rohansharma@gmail.com"
+      email: "rohansharma@gmail.com",
+      _id: "ausia1weghohoahod89y9",
+      createdAt: "24-05-2026"
     },
     createdAt: '2026-07-18T14:10:00.000Z',
     updatedAt: '2026-07-19T17:50:00.000Z',
     avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Kavya",
+    closedAt: "0"
   },
   {
     _id: "6",
@@ -122,11 +137,14 @@ const LEADS: Lead[] = [
     timeToClose: 35,
     salesAgent: {
       name: "Neha Kapoor",
-      email: "nehakapoor@gmail.com"
+      email: "nehakapoor@gmail.com",
+      _id: "ausia123hohoahod89y9",
+      createdAt: "24-05-2026"
     },
     createdAt: '2026-07-17T13:25:00.000Z',
     updatedAt: '2026-07-17T15:40:00.000Z',
     avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Vikram",
+    closedAt: "0"
   },
   {
     _id: "7",
@@ -143,11 +161,14 @@ const LEADS: Lead[] = [
     timeToClose: 18,
     salesAgent: {
       name: "Meera Joshi",
-      email: "meerajoshi@gmail.com"
+      email: "meerajoshi@gmail.com",
+      _id: "ausiaadahohoahod89y9",
+      createdAt: "24-05-2026"
     },
     createdAt: '2026-07-16T15:00:00.000Z',
     updatedAt: '2026-07-17T11:15:00.000Z',
     avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Ananya",
+    closedAt: "0"
   },
   {
     _id: "8",
@@ -164,11 +185,14 @@ const LEADS: Lead[] = [
     timeToClose: 30,
     salesAgent: {
       name: "Arjun Singh",
-      email: "arunsingh@gmail.com"
+      email: "arunsingh@gmail.com",
+      _id: "ausiaadhohoahod89y9",
+      createdAt: "24-05-2026"
     },
     createdAt: '2026-07-20T16:13:34.202Z',
     updatedAt: '2026-07-21T18:48:48.549Z',
     avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Siddharth",
+    closedAt: "0"
   },
 ];
 
