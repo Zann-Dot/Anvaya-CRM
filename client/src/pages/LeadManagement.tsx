@@ -22,27 +22,36 @@ import useMain from "../context/MainProvider";
 import AddLeadModal from "../components/AddLeadModal";
 import LeadManagementSkeleton from "../components/lead/LeadManagementSkeleton";
 import { useState } from "react";
+import useNotification from "../hooks/useNotification";
 
 export default function LeadManagement() {
    const [comment, setComment] = useState("");
    const { id } = useParams();
    const { data: lead, isFetching, isLoading } = useLead(id);
    const { data: comments } = useComments(id);
-   const { mutate: addComment } = useCreateComment();
-   const { setNotificationState } = useMain();
+   const {
+      mutate: addComment,
+      isPending,
+      isSuccess,
+      isError,
+      data,
+      error,
+   } = useCreateComment();
+   const { setNotificationState, setNotificationActive } = useMain();
+   useNotification(isPending, isSuccess, isError, error, data);
 
    const isLeadLoading = isFetching || isLoading;
 
-   const handleComments = (e: React.ChangeEvent<HTMLTextAreaElement>) =>
-      setComment(e.target.value);
-
-   function postComment(leadId?: string, author?: string) {
+   function postComment() {
+      const leadId = lead?._id;
+      const author = lead?.salesAgent._id;
       const newComment: NewComment = {
          leadId,
          author,
          commentText: comment,
       };
       addComment(newComment);
+      setNotificationActive(true);
    }
    return (
       <div className="mx-auto max-w-7xl space-y-6 p-6">
@@ -250,7 +259,10 @@ export default function LeadManagement() {
                      ))}
                   </div>
 
-                  <form className="mt-6 space-y-3 border-t border-gray-100 pt-4 dark:border-gray-700">
+                  <form
+                     action={postComment}
+                     className="mt-6 space-y-3 border-t border-gray-100 pt-4 dark:border-gray-700"
+                  >
                      <div>
                         <div className="mb-1 block">
                            <Label htmlFor="new-comment" defaultValue="Add New Comment" />
@@ -259,18 +271,12 @@ export default function LeadManagement() {
                            id="new-comment"
                            placeholder="Type your comment here..."
                            rows={3}
-                           onChange={handleComments}
+                           onChange={(e) => setComment(e.target.value)}
                         />
                      </div>
 
                      <div className="flex justify-end">
-                        <Button
-                           onClick={() =>
-                              lead && postComment(lead?._id, lead?.salesAgent._id)
-                           }
-                           color="purple"
-                           className="cursor-pointer"
-                        >
+                        <Button type="submit" color="purple" className="cursor-pointer">
                            Submit Comment
                         </Button>
                      </div>

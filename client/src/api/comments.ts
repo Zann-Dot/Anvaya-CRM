@@ -15,5 +15,5 @@ export async function createComment(newComment: NewComment) {
   });
   const data = await response.json();
   if (!response.ok) throw new Error(data.error);
-  console.log(data);
+  return data;
 }
