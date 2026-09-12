@@ -44,6 +44,7 @@ interface MainContextType {
     params: URLSearchParams;
     selectedFilter: SelectStatus;
     setSelectedFilter: Dispatch<SetStateAction<SelectStatus>>;
+    filter: Filter;
     dispatch: React.ActionDispatch<[action: FilterAction]>;
 }
 
@@ -80,6 +81,8 @@ export function MainProvider({ children }: React.PropsWithChildren) {
         status: "",
         agent: "",
         priority: "",
+        source: "",
+        tags: "",
         sort: {
             sortType: "",
             value: "",
@@ -103,6 +106,8 @@ export function MainProvider({ children }: React.PropsWithChildren) {
         appendIfValid("status", activeFilter.toLowerCase());
         appendIfValid("agent", filter.agent);
         appendIfValid("priority", filter.priority);
+        appendIfValid("source", filter.source);
+        appendIfValid("tags", filter.tags);
 
         if (
             filter.sort?.sortType &&
@@ -146,6 +151,7 @@ export function MainProvider({ children }: React.PropsWithChildren) {
                 params,
                 selectedFilter,
                 setSelectedFilter,
+                filter,
                 dispatch,
             }}
         >

@@ -1,6 +1,7 @@
 import { Button } from "flowbite-react";
 import { HiOutlinePlus, HiOutlineCollection } from "react-icons/hi";
 import FilterLead from "../components/lead/FilterLead";
+import LeadsFilterSidebar from "../components/lead/LeadsFilterSidebar";
 import Footer from "../components/lead/Footer";
 import LeadsTable from "../components/lead/LeadsTable";
 import { useDeleteLead, useLeads } from "../hooks/useLeads";
@@ -13,6 +14,7 @@ import { useSearchParams } from "react-router-dom";
 import LeadsViewTabs from "../components/lead/LeadsViewTabs";
 
 export default function Leads() {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [leadIds, setLeadIds] = useState<string[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const { setNotificationState, setNotificationActive, params } = useMain();
@@ -24,9 +26,13 @@ export default function Leads() {
     }
   }, [params, searchParams, setSearchParams]);
 
-  const { data, isLoading, isError, isPlaceholderData, isFetching } = useLeads(
-    params.toString(),
-  );
+  const {
+    data,
+    isError,
+    isLoading,
+    isPlaceholderData,
+    isFetching
+  } = useLeads(params.toString());
 
   const {
     mutate: deleteLeads,
@@ -47,7 +53,7 @@ export default function Leads() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6 p-4 sm:p-6">
+    <div className="mx-auto  space-y-6 p-4 sm:p-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <div className="flex items-center gap-2.5">
@@ -80,70 +86,82 @@ export default function Leads() {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
-        <FilterLead />
-
-        <DeleteBar
-          leadIds={leadIds}
-          handleDeleteLead={handleDeleteLead}
-          isTableLoading={isTableLoading}
+      <div className="flex flex-col lg:flex-row gap-6 items-start">
+        <LeadsFilterSidebar
+          isOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
         />
 
-        {isTableLoading ? (
-          <div role="status" className="w-full animate-pulse space-y-4 p-6">
-            <div className="grid grid-cols-6 border-b border-gray-200 pb-3 dark:border-gray-700">
-              <div className="h-4 w-4 rounded bg-gray-200 dark:bg-gray-700"></div>
-              <div className="h-4 w-40 rounded bg-gray-200 dark:bg-gray-700"></div>
-              <div className="h-4 w-24 justify-self-end rounded bg-gray-200 dark:bg-gray-700"></div>
-              <div className="h-4 w-20 justify-self-end rounded bg-gray-200 dark:bg-gray-700"></div>
-              <div className="h-4 w-16 justify-self-end rounded bg-gray-200 dark:bg-gray-700"></div>
-              <div className="h-4 w-12 justify-self-end rounded bg-gray-200 dark:bg-gray-700"></div>
-            </div>
+        <div className="flex-1 w-full min-w-0">
+          <div className="rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
+            <FilterLead
+              isSidebarOpen={isSidebarOpen}
+              onToggleSidebar={() => setIsSidebarOpen((prev) => !prev)}
+            />
 
-            {[...Array(5)].map((_, i) => (
-              <div
-                key={i}
-                className="grid grid-cols-6 border-b border-gray-100 py-3 dark:border-gray-700/60"
-              >
-                <div className="h-4 w-4 rounded bg-gray-200 dark:bg-gray-700"></div>
-                <div className="flex items-center gap-3">
-                  <div className="h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-700"></div>
-                  <div className="space-y-1.5">
-                    <div className="h-3.5 w-24 rounded bg-gray-200 dark:bg-gray-700"></div>
-                    <div className="h-3 w-32 rounded bg-gray-100 dark:bg-gray-700/50"></div>
-                  </div>
+            <DeleteBar
+              leadIds={leadIds}
+              handleDeleteLead={handleDeleteLead}
+              isTableLoading={isTableLoading}
+            />
+
+            {isTableLoading ? (
+              <div role="status" className="w-full animate-pulse space-y-4 p-6">
+                <div className="grid grid-cols-6 border-b border-gray-200 pb-3 dark:border-gray-700">
+                  <div className="h-4 w-4 rounded bg-gray-200 dark:bg-gray-700"></div>
+                  <div className="h-4 w-40 rounded bg-gray-200 dark:bg-gray-700"></div>
+                  <div className="h-4 w-24 justify-self-end rounded bg-gray-200 dark:bg-gray-700"></div>
+                  <div className="h-4 w-20 justify-self-end rounded bg-gray-200 dark:bg-gray-700"></div>
+                  <div className="h-4 w-16 justify-self-end rounded bg-gray-200 dark:bg-gray-700"></div>
+                  <div className="h-4 w-12 justify-self-end rounded bg-gray-200 dark:bg-gray-700"></div>
                 </div>
-                <div className="h-3.5 w-24 justify-self-end rounded bg-gray-200 dark:bg-gray-700"></div>
-                <div className="h-5 w-20 justify-self-end rounded-full bg-gray-200 dark:bg-gray-700"></div>
-                <div className="h-5 w-14 justify-self-end rounded-full bg-gray-200 dark:bg-gray-700"></div>
-                <div className="h-4 w-12 justify-self-end rounded bg-gray-200 dark:bg-gray-700"></div>
-              </div>
-            ))}
-            <span className="sr-only">Loading...</span>
-          </div>
-        ) : data?.leads?.length === 0 || isError ? (
-          <div className="flex flex-col items-center justify-center py-16 text-center">
-            <div className="mb-3 rounded-2xl bg-gray-100 p-4 dark:bg-gray-700">
-              <HiOutlineCollection className="h-8 w-8 text-gray-400" />
-            </div>
-            <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-              No leads found
-            </p>
-            <p className="text-xs text-gray-400">
-              Try changing the filter or add a new lead
-            </p>
-          </div>
-        ) : (
-          <LeadsTable
-            leads={data?.leads}
-            leadIds={leadIds}
-            setLeadIds={setLeadIds}
-          />
-        )}
 
-        {!isTableLoading && (
-          <Footer data={data} isPlaceholderData={isPlaceholderData} />
-        )}
+                {[...Array(5)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="grid grid-cols-6 border-b border-gray-100 py-3 dark:border-gray-700/60"
+                  >
+                    <div className="h-4 w-4 rounded bg-gray-200 dark:bg-gray-700"></div>
+                    <div className="flex items-center gap-3">
+                      <div className="h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-700"></div>
+                      <div className="space-y-1.5">
+                        <div className="h-3.5 w-24 rounded bg-gray-200 dark:bg-gray-700"></div>
+                        <div className="h-3 w-32 rounded bg-gray-100 dark:bg-gray-700/50"></div>
+                      </div>
+                    </div>
+                    <div className="h-3.5 w-24 justify-self-end rounded bg-gray-200 dark:bg-gray-700"></div>
+                    <div className="h-5 w-20 justify-self-end rounded-full bg-gray-200 dark:bg-gray-700"></div>
+                    <div className="h-5 w-14 justify-self-end rounded-full bg-gray-200 dark:bg-gray-700"></div>
+                    <div className="h-4 w-12 justify-self-end rounded bg-gray-200 dark:bg-gray-700"></div>
+                  </div>
+                ))}
+                <span className="sr-only">Loading...</span>
+              </div>
+            ) : data?.leads?.length === 0 || isError ? (
+              <div className="flex flex-col items-center justify-center py-16 text-center">
+                <div className="mb-3 rounded-2xl bg-gray-100 p-4 dark:bg-gray-700">
+                  <HiOutlineCollection className="h-8 w-8 text-gray-400" />
+                </div>
+                <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                  No leads found
+                </p>
+                <p className="text-xs text-gray-400">
+                  Try changing the filter or add a new lead
+                </p>
+              </div>
+            ) : (
+              <LeadsTable
+                leads={data?.leads}
+                leadIds={leadIds}
+                setLeadIds={setLeadIds}
+              />
+            )}
+
+            {!isTableLoading && (
+              <Footer data={data} isPlaceholderData={isPlaceholderData} />
+            )}
+          </div>
+        </div>
       </div>
 
       <AddLeadModal />

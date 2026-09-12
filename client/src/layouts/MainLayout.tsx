@@ -44,10 +44,7 @@ export default function MainLayout() {
 
   useEffect(() => {
     setPage(1);
-    dispatch({ type: "AGENT", value: "" });
-    dispatch({ type: "STATUS", value: "" });
-    dispatch({ type: "SORT", value: "" });
-    dispatch({ type: "PRIORITY", value: "" });
+    dispatch({ type: "RESET" });
     setSelectedFilter("all");
   }, [location.pathname]);
 
