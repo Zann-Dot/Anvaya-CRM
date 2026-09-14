@@ -45,9 +45,9 @@ commentRouter.post("/leads/:id/comments", async (req, res) => {
 
 commentRouter.get("/leads/:id/comments", async (req, res) => {
     try {
-        const comments = await Comments.find({ leadId: req.params.id }).populate(
-            "author",
-        );
+        const comments = await Comments.find({ leadId: req.params.id })
+            .sort({ createdAt: -1 })
+            .populate("author");
 
         if (!Array.isArray(comments) || !comments)
             return res.status(404).json({ error: "No comments found" });
