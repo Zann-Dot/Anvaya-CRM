@@ -24,6 +24,52 @@ import LeadManagementSkeleton from "../components/lead/LeadManagementSkeleton";
 import { useState } from "react";
 import useNotification from "../hooks/useNotification";
 
+export const TAG_CONFIGS = [
+   {
+      tag: "High Value",
+      textColor: "text-blue-800 dark:text-blue-300",
+      accentColor: "bg-blue-500/5 dark:bg-blue-500/30",
+      borderColor: "border-blue-200 dark:border-blue-800/60",
+      dotColor: "bg-blue-500",
+   },
+   {
+      tag: "Follow-up",
+      textColor: "text-yellow-800 dark:text-yellow-300",
+      accentColor: "bg-yellow-500/5 dark:bg-yellow-500/30",
+      borderColor: "border-yellow-200 dark:border-yellow-800/20",
+      dotColor: "bg-yellow-500",
+   },
+   {
+      tag: "Enterprise",
+      textColor: "text-violet-800 dark:text-violet-400",
+      accentColor: "bg-violet-500/5 dark:bg-violet-700/20",
+      borderColor: "border-violet-200 dark:border-violet-700/20",
+      dotColor: "bg-violet-500",
+   },
+   {
+      tag: "Inbound",
+      textColor: "text-indigo-800 dark:text-indigo-400",
+      accentColor: "bg-indigo-200/50 dark:bg-indigo-700/20",
+      borderColor: "border-indigo-200 dark:border-indigo-700/20",
+      dotColor: "bg-indigo-500",
+   },
+   {
+      tag: "Urgent",
+      textColor: "text-emerald-800 dark:text-emerald-300",
+      accentColor: "bg-emerald-200/50 dark:bg-emerald-700/20",
+      borderColor: "border-emerald-200 dark:border-emerald-700/20",
+      dotColor: "bg-emerald-500",
+   },
+   {
+      tag: "Hot Lead",
+      textColor: "text-red-800 dark:text-red-600",
+      accentColor: "bg-red-200/50 dark:bg-red-700/20",
+      borderColor: "border-red-200 dark:border-red-800/20",
+      dotColor: "bg-red-500",
+   },
+];
+
+
 export default function LeadManagement() {
    const [comment, setComment] = useState("");
    const { id } = useParams();
@@ -118,6 +164,20 @@ export default function LeadManagement() {
                               <p className="text-sm font-semibold text-gray-900 dark:text-white">
                                  {lead && format(lead.createdAt, "MMMM, dd yyyy")}
                               </p>
+                           </div>
+
+                           <div className="rounded-xl bg-gray-50 p-3 dark:bg-gray-700/50">
+                              <p className="text-[11px] text-gray-400">Tags</p>
+                              <div className="flex items-center gap-1 flex-wrap mt-1">
+                                 {lead?.tags?.map((t, i) => {
+                                    const cfg = TAG_CONFIGS.find(tag => tag.tag === t)
+                                    return (
+                                       <span key={i} className={`text-xs ${cfg?.textColor} ${cfg?.accentColor} border ${cfg?.borderColor} px-3 py-px rounded-md`}>
+                                          {t}
+                                       </span>
+                                    )
+                                 })}
+                              </div>
                            </div>
                         </div>
                      </div>

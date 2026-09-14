@@ -43,7 +43,6 @@ export default function AddLeadModal({ lead }: AddLeadModalProps) {
    const [selectedTags, setSelectedTags] = useState<string[]>(
       isEdit && lead?.tags ? lead?.tags : ["High Value"],
    );
-
    useEffect(() => {
       if (showAddModal) {
          if (isEdit && lead?.tags) setSelectedTags(lead?.tags);
@@ -249,19 +248,29 @@ export default function AddLeadModal({ lead }: AddLeadModalProps) {
                      <div className="flex flex-wrap gap-2 rounded-xl border border-gray-200 p-3 dark:border-gray-700 dark:bg-gray-700/50">
                         {AVAILABLE_TAGS.map((tag) => {
                            const isSelected = selectedTags?.includes(tag);
-                           return (
+                           return isPending ? (
                               <label
                                  key={tag}
-                                 onClick={() => toggleTag(tag)}
+                                 htmlFor={tag.split(" ").join("_")
+                                 }
+                                 className={`animate-pulse px-10 flex items-center gap-2 rounded-lg py-3 bg-gray-50 text-gray-600 dark:bg-gray-800 dark:text-gray-400`}
+                              >
+                              </label>
+                           ) : (
+                              <label
+                                 key={tag}
+                                 htmlFor={tag.split(" ").join("_")
+                                 }
                                  className={`flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-1.5 text-xs font-medium transition-all ${isSelected
                                     ? "border-violet-500 bg-violet-50 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300"
                                     : "border-gray-200 bg-gray-50 text-gray-600 hover:border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400"
                                     }`}
                               >
                                  <Checkbox
+                                    id={tag.split(" ").join("_")}
                                     checked={isSelected}
                                     name="tags"
-                                    onChange={() => { }}
+                                    onChange={() => toggleTag(tag)}
                                     className="h-3.5 w-3.5 rounded text-violet-600 focus:ring-violet-500"
                                  />
                                  <span>{tag}</span>
