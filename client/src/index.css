@@ -3,3 +3,13 @@
 @source "../.flowbite-react/class-list.json";
 
 @custom-variant dark (&:where(.dark, .dark *));
+@keyframes spinner-ellipsis {
+  0%,
+  70%,
+  100% {
+    transform: translateY(0);
+  }
+  35% {
+    transform: translateY(-0.4em);
+  }
+}

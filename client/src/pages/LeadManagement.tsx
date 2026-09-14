@@ -69,12 +69,11 @@ export const TAG_CONFIGS = [
    },
 ];
 
-
 export default function LeadManagement() {
    const [comment, setComment] = useState("");
    const { id } = useParams();
    const { data: lead, isFetching, isLoading } = useLead(id);
-   const { data: comments } = useComments(id);
+   const { data: comments, isFetching: isCommentFetching } = useComments(id);
    const {
       mutate: addComment,
       isPending,
@@ -168,14 +167,17 @@ export default function LeadManagement() {
 
                            <div className="rounded-xl bg-gray-50 p-3 dark:bg-gray-700/50">
                               <p className="text-[11px] text-gray-400">Tags</p>
-                              <div className="flex items-center gap-1 flex-wrap mt-1">
+                              <div className="mt-1 flex flex-wrap items-center gap-1">
                                  {lead?.tags?.map((t, i) => {
-                                    const cfg = TAG_CONFIGS.find(tag => tag.tag === t)
+                                    const cfg = TAG_CONFIGS.find((tag) => tag.tag === t);
                                     return (
-                                       <span key={i} className={`text-xs ${cfg?.textColor} ${cfg?.accentColor} border ${cfg?.borderColor} px-3 py-px rounded-md`}>
+                                       <span
+                                          key={i}
+                                          className={`text-xs ${cfg?.textColor} ${cfg?.accentColor} border ${cfg?.borderColor} rounded-md px-3 py-px`}
+                                       >
                                           {t}
                                        </span>
-                                    )
+                                    );
                                  })}
                               </div>
                            </div>
@@ -298,25 +300,63 @@ export default function LeadManagement() {
                      </Badge>
                   </div>
 
-                  <div className="space-y-4">
-                     {comments?.map((c) => (
-                        <div
-                           key={c._id}
-                           className="rounded-xl border border-gray-100 bg-gray-50/70 p-4 dark:border-gray-700/60 dark:bg-gray-900/40"
-                        >
-                           <div className="flex items-center justify-between">
-                              <span className="text-xs font-bold text-gray-900 dark:text-white">
-                                 {c?.author.name}
-                              </span>
-                              <span className="text-[11px] text-gray-500 dark:text-gray-400">
-                                 {format(c.createdAt, "PP")} at {format(c.createdAt, "p")}
-                              </span>
+                  <div className="h-50 scrollbar-thin scrollbar-thumb-indigo-200 space-y-4 overflow-auto scroll-smooth dark:scrollbar-thumb-indigo-600">
+                     {isPending ? (
+                        <>
+                           <div
+                              className="rounded-xl border border-gray-100 bg-gray-50/70 px-8 py-6 dark:border-gray-700/60 dark:bg-gray-900/40"
+                           >
+                              <div className="inline-flex" role="status" aria-label="loading">
+                                 <span
+                                    className="inline-flex items-end gap-1.5"
+                                    aria-hidden="true"
+                                 >
+                                    <span className="inline-block size-1.5 shrink-0 animate-[spinner-ellipsis_0.7s_ease-in-out_infinite_0s] rounded-full bg-gray-300 dark:bg-purple-500"></span>
+                                    <span className="inline-block size-1.5 shrink-0 animate-[spinner-ellipsis_0.7s_ease-in-out_infinite_0.12s] rounded-full bg-gray-300 dark:bg-purple-500"></span>
+                                    <span className="inline-block size-1.5 shrink-0 animate-[spinner-ellipsis_0.7s_ease-in-out_infinite_0.24s] rounded-full bg-gray-300 dark:bg-purple-500"></span>
+                                 </span>
+                              </div>
                            </div>
-                           <p className="mt-2 text-sm text-gray-700 dark:text-gray-300">
-                              {c.commentText}
-                           </p>
-                        </div>
-                     ))}
+                           {comments?.map((c) => (
+                              <div
+                                 key={c._id}
+                                 className="rounded-xl border border-gray-100 bg-gray-50/70 p-4 dark:border-gray-700/60 dark:bg-gray-900/40"
+                              >
+                                 <div className="flex items-center justify-between">
+                                    <span className="text-xs font-bold text-gray-900 dark:text-white">
+                                       {c?.author.name}
+                                    </span>
+                                    <span className="text-[11px] text-gray-500 dark:text-gray-400">
+                                       {format(c.createdAt, "PP")} at{" "}
+                                       {format(c.createdAt, "p")}
+                                    </span>
+                                 </div>
+                                 <p className="mt-2 text-sm text-gray-700 dark:text-gray-300">
+                                    {c.commentText}
+                                 </p>
+                              </div>))}
+                        </>
+                     ) : (
+                        comments?.map((c) => (
+                           <div
+                              key={c._id}
+                              className="rounded-xl border border-gray-100 bg-gray-50/70 p-4 dark:border-gray-700/60 dark:bg-gray-900/40"
+                           >
+                              <div className="flex items-center justify-between">
+                                 <span className="text-xs font-bold text-gray-900 dark:text-white">
+                                    {c?.author.name}
+                                 </span>
+                                 <span className="text-[11px] text-gray-500 dark:text-gray-400">
+                                    {format(c.createdAt, "PP")} at{" "}
+                                    {format(c.createdAt, "p")}
+                                 </span>
+                              </div>
+                              <p className="mt-2 text-sm text-gray-700 dark:text-gray-300">
+                                 {c.commentText}
+                              </p>
+                           </div>
+                        ))
+                     )}
                   </div>
 
                   <form
