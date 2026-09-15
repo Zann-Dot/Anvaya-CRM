@@ -46,6 +46,8 @@ interface MainContextType {
     setSelectedFilter: Dispatch<SetStateAction<SelectStatus>>;
     filter: Filter;
     dispatch: React.ActionDispatch<[action: FilterAction]>;
+    isSidebarOpen: boolean;
+    setIsSidebarOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 const MainContext = createContext<MainContextType | null>(null);
@@ -59,6 +61,7 @@ const useMain = () => {
 export default useMain;
 
 export function MainProvider({ children }: React.PropsWithChildren) {
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [showAddModal, setShowAddModal] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
     const [agentId, setAgentId] = useState<string | undefined>(undefined);
@@ -153,6 +156,8 @@ export function MainProvider({ children }: React.PropsWithChildren) {
                 setSelectedFilter,
                 filter,
                 dispatch,
+                isSidebarOpen,
+                setIsSidebarOpen,
             }}
         >
             {children}

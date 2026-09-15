@@ -39,20 +39,22 @@ export default function MainLayout() {
     isNotificationActive,
     setPage,
     dispatch,
-    setSelectedFilter
+    setSelectedFilter,
+    setIsSidebarOpen,
   } = useMain();
 
   useEffect(() => {
     setPage(1);
     dispatch({ type: "RESET" });
     setSelectedFilter("all");
+    setIsSidebarOpen(false);
   }, [location.pathname]);
 
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-gray-950">
       <AppSidebar />
 
-      <div className="ml-64 flex min-h-screen flex-1 flex-col">
+      <div className="flex min-h-screen flex-1 flex-col md:ml-64 w-full min-w-0 transition-all">
         {isNotificationActive && (
           <ToastNotification
             toastNotification={toastNotification}
@@ -60,7 +62,7 @@ export default function MainLayout() {
           />
         )}
         <TopNavbar title={title} subtitle={subtitle} />
-        <main className="flex-1 overflow-auto">
+        <main className="flex-1 overflow-x-hidden overflow-y-auto w-full">
           <Outlet />
         </main>
       </div>

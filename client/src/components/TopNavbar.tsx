@@ -4,9 +4,11 @@ import {
   HiOutlineOfficeBuilding,
   HiOutlineMail,
   HiOutlineGlobeAlt,
+  HiOutlineMenuAlt2,
 } from "react-icons/hi";
 import { useLeads } from "../hooks/useLeads";
 import { useAgents } from "../hooks/useAgents";
+import useMain from "../context/MainProvider";
 
 interface TopNavbarProps {
   title: string;
@@ -14,6 +16,7 @@ interface TopNavbarProps {
 }
 
 export default function TopNavbar({ title, subtitle }: TopNavbarProps) {
+  const { setIsSidebarOpen } = useMain();
   const { data: leads } = useLeads();
   const { data: agents } = useAgents();
 
@@ -34,7 +37,7 @@ export default function TopNavbar({ title, subtitle }: TopNavbarProps) {
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
             <h4 className="truncate text-base font-bold text-gray-900 dark:text-white">
-              Anvaya CRM Inc.
+               Anvaya CRM Inc.
             </h4>
             <Badge color="purple" size="xs">
               Enterprise
@@ -86,21 +89,31 @@ export default function TopNavbar({ title, subtitle }: TopNavbarProps) {
   );
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-gray-200 bg-white/80 px-6 backdrop-blur-md dark:border-gray-700 dark:bg-gray-900/80">
-      <div>
-        <h2 className="text-lg font-bold text-gray-900 dark:text-white">
-          {title}
-        </h2>
-        {subtitle && (
-          <p className="text-xs text-gray-500 dark:text-gray-400">{subtitle}</p>
-        )}
+    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-gray-200 bg-white/80 px-3.5 sm:px-6 backdrop-blur-md dark:border-gray-700 dark:bg-gray-900/80">
+      <div className="flex items-center gap-2.5">
+        <button
+          type="button"
+          aria-label="Open sidebar"
+          onClick={() => setIsSidebarOpen(true)}
+          className="md:hidden rounded-xl border border-gray-200 bg-gray-50 p-2 text-gray-600 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 active:scale-95 transition-transform"
+        >
+          <HiOutlineMenuAlt2 className="h-5 w-5" />
+        </button>
+        <div>
+          <h2 className="text-base sm:text-lg font-bold text-gray-900 dark:text-white truncate">
+            {title}
+          </h2>
+          {subtitle && (
+            <p className="hidden sm:block text-xs text-gray-500 dark:text-gray-400 truncate">{subtitle}</p>
+          )}
+        </div>
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2.5 sm:gap-3">
         <DarkThemeToggle className="rounded-xl border border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800" />
 
         <Popover content={companyProfileContent} placement="bottom-end">
-          <button className="flex items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 px-3 py-1.5 transition hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+          <button className="flex items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 px-2.5 sm:px-3 py-1.5 transition hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
             <img
               src="https://upload.wikimedia.org/wikipedia/commons/0/03/Twitter_default_profile_400x400.png"
               alt="avatar"
