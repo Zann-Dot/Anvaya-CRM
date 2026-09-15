@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { Navigate, NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
    HiOutlineChartBar,
    HiOutlineUserGroup,
@@ -19,6 +19,7 @@ const navItems = [
 
 export default function AppSidebar() {
    const location = useLocation();
+   const navigate = useNavigate()
 
    return (
       <aside className="fixed top-0 left-0 z-40 flex h-screen w-64 flex-col border-r border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900">
@@ -37,7 +38,7 @@ export default function AppSidebar() {
                   <circle cx="20" cy="18" r="3.5" className="fill-background" />
                </svg>
             </div>
-            <div>
+            <div className="cursor-pointer" onClick={() => navigate("/")}>
                <h1 className="text-lg font-bold tracking-tight text-gray-900 dark:text-white">
                   ANVAYA
                </h1>
