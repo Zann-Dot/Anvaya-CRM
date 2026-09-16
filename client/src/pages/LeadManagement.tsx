@@ -104,7 +104,7 @@ export default function LeadManagement() {
             <LeadManagementSkeleton />
          ) : (
             <>
-               <div className="flex flex-col gap-4 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between dark:border-gray-700 dark:bg-gray-800">
+               <div className="flex flex-col gap-4 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm lg:flex-row items-start lg:items-center sm:justify-between dark:border-gray-700 dark:bg-gray-800">
                   <div className="flex items-center gap-3">
                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-violet-600 to-indigo-600 text-white shadow-md">
                         <HiOutlineUser className="h-6 w-6" />
@@ -115,7 +115,7 @@ export default function LeadManagement() {
                               Lead Management
                            </span>
                            <span className="text-gray-300 dark:text-gray-600">•</span>
-                           <Badge color="purple" size="xs">
+                           <Badge color="purple" size="xs" className="max-[420px]:hidden inline">
                               Enterprise Lead
                            </Badge>
                         </div>

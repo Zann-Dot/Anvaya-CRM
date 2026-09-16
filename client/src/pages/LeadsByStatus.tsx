@@ -186,7 +186,7 @@ export default function LeadsByStatus() {
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between rounded-xl border border-gray-200 bg-white px-5 py-3 text-xs text-gray-500 shadow-xs dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
+      <div className="sm:flex flex-wrap items-center justify-between hidden rounded-xl border border-gray-200 bg-white px-5 py-3 text-xs text-gray-500 shadow-xs dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
         <div className="flex items-center gap-4">
           <span>Status breakdown:</span>
           {STATUS_CONFIGS.map((cfg) => (
