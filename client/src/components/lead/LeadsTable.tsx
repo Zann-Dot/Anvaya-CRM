@@ -173,10 +173,12 @@ export default function LeadsTable({
                               {lead.closedAt ? (
                                  <HiMinus />
                               ) : (
-                                 <>
+                                 <span className="flex gap-1 items-center justify-center">
                                     <HiOutlineClock className="h-3.5 w-3.5 text-violet-400" />
-                                    {lead.timeToClose} days
-                                 </>
+                                    <span className="text-nowrap ">
+                                       {lead.timeToClose} days
+                                    </span>
+                                 </span>
                               )}
                            </div>
                         </TableCell>
@@ -186,7 +188,7 @@ export default function LeadsTable({
                               {lead.tags.slice(0, 2).map((tag) => (
                                  <span
                                     key={tag}
-                                    className="rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-medium text-gray-600 dark:bg-gray-700 dark:text-gray-300"
+                                    className="rounded-full bg-gray-100 px-2 py-0.5 text-xs text-nowrap font-medium text-gray-600 dark:bg-gray-700 dark:text-gray-300"
                                  >
                                     {tag}
                                  </span>

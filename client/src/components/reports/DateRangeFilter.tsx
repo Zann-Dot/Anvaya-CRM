@@ -42,14 +42,14 @@ export default function DateRangeFilter({
     }
   }, [searchParams, params, setSearchParams]);
   return (
-    <div className="flex flex-col gap-4 rounded-2xl border border-gray-200 bg-white p-4 shadow-xs backdrop-blur-md sm:flex-row sm:items-center sm:justify-between dark:border-gray-700/60 dark:bg-gray-800/80">
+    <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 rounded-2xl border border-gray-200 bg-white p-4 shadow-xs backdrop-blur-md sm:flex-row sm:items-center sm:justify-between dark:border-gray-700/60 dark:bg-gray-800/80">
       <div className="flex flex-wrap items-center gap-2">
         <div className="flex items-center gap-2 border-r border-gray-200 pr-2 text-sm font-semibold text-gray-700 dark:border-gray-700 dark:text-gray-200">
           <HiOutlineFilter className="h-4 w-4 text-violet-600 dark:text-violet-400" />
           <span>Date Filter</span>
         </div>
 
-        <div className="hidden items-center gap-1.5 md:flex">
+        <div className="items-center gap-1.5 flex">
           {(
             [
               "last-week",
@@ -76,9 +76,10 @@ export default function DateRangeFilter({
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center gap-3">
-        <div className="flex items-center gap-2">
-          <div className="relative">
+      <div className="flex flex-wrap items-center xl:justify-self-end gap-3">
+        <div className="flex items-center flex-col sm:flex-row gap-2">
+          <div className="relative flex items-center justify-between w-full gap-2">
+            <span className="hidden max-sm:inline text-lg text-gray-700 dark:text-gray-300">From:</span>
             <TextInput
               type="date"
               value={startDate}
@@ -90,8 +91,9 @@ export default function DateRangeFilter({
               className="w-36 text-xs"
             />
           </div>
-          <span className="text-xs font-medium text-gray-400">to</span>
-          <div className="relative">
+          <span className="text-xs font-medium max-sm:hidden text-gray-400">to</span>
+          <div className="relative flex items-center justify-between w-full">
+            <span className="hidden max-sm:inline text-lg text-gray-700 dark:text-gray-300">To:</span>
             <TextInput
               type="date"
               value={endDate}
@@ -105,7 +107,7 @@ export default function DateRangeFilter({
           </div>
         </div>
 
-        <Button
+        {/* <Button
           size="xs"
           color="gray"
           className="rounded-lg"
@@ -113,7 +115,7 @@ export default function DateRangeFilter({
         >
           <HiOutlineRefresh className="mr-1 h-3.5 w-3.5 text-gray-500 dark:text-gray-400" />
           <span>Load Report</span>
-        </Button>
+        </Button> */}
       </div>
     </div>
   );

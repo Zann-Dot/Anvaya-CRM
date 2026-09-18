@@ -64,11 +64,11 @@ export default function Agents() {
         ) : (
           <>
             <div className="flex items-center gap-4">
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-linear-to-br from-violet-600 to-indigo-600 text-white shadow-lg shadow-violet-500/20">
+              <div className="flex p-4 items-center justify-center rounded-2xl bg-linear-to-br from-violet-600 to-indigo-600 text-white shadow-lg shadow-violet-500/20">
                 <HiOutlineUserGroup className="h-7 w-7" />
               </div>
               <div>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                     Sales Agent Management
                   </h1>

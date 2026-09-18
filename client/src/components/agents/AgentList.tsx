@@ -35,22 +35,28 @@ export default function AgentList({
       case "active":
         return (
           <Badge color="success" className="w-fit font-medium">
-            <span className="mr-1 inline-block h-1.5 w-1.5 rounded-full bg-emerald-500" />
-            Active
+            <span className="flex items-center justify-center">
+              <span className="mr-1 inline-block h-1.5 w-1.5 rounded-full bg-emerald-500" />
+              Active
+            </span>
           </Badge>
         );
       case "oncall":
         return (
           <Badge color="warning" className="w-fit font-medium">
-            <span className="mr-1 inline-block h-1.5 w-1.5 rounded-full bg-amber-500" />
-            On Call
+            <span className="flex items-center justify-center">
+              <span className="mr-1 inline-block h-1.5 w-1.5 rounded-full bg-amber-500" />
+              On Call
+            </span>
           </Badge>
         );
       case "offline":
         return (
           <Badge color="gray" className="w-fit font-medium">
-            <span className="mr-1 inline-block h-1.5 w-1.5 rounded-full bg-gray-400" />
-            Offline
+            <span className="flex items-center justify-center">
+              <span className="mr-1 inline-block h-1.5 w-1.5 rounded-full bg-gray-400" />
+              Offline
+            </span>
           </Badge>
         );
       default:
