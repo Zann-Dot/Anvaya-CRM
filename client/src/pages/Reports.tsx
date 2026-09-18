@@ -263,7 +263,7 @@ export default function Reports() {
                            </p>
                         </div>
                      </div>
-                     <Badge color="purple" size="xs">
+                     <Badge color="purple" size="xs" className="text-nowrap">
                         Pie Chart
                      </Badge>
                   </div>
@@ -291,7 +291,7 @@ export default function Reports() {
                            </p>
                         </div>
                      </div>
-                     <Badge color="indigo" size="xs">
+                     <Badge color="indigo" size="xs" className="text-nowrap">
                         Bar Chart
                      </Badge>
                   </div>
@@ -320,7 +320,7 @@ export default function Reports() {
                            </p>
                         </div>
                      </div>
-                     <Badge color="pink" size="xs">
+                     <Badge color="pink" size="xs" className="text-nowrap">
                         Doughnut Chart
                      </Badge>
                   </div>
