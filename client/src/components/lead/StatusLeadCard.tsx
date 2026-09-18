@@ -58,10 +58,12 @@ export default function StatusLeadCard({ lead }: StatusLeadCardProps) {
       </div>
 
       <div className="flex items-center justify-between border-t border-gray-100 pt-2.5 dark:border-gray-700/60 text-xs">
-        <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400">
-          <HiOutlineClock className="h-3.5 w-3.5 text-violet-500" />
-          <span>{lead.timeToClose}d to close</span>
-        </div>
+        {lead.status !== "Closed" && (
+          <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400">
+            <HiOutlineClock className="h-3.5 w-3.5 text-violet-500" />
+            <span>{lead.timeToClose}d to close</span>
+          </div>
+        )}
 
         <Link
           to={`/leads/${lead._id}`}

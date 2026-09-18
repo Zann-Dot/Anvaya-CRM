@@ -11,11 +11,13 @@ import useMain from "../../context/MainProvider";
 interface FilterLeadProps {
     isSidebarOpen?: boolean;
     onToggleSidebar?: () => void;
+    isSearchbarActive?: boolean
 }
 
 export default function FilterLead({
     isSidebarOpen = true,
     onToggleSidebar,
+    isSearchbarActive = true
 }: FilterLeadProps) {
     const { data: agentRes } = useAgents();
     const { search, setSearch, filter, dispatch, setPage } = useMain();
@@ -58,20 +60,22 @@ export default function FilterLead({
     return (
         <div className="border-b border-gray-100 p-4 dark:border-gray-700">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <div className="relative w-full sm:max-w-md">
-                    <TextInput
-                        id="lead-search"
-                        type="search"
-                        icon={HiOutlineSearch}
-                        placeholder="Search leads by name, company or email…"
-                        className="w-full"
-                        value={search}
-                        onChange={(e) => {
-                            setSearch(e.target.value);
-                            setPage(1);
-                        }}
-                    />
-                </div>
+                {isSearchbarActive && (
+                    <div className="relative w-full sm:max-w-md">
+                        <TextInput
+                            id="lead-search"
+                            type="search"
+                            icon={HiOutlineSearch}
+                            placeholder="Search leads by name, company or email…"
+                            className="w-full"
+                            value={search}
+                            onChange={(e) => {
+                                setSearch(e.target.value);
+                                setPage(1);
+                            }}
+                        />
+                    </div>
+                )}
 
                 <div className="flex items-center gap-2 self-end sm:self-auto">
                     {activeCount > 0 && (
@@ -90,8 +94,8 @@ export default function FilterLead({
                             type="button"
                             onClick={onToggleSidebar}
                             className={`flex items-center gap-2 rounded-xl border px-3.5 py-2 text-xs font-semibold transition-all duration-150 cursor-pointer ${isSidebarOpen
-                                    ? "border-violet-300 bg-violet-50 text-violet-700 dark:border-violet-700 dark:bg-violet-900/30 dark:text-violet-300"
-                                    : "border-gray-200 bg-white text-gray-700 hover:bg-gray-50 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                                ? "border-violet-300 bg-violet-50 text-violet-700 dark:border-violet-700 dark:bg-violet-900/30 dark:text-violet-300"
+                                : "border-gray-200 bg-white text-gray-700 hover:bg-gray-50 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
                                 }`}
                         >
                             <HiOutlineFilter className="h-4 w-4 text-violet-600 dark:text-violet-400" />
