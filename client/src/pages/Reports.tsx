@@ -255,10 +255,10 @@ export default function Reports() {
                            <HiOutlineChartPie className="h-5 w-5" />
                         </div>
                         <div>
-                           <h3 className="text-base font-bold text-gray-900 dark:text-white">
+                           <h3 className="max-[400px]:text-sm text-base font-bold text-gray-900 dark:text-white">
                               Pipeline vs Closed Leads
                            </h3>
-                           <p className="text-xs text-gray-500 dark:text-gray-400">
+                           <p className="max-[400px]:text-[10px] text-xs text-gray-500 dark:text-gray-400">
                               Proportion of active leads vs closed deals
                            </p>
                         </div>
@@ -283,10 +283,10 @@ export default function Reports() {
                            <HiOutlineUserGroup className="h-5 w-5" />
                         </div>
                         <div>
-                           <h3 className="text-base font-bold text-gray-900 dark:text-white">
+                           <h3 className="max-[400px]:text-sm text-base font-bold text-gray-900 dark:text-white">
                               Leads Closed by Sales Agent
                            </h3>
-                           <p className="text-xs text-gray-500 dark:text-gray-400">
+                           <p className="max-[400px]:text-[10px] text-xs text-gray-500 dark:text-gray-400">
                               Individual sales performance & agent comparison
                            </p>
                         </div>
@@ -312,10 +312,10 @@ export default function Reports() {
                            <HiOutlineFilter className="h-5 w-5" />
                         </div>
                         <div>
-                           <h3 className="text-base font-bold text-gray-900 dark:text-white">
+                           <h3 className="max-[400px]:text-sm text-base font-bold text-gray-900 dark:text-white">
                               Lead Status Distribution
                            </h3>
-                           <p className="text-xs text-gray-500 dark:text-gray-400">
+                           <p className="max-[400px]:text-[10px] text-xs text-gray-500 dark:text-gray-400">
                               Breakdown across New, Contacted, Qualified & Proposal
                            </p>
                         </div>
