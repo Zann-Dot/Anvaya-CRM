@@ -76,7 +76,7 @@ export default function LeadsByStatus() {
 
   return (
     <div className="mx-auto space-y-6 p-4 sm:p-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex max-lg:flex-col gap-4 flex-row lg:items-center justify-between">
         <div>
           <div className="flex items-center gap-2.5">
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-100 text-violet-600 dark:bg-violet-900/30 dark:text-violet-400">
@@ -86,7 +86,7 @@ export default function LeadsByStatus() {
               Leads by Status
             </h1>
             {!isLeadsLoading && (
-              <span className="rounded-full bg-violet-100 px-2.5 py-0.5 text-xs font-semibold text-violet-700 dark:bg-violet-900/30 dark:text-violet-300">
+              <span className="text-nowrap max-sm:hidden rounded-full bg-violet-100 px-2.5 py-0.5 text-xs font-semibold text-violet-700 dark:bg-violet-900/30 dark:text-violet-300">
                 {totalLeadsCount} categorized
               </span>
             )}
