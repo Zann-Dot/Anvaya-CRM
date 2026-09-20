@@ -1,0 +1,51 @@
+# 🌟 Anvaya CRM
+
+**Anvaya CRM** is an end-to-end sales operations and lead relationship platform. Built with a modern, decoupled architecture, it pairs a responsive, high-performance React 19 single-page application with a scalable Express 5 and MongoDB backend API.
+
+---
+
+## 📂 Repository Structure
+
+This repository is organized as a monorepo containing both the frontend client and backend server:
+
+```text
+Anvaya-CRM/
+├── client/     # Frontend Web Application (React 19, TypeScript, Vite, Tailwind CSS v4, Flowbite React)
+└── server/     # Backend RESTful API (Node.js, Express 5, Mongoose 9, MongoDB)
+```
+
+---
+
+## 📖 Sub-project Documentation
+
+Detailed documentation, architecture overviews, API references, and setup guides are available in their respective directories:
+
+| Component           | Description                                                                                                                                                    | Documentation Link                           |
+| :------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------- |
+| **Frontend Client** | Single-page application featuring executive dashboards, Kanban status boards, agent directories, multi-faceted filtering, and Chart.js analytics.              | 👉 [**Frontend README**](./client/README.md) |
+| **Backend API**     | REST API providing lead lifecycle tracking, agent assignment, activity comments, pre-save priority weighting, date range filtering, and aggregation pipelines. | 👉 [**Backend README**](./server/README.md)  |
+
+---
+
+## 🚀 Quick Start
+
+### 1. Backend Setup
+
+```bash
+cd server
+npm install
+# Create a .env file with MONGODB=<your_mongo_uri>
+npm run dev
+```
+
+The server will run on `http://localhost:3000`.
+
+### 2. Frontend Setup
+
+```bash
+cd client
+npm install
+npm run dev
+```
+
+The client will launch on `http://localhost:5173`, proxying `/api` calls directly to the server.
