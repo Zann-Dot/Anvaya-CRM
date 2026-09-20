@@ -12,9 +12,10 @@ import StatusColumn, {
 } from "../components/lead/StatusColumn";
 import { useLeads } from "../hooks/useLeads";
 import useMain from "../context/MainProvider";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useAgents } from "../hooks/useAgents";
+import LeadsFilterSidebar from "../components/lead/LeadsFilterSidebar";
 
 const STATUS_CONFIGS: StatusColumnConfig[] = [
   {
@@ -56,6 +57,7 @@ const STATUS_CONFIGS: StatusColumnConfig[] = [
 
 export default function LeadsByAgents() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const { params, setSearch, dispatch } = useMain();
   const { data, isLoading, isFetching, isError } = useLeads(params.toString());
   const { data: agentRes } = useAgents();
@@ -74,8 +76,8 @@ export default function LeadsByAgents() {
   }, [params, searchParams, setSearchParams, firstAgentMount]);
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6 p-4 sm:p-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="mx-auto space-y-6 p-4 sm:p-6">
+      <div className="flex max-lg:flex-col gap-4 flex-row lg:items-center justify-between">
         <div>
           <div className="flex items-center gap-2.5">
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-100 text-violet-600 dark:bg-violet-900/30 dark:text-violet-400">
@@ -101,88 +103,20 @@ export default function LeadsByAgents() {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-xs dark:border-gray-700 dark:bg-gray-800">
-        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-          <div className="w-full lg:max-w-xs">
-            <TextInput
-              id="lead-search"
-              type="search"
-              icon={HiOutlineSearch}
-              placeholder="Search leads by name, company or email…"
-              className="w-full lg:max-w-xs"
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </div>
 
-          <div className="flex flex-wrap items-center gap-3">
-            <div className="flex items-center gap-1.5">
-              <HiOutlineFilter className="h-4 w-4 shrink-0 text-gray-400" />
-              <Select
-                id="filter-status"
-                className="w-40"
-                onChange={(e) =>
-                  dispatch({ type: "STATUS", value: e.target.value })
-                }
-              >
-                <option value="all">Select all</option>
-                {STATUS_CONFIGS.map((s) => (
-                  <option key={s.status} value={s.status.toLowerCase()}>
-                    {s.status}
-                  </option>
-                ))}
-              </Select>
-            </div>
-
-            <div className="flex items-center gap-1.5">
-              <HiOutlineFire className="h-4 w-4 shrink-0 text-gray-400" />
-              <Select
-                id="filter-priority"
-                className="w-36"
-                defaultValue="all"
-                onChange={(e) =>
-                  dispatch({ type: "PRIORITY", value: e.target.value })
-                }
-              >
-                <option value="all">Filters: Priority</option>
-                <option value="high">High Priority</option>
-                <option value="medium">Medium Priority</option>
-                <option value="low">Low Priority</option>
-              </Select>
-            </div>
-
-            <div className="flex items-center gap-1.5">
-              <HiOutlineClock className="h-4 w-4 shrink-0 text-gray-400" />
-              <Select
-                id="sort-by"
-                className="w-48"
-                onChange={(e) =>
-                  dispatch({
-                    type: "SORT",
-                    value: e.target.value,
-                    sort: e.target.options[e.target.selectedIndex].dataset.sort,
-                  })
-                }
-              >
-                <option value="all">Sort: Default</option>
-                <option data-sort="timeToClose" value="desc">
-                  Time to Close: Longest
-                </option>
-                <option data-sort="timeToClose" value="asc">
-                  Time to Close: Shortest
-                </option>
-              </Select>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="pb-4">
+      <div className="flex flex-col lg:flex-row gap-6 items-start">
+        <LeadsFilterSidebar
+          isOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
+        />
         <div className="flex w-full flex-col gap-4">
           <StatusColumn
             agents={agentRes?.agents}
             leads={data?.leads}
             isLeadsLoading={isLeadsLoading}
             isError={isError}
+            isSidebarOpen={isSidebarOpen}
+            setIsSidebarOpen={setIsSidebarOpen}
           />
         </div>
       </div>
