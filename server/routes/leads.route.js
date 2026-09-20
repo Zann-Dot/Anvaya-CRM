@@ -34,6 +34,9 @@ leadsRouter.post("/leads", async (req, res) => {
                 .status(400)
                 .json({ error: "Invalid input: all fields are required." });
 
+        if (Array.isArray(tags) && tags.length > 3)
+            return res.status(400).json({ error: "Cannot add more than 3 tags" });
+
         const agent = await SalesAgent.findById(salesAgent);
         if (!agent)
             return res.status(404).json({
