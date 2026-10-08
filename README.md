@@ -1,10 +1,10 @@
-# 🌟 Anvaya CRM
+# Anvaya CRM
 
 **Anvaya CRM** is an end-to-end sales operations and lead relationship platform. Built with a modern, decoupled architecture, it pairs a responsive, high-performance React 19 single-page application with a scalable Express 5 and MongoDB backend API.
 
 ---
 
-## 📂 Repository Structure
+## Repository Structure
 
 This repository is organized as a monorepo containing both the frontend client and backend server:
 
@@ -16,7 +16,7 @@ Anvaya-CRM/
 
 ---
 
-## 📖 Sub-project Documentation
+## Sub-project Documentation
 
 Detailed documentation, architecture overviews, API references, and setup guides are available in their respective directories:
 
